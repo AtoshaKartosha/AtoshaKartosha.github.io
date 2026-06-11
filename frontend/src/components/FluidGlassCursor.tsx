@@ -428,7 +428,7 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
 
         const texture = (textures as any)[item.id];
 
-        if (texture) {
+        if (texture && item.id !== "dossier" && item.id !== "phone") {
           return (
             <group key={item.id} position={[x, y, 0.1]} rotation={[0, 0, (pos.rotation * Math.PI) / 180]}>
               <mesh scale={[w, h, 1]}>

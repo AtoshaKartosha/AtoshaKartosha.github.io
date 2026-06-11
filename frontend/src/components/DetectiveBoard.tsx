@@ -295,7 +295,9 @@ export const DetectiveBoard: React.FC = () => {
             : "w-[94%] h-[92%] max-w-[1800px] max-h-[1000px] rounded-sm absolute top-1/2 left-1/2 border-[12px] border-[#38281b]"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
-          backgroundImage: "radial-gradient(circle at center, #201811 0%, #0a0806 100%)",
+          backgroundImage: "url(/background_detective.svg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
           transform: isMobile
             ? `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`
             : "translate3d(-50%, -50%, 0)",
