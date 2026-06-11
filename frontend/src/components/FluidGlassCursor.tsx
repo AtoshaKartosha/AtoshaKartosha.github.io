@@ -157,14 +157,7 @@ const ModeWrapper = memo(function ModeWrapper({
     ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, targetY, 0.15);
     ref.current.position.z = 3.0; // Float above the board items
 
-    // Apply clean texture magnification center & repeat based on lens position
-    const u_L = (ref.current.position.x / (vp.width / 2) + 1) / 2;
-    const v_L = (ref.current.position.y / (vp.height / 2) + 1) / 2;
-    
-    const zoomFactor = isLoading ? 1.0 : 1.4; // Zoom by 1.4x
-    
-    // renderTarget.texture.center.set(u_L, v_L);
-    // renderTarget.texture.repeat.set(1 / zoomFactor, 1 / zoomFactor);
+    // FBO texture parameters remain static to avoid WebGL2 immutable texture errors
 
     // Render off-screen scene into renderTarget
     gl.setRenderTarget(renderTarget);
@@ -221,8 +214,8 @@ const ModeWrapper = memo(function ModeWrapper({
           <sphereGeometry args={[1, 32, 32]} />
           <MeshTransmissionMaterial
             buffer={renderTarget.texture}
-            ior={1.20}
-            thickness={1.5}
+            ior={1.35}
+            thickness={2.5}
             anisotropy={0.1}
             chromaticAberration={0.03}
             transmission={1.0}
@@ -292,7 +285,9 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
     evidence: "/images/board/evidence.png",
     newspaper: "/images/board/newspaper.png",
     note: "/images/board/note.png",
+    background: "/background_detective.svg",
   });
+  console.log("WebGlBoardScene rendering, textures loaded:", Object.keys(textures));
 
   // Ensure textures use correct sRGB encoding
   useEffect(() => {
@@ -393,10 +388,14 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
         <meshBasicMaterial color="#1b140e" />
       </mesh>
 
-      {/* Repeating cork board background */}
-      <mesh scale={[viewport.width * (isMobile ? 1.68 : 0.92), viewport.height * (isMobile ? 2.08 : 0.90), 1]} position={[0, 0, -0.4]}>
+      {/* Background board image matching the HTML board's background */}
+      <mesh scale={[viewport.width * (isMobile ? 1.7 : 0.94), viewport.height * (isMobile ? 2.1 : 0.92), 1]} position={[0, 0, -0.4]}>
         <planeGeometry />
-        <meshBasicMaterial color="#2c1d12" />
+        {textures.background ? (
+          <meshBasicMaterial map={textures.background} />
+        ) : (
+          <meshBasicMaterial color="#2c1d12" />
+        )}
       </mesh>
 
       {/* The WebGL loading screen background (black plane that fades out) */}
@@ -426,14 +425,17 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
         const x = -boardW / 2 + (pos.left / 100) * boardW + w / 2;
         const y = boardH / 2 - (pos.top / 100) * boardH - h / 2;
 
-        const texture = (textures as any)[item.id];
+        const texture = textures[item.id as keyof typeof textures];
 
-        if (texture && item.id !== "dossier" && item.id !== "phone") {
+        if (texture) {
           return (
             <group key={item.id} position={[x, y, 0.1]} rotation={[0, 0, (pos.rotation * Math.PI) / 180]}>
               <mesh scale={[w, h, 1]}>
                 <planeGeometry />
-                <meshBasicMaterial map={texture} transparent={true} />
+                <meshBasicMaterial
+                  map={texture}
+                  transparent={true}
+                />
               </mesh>
             </group>
           );
