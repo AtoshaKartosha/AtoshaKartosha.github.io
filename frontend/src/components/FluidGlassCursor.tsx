@@ -146,17 +146,32 @@ const RefractingLens: React.FC<{
       {/* 3. The 3D Glass Lens Body with magnifying refraction */}
       <mesh scale={[1, 1, 0.25]}>
         <sphereGeometry args={[0.58, 32, 32]} />
-        <MeshTransmissionMaterial
-          ior={1.28}
-          thickness={1.5}
-          anisotropy={0.15}
-          chromaticAberration={0.05}
-          transmission={1.0}
-          roughness={0.0}
-          distortion={0.15}
-          distortionScale={0.05}
-          temporalDistortion={0.0}
-        />
+        {isLoading ? (
+          <MeshTransmissionMaterial
+            ior={1.28}
+            thickness={1.5}
+            anisotropy={0.15}
+            chromaticAberration={0.05}
+            transmission={1.0}
+            roughness={0.0}
+            distortion={0.15}
+            distortionScale={0.05}
+            temporalDistortion={0.0}
+          />
+        ) : (
+          <meshPhysicalMaterial
+            color="#ffffff"
+            transparent
+            opacity={0.3}
+            roughness={0.02}
+            metalness={0.05}
+            transmission={0.9}
+            ior={1.52}
+            thickness={1.0}
+            clearcoat={1.0}
+            clearcoatRoughness={0.0}
+          />
+        )}
       </mesh>
 
       {/* 4. Realistic Glass Highlight/Reflection (diagonal gloss shine) */}
