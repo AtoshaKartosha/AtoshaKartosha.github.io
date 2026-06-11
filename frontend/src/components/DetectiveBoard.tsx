@@ -32,6 +32,7 @@ export const DetectiveBoard: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isDraggingState, setIsDraggingState] = useState(false);
 
+
   // Drag interaction state
   const isDragging = useRef(false);
   const startPos = useRef({ x: 0, y: 0 });

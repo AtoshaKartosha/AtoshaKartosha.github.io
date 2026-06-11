@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Renderer, Program, Mesh, Geometry, OGLRenderingContext } from "ogl";
+import React, { useEffect, useRef, useState } from "react";
+import { Renderer, Program, Mesh, Geometry, OGLRenderingContext, Camera } from "ogl";
 import { useBoardStore } from "../stores/useBoardStore";
 import { threadConnections } from "../data/boardItems";
 
 const vertexShader = `
+precision mediump float;
 attribute vec2 position;
 attribute vec2 uv;
 
@@ -40,7 +41,6 @@ varying vec2 vUv;
 uniform float uDrawProgress;
 uniform vec3 uColor;
 uniform float uTime;
-
 void main() {
     // Reveal animation
     if (vUv.x > uDrawProgress) {
@@ -65,6 +65,7 @@ export const ThreadCanvas: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<Renderer | null>(null);
   const glRef = useRef<OGLRenderingContext | null>(null);
+  const cameraRef = useRef<Camera | null>(null);
   const programRef = useRef<Program | null>(null);
   const meshRef = useRef<Mesh | null>(null);
   const initialized = useRef(false);
@@ -76,6 +77,26 @@ export const ThreadCanvas: React.FC = () => {
   // Uniform values
   const drawProgress = useRef(0.0);
   const time = useRef(0.0);
+  const [size, setSize] = useState({ width: 0, height: 0 });
+
+  // Resize handler using ResizeObserver
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    const resizeObserver = new ResizeObserver(() => {
+      setSize({
+        width: parent.clientWidth,
+        height: parent.clientHeight,
+      });
+    });
+
+    resizeObserver.observe(parent);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -89,11 +110,15 @@ export const ThreadCanvas: React.FC = () => {
       alpha: true,
       premultipliedAlpha: false,
       dpr,
+      preserveDrawingBuffer: true,
     });
     rendererRef.current = renderer;
     const gl = renderer.gl;
     glRef.current = gl;
 
+    // Create dummy camera
+    const camera = new Camera(gl);
+    cameraRef.current = camera;
     // Enable blending for glowing thread transparency
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -108,6 +133,8 @@ export const ThreadCanvas: React.FC = () => {
         uDrawProgress: { value: 0.0 },
         uColor: { value: [0.77, 0.12, 0.12] }, // Crimson red thread
       },
+      transparent: true,
+      cullFace: null,
       depthTest: false,
       depthWrite: false,
     });
@@ -128,16 +155,15 @@ export const ThreadCanvas: React.FC = () => {
     };
   }, []);
 
-  // Update Geometry when Pin Positions change
+  // Update Geometry when Pin Positions or Canvas Size changes
   useEffect(() => {
     const gl = glRef.current;
     const canvas = canvasRef.current;
     const program = programRef.current;
-    if (!gl || !canvas || !program) return;
+    if (!gl || !canvas || !program || size.width === 0 || size.height === 0) return;
 
-    // Find current board size
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
+    const width = size.width;
+    const height = size.height;
 
     // Make sure we have resolution uniform updated
     program.uniforms.uResolution.value = [width, height];
@@ -156,7 +182,7 @@ export const ThreadCanvas: React.FC = () => {
 
     // Build merged geometry for all active connections
     const segmentsPerLine = 40;
-    const thickness = 2.0; // 4px total ribbon width
+    const thickness = 2.5; // 5px total ribbon width for a delicate, organic thread glow
 
     const allPositions: number[] = [];
     const allUvs: number[] = [];
@@ -220,7 +246,6 @@ export const ThreadCanvas: React.FC = () => {
     if (meshRef.current) {
       meshRef.current.geometry.remove();
     }
-
     // Create new OGL Geometry
     const geometry = new Geometry(gl, {
       position: { size: 2, data: new Float32Array(allPositions) },
@@ -232,8 +257,11 @@ export const ThreadCanvas: React.FC = () => {
     meshRef.current = new Mesh(gl, {
       geometry,
       program,
+      frustumCulled: false,
     });
-  }, [pinPositions]);
+    console.log("ThreadCanvas geometry built. Connections:", activeConnections.length, "Positions:", allPositions.length, "Indices:", allIndices.length);
+    console.log("Positions sample:", allPositions.slice(0, 10));
+  }, [pinPositions, size]);
 
   // Animation loop
   useEffect(() => {
@@ -244,8 +272,9 @@ export const ThreadCanvas: React.FC = () => {
       const renderer = rendererRef.current;
       const mesh = meshRef.current;
       const program = programRef.current;
+      const camera = cameraRef.current;
 
-      if (!gl || !renderer || !program || !mesh) {
+      if (!gl || !renderer || !program || !mesh || !camera) {
         animationFrameId.current = requestAnimationFrame(renderLoop);
         return;
       }
@@ -253,6 +282,10 @@ export const ThreadCanvas: React.FC = () => {
       // Calculate dt
       const delta = lastTime ? (now - lastTime) / 1000 : 0;
       lastTime = now;
+
+      if (Math.random() < 0.02) {
+        console.log("DrawProgress:", drawProgress.current, "isLoading:", isLoading, "meshExists:", !!mesh, "time:", time.current);
+      }
 
       time.current += delta;
       program.uniforms.uTime.value = time.current;
@@ -268,7 +301,7 @@ export const ThreadCanvas: React.FC = () => {
       program.uniforms.uDrawProgress.value = drawProgress.current;
 
       // Render
-      renderer.render({ scene: mesh });
+      renderer.render({ scene: mesh, camera });
 
       animationFrameId.current = requestAnimationFrame(renderLoop);
     };

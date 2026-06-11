@@ -11,11 +11,13 @@ export const LoadingScreen: React.FC = () => {
   const [text, setText] = useState("");
 
   useEffect(() => {
+    console.log("LoadingScreen useEffect mounted");
     const fullText = "ДЕЛО № 1853: ДЕТЕКТИВНЫЙ ВЕЧЕР...";
     
     // Typewriter effect
     let charIdx = 0;
     const typingInterval = setInterval(() => {
+      console.log("Interval charIdx:", charIdx, "text:", fullText.substring(0, charIdx + 1));
       if (charIdx < fullText.length) {
         setText(fullText.substring(0, charIdx + 1));
         charIdx++;
