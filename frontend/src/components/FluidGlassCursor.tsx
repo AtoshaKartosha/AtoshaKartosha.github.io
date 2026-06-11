@@ -1,631 +1,390 @@
 "use client";
 
-import React, { useRef, useState, useEffect, memo } from "react";
-import { Canvas, createPortal, useFrame, useThree } from "@react-three/fiber";
-import { MeshTransmissionMaterial, useTexture } from "@react-three/drei";
-import * as THREE from "three";
-import gsap from "gsap";
+import React, { useRef, useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
 import { boardItems } from "../data/boardItems";
+import {
+  CorkboardTexture,
+  DossierSvg,
+  Suspect1Svg,
+  Suspect2Svg,
+  MapSvg,
+  RotaryPhoneSvg,
+  VintageClockSvg,
+  EvidenceBagSvg,
+  NewspaperSvg,
+} from "./BoardSvgs";
+import { ThreadCanvas } from "./ThreadCanvas";
 
-interface ModeWrapperProps {
-  children: React.ReactNode;
-  mouseRef: React.MutableRefObject<{ x: number; y: number }>;
-  isLoading: boolean;
-  size: { width: number; height: number };
-}
-
-// The WebGL 3D Detective Logo built with native Three.js primitives
-const WebGlDetectiveLogo: React.FC<{
-  logoRef?: React.RefObject<THREE.Group | null>;
-  opacityRef?: React.MutableRefObject<number>;
-}> = ({ logoRef, opacityRef }) => {
-  const [opacity, setOpacity] = useState(1);
-
-  useFrame(() => {
-    if (opacityRef && opacityRef.current !== opacity) {
-      setOpacity(opacityRef.current);
-    }
-  });
-
-  return (
-    <group ref={logoRef} position={[0, 0, 0.2]} scale={[2.2, 2.2, 1]}>
-      {/* 1. Outer Gold Badge Circle */}
-      <mesh position={[0, 0, 0.01]}>
-        <ringGeometry args={[0.9, 1.0, 64]} />
-        <meshBasicMaterial color="#c8a96e" transparent opacity={opacity} />
-      </mesh>
-      
-      {/* 2. Inner Red Dotted Circle */}
-      <mesh position={[0, 0, 0.02]}>
-        <ringGeometry args={[0.83, 0.85, 64]} />
-        <meshBasicMaterial color="#c41e1e" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 3. Parchment Face Background */}
-      <mesh position={[0, 0, 0.03]}>
-        <circleGeometry args={[0.82, 64]} />
-        <meshBasicMaterial color="#decfa8" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 4. Fedora Hat Crown */}
-      <mesh position={[0, 0.22, 0.05]} scale={[0.75, 0.45, 1]}>
-        <circleGeometry args={[0.5, 32]} />
-        <meshBasicMaterial color="#0c0907" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 5. Fedora Brim */}
-      <mesh position={[0, 0.16, 0.06]} scale={[1.2, 0.06, 1]}>
-        <planeGeometry />
-        <meshBasicMaterial color="#c41e1e" transparent opacity={opacity} />
-      </mesh>
-      
-      {/* 6. Fedora Brim Shadow */}
-      <mesh position={[0, 0.13, 0.07]} scale={[1.15, 0.04, 1]}>
-        <planeGeometry />
-        <meshBasicMaterial color="#0c0907" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 7. Sunglasses Left Lens */}
-      <mesh position={[-0.18, -0.05, 0.08]} scale={[0.16, 0.12, 1]}>
-        <circleGeometry args={[1, 32]} />
-        <meshBasicMaterial color="#0c0907" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 8. Sunglasses Right Lens */}
-      <mesh position={[0.18, -0.05, 0.08]} scale={[0.16, 0.12, 1]}>
-        <circleGeometry args={[1, 32]} />
-        <meshBasicMaterial color="#0c0907" transparent opacity={opacity} />
-      </mesh>
-      
-      {/* 9. Sunglasses Bridge */}
-      <mesh position={[0, -0.02, 0.09]} scale={[0.2, 0.02, 1]}>
-        <planeGeometry />
-        <meshBasicMaterial color="#0c0907" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 10. Coat Shoulders */}
-      <mesh position={[0, -0.45, 0.08]} scale={[0.7, 0.35, 1]}>
-        <planeGeometry />
-        <meshBasicMaterial color="#0c0907" transparent opacity={opacity} />
-      </mesh>
-
-      {/* 11. Red Tie */}
-      <mesh position={[0, -0.58, 0.09]} scale={[0.07, 0.22, 1]}>
-        <planeGeometry />
-        <meshBasicMaterial color="#c41e1e" transparent opacity={opacity} />
-      </mesh>
-    </group>
-  );
-};
-
-
-// ModeWrapper handles FBO creation and rendering the lens following the mouse
-const ModeWrapper = memo(function ModeWrapper({
-  children,
-  mouseRef,
-  isLoading,
-  size,
-}: ModeWrapperProps) {
-  const ref = useRef<THREE.Group>(null);
-  
-  // Custom manual WebGLRenderTarget to avoid WebGL2 immutable texture errors
-  const [renderTarget] = useState(() => new THREE.WebGLRenderTarget(512, 512, {
-    minFilter: THREE.LinearFilter,
-    magFilter: THREE.LinearFilter,
-    format: THREE.RGBAFormat,
-  }));
-
-  const bgPlaneMatRef = useRef<THREE.MeshBasicMaterial>(null);
-
-  const { viewport: vp, camera } = useThree();
-  const [scene] = useState(() => new THREE.Scene());
-
-  // Keep render target size synchronized with canvas viewport (accounting for DPR)
-  useEffect(() => {
-    if (size.width > 0 && size.height > 0) {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      renderTarget.setSize(size.width * dpr, size.height * dpr);
-    }
-  }, [size, renderTarget]);
-
-  // Fade out WebGL flat background plane when loading completes
-  useEffect(() => {
-    if (!isLoading && bgPlaneMatRef.current) {
-      gsap.to(bgPlaneMatRef.current, {
-        opacity: 0,
-        duration: 1.0,
-        ease: "power2.out",
-        onComplete: () => {
-          if (bgPlaneMatRef.current) {
-            bgPlaneMatRef.current.visible = false;
-          }
-        },
-      });
-    }
-  }, [isLoading]);
-
-  useFrame((state) => {
-    const { gl } = state;
-    if (!ref.current) return;
-    
-    // Smoothly follow the mouse (normalized to viewport units)
-    const targetX = (mouseRef.current.x * vp.width) / 2;
-    const targetY = (mouseRef.current.y * vp.height) / 2;
-    
-    ref.current.position.x = THREE.MathUtils.lerp(ref.current.position.x, targetX, 0.15);
-    ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, targetY, 0.15);
-    ref.current.position.z = 3.0; // Float above the board items
-
-    // FBO texture parameters remain static to avoid WebGL2 immutable texture errors
-
-    // Render off-screen scene into renderTarget
-    gl.setRenderTarget(renderTarget);
-    gl.render(scene, camera);
-    gl.setRenderTarget(null);
-  });
-
-  return (
-    <>
-      {/* Portals the board items AND lights into the off-screen scene */}
-      {createPortal(
-        <>
-          <ambientLight intensity={1.5} />
-          <directionalLight position={[5, 10, 5]} intensity={1.0} />
-          {children}
-        </>,
-        scene
-      )}
-
-
-      {/* Render the background FBO texture flat on screen (fades out after loading) */}
-      <mesh scale={[vp.width, vp.height, 1]} position={[0, 0, 0]}>
-        <planeGeometry />
-        <meshBasicMaterial
-          ref={bgPlaneMatRef}
-          map={renderTarget.texture}
-          transparent
-          opacity={1}
-        />
-      </mesh>
-
-      {/* The 3D Vintage Magnifying Glass Lens following the mouse pointer */}
-      <group ref={ref}>
-        {/* 1. Gold/Brass Bezel Outer Ring */}
-        <mesh>
-          <torusGeometry args={[0.62, 0.03, 16, 64]} />
-          <meshPhysicalMaterial
-            color="#c8a96e"
-            roughness={0.15}
-            metalness={0.9}
-            clearcoat={1.0}
-            clearcoatRoughness={0.1}
-          />
-        </mesh>
-
-        {/* 2. Inner Red Bezel Accenting Ring */}
-        <mesh position={[0, 0, 0.01]}>
-          <torusGeometry args={[0.59, 0.006, 8, 64]} />
-          <meshBasicMaterial color="#c41e1e" />
-        </mesh>
-
-        {/* 3. The refracting glass lens body */}
-        <mesh scale={[0.58, 0.58, 0.15]} position={[0, 0, 0.005]}>
-          <sphereGeometry args={[1, 32, 32]} />
-          <MeshTransmissionMaterial
-            buffer={renderTarget.texture}
-            ior={1.35}
-            thickness={2.5}
-            anisotropy={0.1}
-            chromaticAberration={0.03}
-            transmission={1.0}
-            roughness={0.0}
-            distortion={0.0}
-            distortionScale={0.0}
-            temporalDistortion={0.0}
-          />
-        </mesh>
-
-        {/* 4. Wooden Handle and Brass Details */}
-        <group position={[0, 0, -0.01]}>
-          {/* Handle Brass Joint */}
-          <mesh position={[-0.46, -0.46, 0]} rotation={[0, 0, -Math.PI / 4]}>
-            <cylinderGeometry args={[0.03, 0.03, 0.08, 16]} />
-            <meshPhysicalMaterial
-              color="#c8a96e"
-              roughness={0.2}
-              metalness={0.8}
-            />
-          </mesh>
-
-          {/* Wooden Grip */}
-          <mesh position={[-0.61, -0.61, -0.01]} rotation={[0, 0, -Math.PI / 4]}>
-            <cylinderGeometry args={[0.025, 0.025, 0.4, 16]} />
-            <meshPhysicalMaterial
-              color="#3e2723"
-              roughness={0.65}
-              metalness={0.1}
-            />
-          </mesh>
-
-          {/* Handle Brass Tip */}
-          <mesh position={[-0.77, -0.77, -0.01]} rotation={[0, 0, -Math.PI / 4]}>
-            <cylinderGeometry args={[0.027, 0.027, 0.06, 16]} />
-            <meshPhysicalMaterial
-              color="#c8a96e"
-              roughness={0.2}
-              metalness={0.8}
-            />
-          </mesh>
-        </group>
-      </group>
-    </>
-  );
-});
-
-// The WebGL scene matching the HTML board exactly using basic geometries
-const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: number } }> = ({
-  isMobile,
-  panOffset,
-}) => {
-  const { viewport } = useThree();
-  const isLoading = useBoardStore((state) => state.isLoading);
-  const logoRef = useRef<THREE.Group>(null);
-  const blackPlaneMatRef = useRef<THREE.MeshBasicMaterial>(null);
-  const logoOpacityRef = useRef(1);
-
-  // Load high-fidelity textures using Drei's useTexture
-  const textures = useTexture({
-    dossier: "/images/board/dossier.png",
-    "suspect-1": "/images/board/suspect-1.png",
-    "suspect-2": "/images/board/suspect-2.png",
-    map: "/images/board/map.png",
-    phone: "/images/board/phone.png",
-    clock: "/images/board/clock.png",
-    evidence: "/images/board/evidence.png",
-    newspaper: "/images/board/newspaper.png",
-    note: "/images/board/note.png",
-    background: "/background_detective.svg",
-  });
-  console.log("WebGlBoardScene rendering, textures loaded:", Object.keys(textures));
-
-  // Ensure textures use correct sRGB encoding
-  useEffect(() => {
-    Object.values(textures).forEach((tex) => {
-      tex.colorSpace = THREE.SRGBColorSpace;
-    });
-  }, [textures]);
-
-  // Procedural gradient corkboard texture
-  const [bgTexture] = useState(() => {
-    if (typeof window === "undefined") return null;
-    const canvas = document.createElement("canvas");
-    canvas.width = 512;
-    canvas.height = 512;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      const grad = ctx.createRadialGradient(256, 256, 0, 256, 256, 360);
-      grad.addColorStop(0, "#201811");
-      grad.addColorStop(1, "#0a0806");
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 512, 512);
-
-      // Add noise
-      const imgData = ctx.getImageData(0, 0, 512, 512);
-      const data = imgData.data;
-      for (let i = 0; i < data.length; i += 4) {
-        const noise = (Math.random() - 0.5) * 8;
-        data[i] = Math.min(255, Math.max(0, data[i] + noise));
-        data[i+1] = Math.min(255, Math.max(0, data[i+1] + noise));
-        data[i+2] = Math.min(255, Math.max(0, data[i+2] + noise));
-      }
-      ctx.putImageData(imgData, 0, 0);
-    }
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.colorSpace = THREE.SRGBColorSpace;
-    return texture;
-  });
-
-  // Animate the WebGL logo flight and fade out the black preloader plane
-  useEffect(() => {
-    if (!isLoading && logoRef.current) {
-      const boardW = viewport.width * (isMobile ? 1.7 : 0.94);
-      const boardH = viewport.height * (isMobile ? 2.1 : 0.92);
-      const pos = isMobile ? boardItems[0].mobile : boardItems[0].desktop; // dossier coordinates
-
-      const targetX = -boardW / 2 + (pos.left / 100) * boardW + ((pos.width / 2) / 100) * boardW;
-      const targetW = (pos.width / 100) * boardW;
-      const targetY = boardH / 2 - (pos.top / 100) * boardH - (targetW * 0.8 / 2);
-
-      // 1. Fly the WebGL logo to the dossier cover in local space
-      gsap.to(logoRef.current.position, {
-        x: targetX,
-        y: targetY,
-        z: 0.1, // sit exactly on top of dossier
-        duration: 1.2,
-        ease: "power2.inOut",
-      });
-
-      gsap.to(logoRef.current.scale, {
-        x: targetW * 0.35, // scale to fit the dossier cover center (approx 35% of dossier width)
-        y: targetW * 0.35,
-        z: 1.0,
-        duration: 1.2,
-        ease: "power2.inOut",
-      });
-
-      // 2. Once logo lands, fade it out to 0 opacity over 0.5s to reveal the HTML dossier logo
-      gsap.to(logoOpacityRef, {
-        current: 0,
-        duration: 0.5,
-        delay: 1.2,
-        ease: "power2.out",
-        onComplete: () => {
-          if (logoRef.current) {
-            logoRef.current.visible = false;
-          }
-        },
-      });
-    }
-  }, [isLoading, viewport, isMobile]);
-
-  // Compute scale multiplier for mobile pan offset to match viewport
-  const panScaleX = isMobile ? viewport.width / window.innerWidth : 0;
-  const panScaleY = isMobile ? viewport.height / window.innerHeight : 0;
-
-  // Render the WebGL board items matching their HTML counterpart positions
-  return (
-    <group
-      position={[
-        panOffset.x * panScaleX,
-        panOffset.y * panScaleY,
-        0,
-      ]}
-    >
-      {/* Background board shadow/border card */}
-      <mesh scale={[viewport.width * (isMobile ? 1.7 : 0.94), viewport.height * (isMobile ? 2.1 : 0.92), 1]} position={[0, 0, -0.5]}>
-        <planeGeometry />
-        <meshBasicMaterial color="#1b140e" />
-      </mesh>
-
-      {/* Background board image matching the HTML board's background */}
-      <mesh scale={[viewport.width * (isMobile ? 1.7 : 0.94), viewport.height * (isMobile ? 2.1 : 0.92), 1]} position={[0, 0, -0.4]}>
-        <planeGeometry />
-        {textures.background ? (
-          <meshBasicMaterial map={textures.background} />
-        ) : (
-          <meshBasicMaterial color="#2c1d12" />
-        )}
-      </mesh>
-
-      {/* The WebGL loading screen background (black plane that fades out) */}
-      {isLoading && (
-        <mesh scale={[viewport.width * 3, viewport.height * 3, 1]} position={[0, 0, 0.15]}>
-          <planeGeometry />
-          <meshBasicMaterial ref={blackPlaneMatRef} color="#080808" transparent opacity={1} />
-        </mesh>
-      )}
-
-      {/* Render WebGL representation of each board item using basic geometries */}
-      {boardItems.map((item) => {
-        const pos = isMobile ? item.mobile : item.desktop;
-
-        const boardW = viewport.width * (isMobile ? 1.7 : 0.94);
-        const boardH = viewport.height * (isMobile ? 2.1 : 0.92);
-
-        const w = (pos.width / 100) * boardW;
-        
-        let aspect = 1.2;
-        if (item.id === "dossier") aspect = 0.8;
-        else if (item.id === "map" || item.id === "phone" || item.id === "clock") aspect = 1.0;
-        else if (item.id === "evidence") aspect = 1.25;
-        else if (item.id === "newspaper") aspect = 1.22;
-        const h = w * aspect;
-
-        const x = -boardW / 2 + (pos.left / 100) * boardW + w / 2;
-        const y = boardH / 2 - (pos.top / 100) * boardH - h / 2;
-
-        const texture = textures[item.id as keyof typeof textures];
-
-        if (texture) {
-          return (
-            <group key={item.id} position={[x, y, 0.1]} rotation={[0, 0, (pos.rotation * Math.PI) / 180]}>
-              <mesh scale={[w, h, 1]}>
-                <planeGeometry />
-                <meshBasicMaterial
-                  map={texture}
-                  transparent={true}
-                />
-              </mesh>
-            </group>
-          );
-        }
-
-        return (
-          <group key={item.id} position={[x, y, 0.1]} rotation={[0, 0, (pos.rotation * Math.PI) / 180]}>
-            {item.id === "dossier" && (
-              // Dossier Folder
-              <mesh scale={[w, h, 1]}>
-                <planeGeometry />
-                <meshBasicMaterial color="#bfae93" />
-              </mesh>
-            )}
-
-            {item.id === "suspect-1" && (
-              // Suspect 1 (Femme Fatale) - Polaroid
-              <group>
-                <mesh scale={[w, h, 1]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#f1ece1" />
-                </mesh>
-                <mesh scale={[w * 0.88, h * 0.72, 1]} position={[0, h * 0.08, 0.01]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#2c2014" />
-                </mesh>
-              </group>
-            )}
-
-            {item.id === "suspect-2" && (
-              // Suspect 2 (Mobster) - Polaroid
-              <group>
-                <mesh scale={[w, h, 1]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#eae3d5" />
-                </mesh>
-                <mesh scale={[w * 0.88, h * 0.72, 1]} position={[0, h * 0.08, 0.01]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#241a12" />
-                </mesh>
-              </group>
-            )}
-
-            {item.id === "map" && (
-              // Map Card (Beige with red pin circle)
-              <group>
-                <mesh scale={[w, h, 1]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#decfa8" />
-                </mesh>
-                <mesh position={[0, 0, 0.01]} scale={[w * 0.14, w * 0.14, 1]}>
-                  <circleGeometry args={[1, 32]} />
-                  <meshBasicMaterial color="#c41e1e" />
-                </mesh>
-              </group>
-            )}
-
-            {item.id === "phone" && (
-              // Phone (Black circle body + cream dial circle)
-              <group>
-                <mesh scale={[w * 0.9, h * 0.9, 1]}>
-                  <circleGeometry args={[1, 32]} />
-                  <meshBasicMaterial color="#1c1b18" />
-                </mesh>
-                <mesh position={[0, -h * 0.08, 0.01]} scale={[w * 0.35, w * 0.35, 1]}>
-                  <circleGeometry args={[1, 32]} />
-                  <meshBasicMaterial color="#eae2d2" />
-                </mesh>
-              </group>
-            )}
-
-            {item.id === "clock" && (
-              // Clock (Gold case + cream dial face)
-              <group>
-                <mesh scale={[w, h, 1]}>
-                  <circleGeometry args={[1, 32]} />
-                  <meshBasicMaterial color="#c8a96e" />
-                </mesh>
-                <mesh position={[0, 0, 0.01]} scale={[w * 0.84, h * 0.84, 1]}>
-                  <circleGeometry args={[1, 32]} />
-                  <meshBasicMaterial color="#ecdcb9" />
-                </mesh>
-              </group>
-            )}
-
-            {item.id === "evidence" && (
-              // Evidence Bag (translucent sheet + red/black dice)
-              <group>
-                <mesh scale={[w, h, 1]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#ffffff" transparent opacity={0.16} />
-                </mesh>
-                <mesh position={[-w * 0.2, -h * 0.2, 0.01]} scale={[w * 0.22, w * 0.22, 1]} rotation={[0, 0, 0.2]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#c41e1e" />
-                </mesh>
-                <mesh position={[w * 0.2, -h * 0.25, 0.01]} scale={[w * 0.22, w * 0.22, 1]} rotation={[0, 0, -0.3]}>
-                  <planeGeometry />
-                  <meshBasicMaterial color="#1c1b18" />
-                </mesh>
-              </group>
-            )}
-
-            {item.id === "newspaper" && (
-              // Newspaper (Aged yellow-beige clipping)
-              <mesh scale={[w, h, 1]}>
-                <planeGeometry />
-                <meshBasicMaterial color="#dfd6c0" />
-              </mesh>
-            )}
-
-            {item.id === "note" && (
-              // Typewritten Note (Beige card)
-              <mesh scale={[w, h, 1]}>
-                <planeGeometry />
-                <meshBasicMaterial color="#decfa8" />
-              </mesh>
-            )}
-          </group>
-        );
-      })}
-
-      {/* WebGL 3D Detective Logo badge */}
-      <WebGlDetectiveLogo logoRef={logoRef} opacityRef={logoOpacityRef} />
-    </group>
-  );
-};
-
+const LENS_RADIUS = 120; // Radius in pixels
+const ZOOM_FACTOR = 1.35; // Magnification factor
 
 export const FluidGlassCursor: React.FC = () => {
-  const mouseRef = useRef({ x: 0, y: 0 });
+  const magnifierRef = useRef<HTMLDivElement>(null);
+  const clonedBoardRef = useRef<HTMLDivElement>(null);
   
   const isLoading = useBoardStore((state) => state.isLoading);
-  const panOffset = useBoardStore((state) => state.panOffset);
+  const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const [isMobile, setIsMobile] = useState(false);
-  const [size, setSize] = useState({ width: 0, height: 0 });
+  const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
 
-  // Resize handler using ResizeObserver
+  // Mouse position in viewport coordinates
+  const mouseRef = useRef({
+    x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+  });
+
+  // Lerped position for the smooth follow effect
+  const lerpedPos = useRef({
+    x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
+    y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
+  });
+
+  // Generate the lens displacement map once on mount
   useEffect(() => {
-    const canvas = document.querySelector(".fluid-glass-canvas canvas");
-    if (!canvas) return;
+    const size = LENS_RADIUS * 2;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const parent = canvas.parentElement;
-    if (!parent) return;
+    const imgData = ctx.createImageData(size, size);
+    const data = imgData.data;
 
-    const resizeObserver = new ResizeObserver(() => {
-      setSize({
-        width: parent.clientWidth,
-        height: parent.clientHeight,
-      });
-      setIsMobile(window.innerWidth < 1024);
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        const idx = (y * size + x) * 4;
+        
+        // Coordinates relative to center of the lens
+        const dx = x - LENS_RADIUS;
+        const dy = y - LENS_RADIUS;
+        const r = Math.sqrt(dx * dx + dy * dy);
+
+        if (r >= LENS_RADIUS) {
+          // Neutral gray (no displacement outside the lens boundary)
+          data[idx] = 128;     // R
+          data[idx + 1] = 128; // G
+          data[idx + 2] = 128; // B
+          data[idx + 3] = 255; // A
+        } else {
+          // Normalized distance from center (0 to 1)
+          const normR = r / LENS_RADIUS;
+          
+          // Bulge distortion profile: peaks inside, zero at center/edges
+          // Sine profile: sin(normR * Math.PI) * strength
+          const factor = Math.sin(normR * Math.PI) * 0.35;
+          
+          // Displacement vectors point inwards for magnifying convex lens effect
+          const dispX = -(dx / (r || 1)) * factor;
+          const dispY = -(dy / (r || 1)) * factor;
+
+          // Map displacement (-1 to 1) to color range (0 to 255)
+          data[idx] = Math.max(0, Math.min(255, Math.round(128 + dispX * 127)));
+          data[idx + 1] = Math.max(0, Math.min(255, Math.round(128 + dispY * 127)));
+          data[idx + 2] = 128; // B (not used)
+          data[idx + 3] = 255; // A
+        }
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    const url = canvas.toDataURL();
+    requestAnimationFrame(() => {
+      setDisplacementMapUrl(url);
     });
-
-    resizeObserver.observe(parent);
-    return () => resizeObserver.disconnect();
   }, []);
 
-  // Update mouse coordinates globally
+  // Handle mobile check and initial sizing
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Track mouse coordinates globally
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      // Normalize to clip space coordinates (-1 to 1)
-      mouseRef.current.x = (e.clientX / window.innerWidth) * 2 - 1;
-      mouseRef.current.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      mouseRef.current.x = e.clientX;
+      mouseRef.current.y = e.clientY;
     };
-    
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  return (
-    <div className="fluid-glass-canvas absolute inset-0 w-full h-full pointer-events-none z-25 overflow-hidden">
-      <Canvas
-        camera={{ position: [0, 0, 20], fov: 15 }}
-        gl={{ alpha: true, antialias: true, preserveDrawingBuffer: true }}
-        style={{ width: "100%", height: "100%" }}
-      >
-        <ambientLight intensity={1.2} />
-        <directionalLight position={[5, 8, 3]} intensity={1.5} />
+  // Animation loop for smooth follow and precise alignment
+  useEffect(() => {
+    let animationFrameId: number;
 
-        <ModeWrapper
-          mouseRef={mouseRef}
-          isLoading={isLoading}
-          size={size}
+    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+    const update = () => {
+      // Smoothly lerp towards target mouse coordinates (damping factor 0.15 matches original WebGL)
+      lerpedPos.current.x = lerp(lerpedPos.current.x, mouseRef.current.x, 0.15);
+      lerpedPos.current.y = lerp(lerpedPos.current.y, mouseRef.current.y, 0.15);
+
+      const boardEl = document.querySelector('[data-board="true"]');
+      if (magnifierRef.current && clonedBoardRef.current && boardEl) {
+        const boardRect = boardEl.getBoundingClientRect();
+        
+        // Centered position of the lens on screen
+        const clientX = lerpedPos.current.x;
+        const clientY = lerpedPos.current.y;
+        
+        magnifierRef.current.style.transform = `translate3d(${clientX - LENS_RADIUS}px, ${clientY - LENS_RADIUS}px, 0)`;
+
+        // Calculate mouse relative coordinates to the board
+        const mouseX = clientX - boardRect.left;
+        const mouseY = clientY - boardRect.top;
+
+        // Apply same size as original board to make relative positions match perfectly
+        clonedBoardRef.current.style.width = `${boardRect.width}px`;
+        clonedBoardRef.current.style.height = `${boardRect.height}px`;
+
+        // Scale and shift cloned board so the point under cursor aligns perfectly with center of lens
+        const tx = LENS_RADIUS - mouseX * ZOOM_FACTOR;
+        const ty = LENS_RADIUS - mouseY * ZOOM_FACTOR;
+        clonedBoardRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${ZOOM_FACTOR})`;
+      }
+
+      animationFrameId = requestAnimationFrame(update);
+    };
+
+    update();
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  // Render SVG based on ID
+  const renderItemSvg = (id: string) => {
+    switch (id) {
+      case "dossier":
+        return <DossierSvg forceLogo={true} />;
+      case "suspect-1":
+        return <Suspect1Svg />;
+      case "suspect-2":
+        return <Suspect2Svg />;
+      case "map":
+        return <MapSvg />;
+      case "phone":
+        return <RotaryPhoneSvg />;
+      case "clock":
+        return <VintageClockSvg />;
+      case "evidence":
+        return <EvidenceBagSvg />;
+      case "newspaper":
+        return <NewspaperSvg />;
+      case "note":
+        return (
+          <div className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] shadow-[0_6px_12px_rgba(0,0,0,0.5)] flex flex-col justify-between select-none">
+            <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
+              РАСПИСАНИЕ
+            </div>
+            <div className="space-y-0.5 select-none leading-tight">
+              <div>16:00 — Сбор гостей</div>
+              <div>16:30 — Инструктаж</div>
+              <div>17:00 — Первая сессия</div>
+              <div>19:00 — Кофе-брейк</div>
+              <div>19:30 — Вторая сессия</div>
+              <div>21:30 — Итоги</div>
+            </div>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="absolute inset-0 w-full h-full pointer-events-none z-25 overflow-hidden">
+      <div
+        ref={magnifierRef}
+        className="absolute pointer-events-none transition-opacity duration-500"
+        style={{
+          width: LENS_RADIUS * 2,
+          height: LENS_RADIUS * 2,
+          opacity: isLoading ? 0 : 1,
+          left: 0,
+          top: 0,
+        }}
+      >
+        {/* Cloned board contents inside circular lens clip */}
+        <div
+          className="absolute inset-0 overflow-hidden shadow-[inset_0_0_24px_rgba(0,0,0,0.45),0_10px_30px_rgba(0,0,0,0.5)]"
+          style={{
+            borderRadius: "50%",
+            transform: "translate3d(0, 0, 0)", // Hardware accelerated clipping
+          }}
         >
-          {/* Renders the matching WebGL scene inside the FBO only */}
-          <React.Suspense fallback={null}>
-            <WebGlBoardScene isMobile={isMobile} panOffset={panOffset} />
-          </React.Suspense>
-        </ModeWrapper>
-      </Canvas>
+          {/* Apply displacement filter at this level to keep map stationary relative to the lens */}
+          <div
+            className="w-full h-full"
+            style={{
+              filter: displacementMapUrl ? "url(#lens-bulge)" : "none",
+            }}
+          >
+            {/* Cloned Board */}
+            <div
+              ref={clonedBoardRef}
+              className="absolute origin-top-left"
+              style={{
+                backgroundImage: "url(/background_detective.svg)",
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                pointerEvents: "none",
+              }}
+            >
+              {/* Repeating cork board texture in background */}
+              <CorkboardTexture />
+
+              {/* Red thread canvas overlay */}
+              <ThreadCanvas />
+
+              {/* Cloned Board Items */}
+              {boardItems.map((item) => {
+                const pos = isMobile ? item.mobile : item.desktop;
+                const isHovered = hoveredItemId === item.id;
+
+                return (
+                  <div
+                    key={item.id}
+                    className={`absolute transition-all duration-200 ease-out z-10 ${
+                      isHovered ? "scale-105 z-30" : ""
+                    }`}
+                    style={{
+                      left: `${pos.left}%`,
+                      top: `${pos.top}%`,
+                      width: `${pos.width}%`,
+                      transform: `rotate(${pos.rotation}deg)`,
+                    }}
+                  >
+                    {/* Red Pin Pierce-point */}
+                    <div className="absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#c41e1e] border-2 border-[#1c160e] shadow-[0_4px_8px_rgba(0,0,0,0.6)] flex items-center justify-center z-40">
+                      <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
+                      <div
+                        data-pin-id={item.id}
+                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
+                      />
+                    </div>
+
+                    {/* Visual SVG Content */}
+                    <div className="transition-transform duration-200">
+                      {renderItemSvg(item.id)}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Glass glare gradients */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 75%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 55%, rgba(0, 0, 0, 0.18) 100%)",
+            }}
+          />
+        </div>
+
+        {/* Outer Metallic Bezel Ring */}
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{
+            border: "1.5px solid #8b6d3b",
+            boxShadow: "0 6px 20px rgba(0,0,0,0.6), inset 0 0 0 8px #c8a96e, inset 0 2px 4px 6px rgba(255,255,255,0.45), inset 0 -2px 4px 6px rgba(0,0,0,0.55)",
+          }}
+        />
+
+        {/* Inner Red Bezel Accenting Ring */}
+        <div
+          className="absolute rounded-full pointer-events-none"
+          style={{
+            inset: "8px",
+            border: "2.5px solid #c41e1e",
+            boxShadow: "inset 0 0 4px rgba(0,0,0,0.4)",
+          }}
+        />
+
+        {/* Vintage Handle rotated 45deg (pointing down-left outwards) */}
+        <div
+          style={{
+            position: "absolute",
+            left: `${LENS_RADIUS * (1 - 0.7071)}px`,
+            top: `${LENS_RADIUS * (1 + 0.7071)}px`,
+            transform: "rotate(45deg)",
+            transformOrigin: "top center",
+          }}
+        >
+          {/* Brass Joint */}
+          <div
+            style={{
+              width: "18px",
+              height: "26px",
+              background: "linear-gradient(90deg, #8b6d3b 0%, #c8a96e 50%, #8b6d3b 100%)",
+              borderRadius: "3px 3px 0 0",
+              marginLeft: "-9px",
+              boxShadow: "2px 2px 5px rgba(0,0,0,0.4)",
+              border: "1px solid #5c4827",
+            }}
+          />
+
+          {/* Wooden Grip */}
+          <div
+            style={{
+              width: "15px",
+              height: "110px",
+              background: "linear-gradient(90deg, #2b1d12 0%, #4e3629 30%, #3a2518 70%, #1e120a 100%)",
+              borderRadius: "0 0 4px 4px",
+              marginLeft: "-7.5px",
+              marginTop: "26px",
+              position: "absolute",
+              top: 0,
+              boxShadow: "3px 3px 8px rgba(0,0,0,0.5)",
+            }}
+          />
+
+          {/* Handle Brass Tip */}
+          <div
+            style={{
+              width: "16px",
+              height: "12px",
+              background: "linear-gradient(90deg, #8b6d3b 0%, #c8a96e 50%, #8b6d3b 100%)",
+              borderRadius: "0 0 6px 6px",
+              marginLeft: "-8px",
+              marginTop: "136px",
+              position: "absolute",
+              top: 0,
+              boxShadow: "2px 2px 4px rgba(0,0,0,0.4)",
+            }}
+          />
+        </div>
+      </div>
+
+      {/* SVG filter for lens bulge refraction */}
+      <svg width="0" height="0" className="absolute">
+        <defs>
+          {displacementMapUrl && (
+            <filter id="lens-bulge">
+              <feImage href={displacementMapUrl} result="map" />
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="map"
+                scale="45"
+                xChannelSelector="R"
+                yChannelSelector="G"
+              />
+            </filter>
+          )}
+        </defs>
+      </svg>
     </div>
   );
 };

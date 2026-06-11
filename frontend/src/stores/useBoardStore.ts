@@ -11,11 +11,13 @@ interface BoardState {
   panOffset: Position;
   zoomScale: number;
   isLoading: boolean;
+  hoveredItemId: string | null;
   setPinPosition: (id: string, pos: Position) => void;
   setActivePopup: (id: string | null) => void;
   setPanOffset: (pos: Position | ((prev: Position) => Position)) => void;
   setZoomScale: (scale: number) => void;
   setIsLoading: (loading: boolean) => void;
+  setHoveredItemId: (id: string | null) => void;
 }
 
 export const useBoardStore = create<BoardState>((set) => ({
@@ -24,6 +26,7 @@ export const useBoardStore = create<BoardState>((set) => ({
   panOffset: { x: 0, y: 0 },
   zoomScale: 1,
   isLoading: true,
+  hoveredItemId: null,
   setPinPosition: (id, pos) =>
     set((state) => ({
       pinPositions: { ...state.pinPositions, [id]: pos },
@@ -35,4 +38,5 @@ export const useBoardStore = create<BoardState>((set) => ({
     })),
   setZoomScale: (scale) => set({ zoomScale: scale }),
   setIsLoading: (loading) => set({ isLoading: loading }),
+  setHoveredItemId: (id) => set({ hoveredItemId: id }),
 }));

@@ -29,6 +29,8 @@ export const DetectiveBoard: React.FC = () => {
   const panOffset = useBoardStore((state) => state.panOffset);
   const setPanOffset = useBoardStore((state) => state.setPanOffset);
   const isLoading = useBoardStore((state) => state.isLoading);
+  const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
+  const setHoveredItemId = useBoardStore((state) => state.setHoveredItemId);
 
   const [isMobile, setIsMobile] = useState(false);
   const [isDraggingState, setIsDraggingState] = useState(false);
@@ -286,6 +288,7 @@ export const DetectiveBoard: React.FC = () => {
       {/* 2. THE INVESTIGATION BOARD */}
       <div
         ref={boardRef}
+        data-board="true"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -326,13 +329,18 @@ export const DetectiveBoard: React.FC = () => {
               }}
             >
               {/* Clue button wrapping asset */}
+              {/* Clue button wrapping asset */}
               <button
                 onClick={() => {
                   // Ignore click if it was a drag gesture
                   if (isDragging.current) return;
                   setActivePopup(item.popupId);
                 }}
-                className="w-full focus:outline-none focus:scale-105 transition-all duration-200 ease-out hover:scale-105 hover:z-30 block relative"
+                onPointerEnter={() => setHoveredItemId(item.id)}
+                onPointerLeave={() => setHoveredItemId(null)}
+                className={`w-full focus:outline-none transition-all duration-200 ease-out block relative ${
+                  hoveredItemId === item.id ? "scale-105 z-30" : "hover:scale-105 hover:z-30"
+                }`}
                 aria-haspopup="dialog"
                 aria-label={item.name}
               >
