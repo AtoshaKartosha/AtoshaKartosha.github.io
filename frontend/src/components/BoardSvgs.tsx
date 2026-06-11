@@ -1,4 +1,5 @@
 import React from "react";
+import { useBoardStore } from "../stores/useBoardStore";
 
 // Corkboard SVG Pattern overlay for background texture
 export const CorkboardTexture: React.FC = () => (
@@ -12,61 +13,73 @@ export const CorkboardTexture: React.FC = () => (
 );
 
 // Dossier / Main case folder
-export const DossierSvg: React.FC = () => (
-  <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]">
-    {/* Folder Back */}
-    <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#4a3e30" />
-    <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#bfae93" opacity="0.85" />
-    
-    {/* Folder Inside / Papers */}
-    <rect x="20" y="25" width="260" height="195" rx="2" fill="#eae1cb" transform="rotate(-1 150 120)" />
-    <rect x="25" y="20" width="250" height="200" rx="2" fill="#f4edd9" transform="rotate(1.5 150 120)" />
-    
-    {/* File contents / Lines */}
-    <g transform="rotate(1.5 150 120)">
-      {/* Photo inside folder */}
-      <rect x="40" y="45" width="60" height="70" fill="#222" stroke="#fff" strokeWidth="3" />
-      <circle cx="70" cy="75" r="12" fill="#555" />
-      <path d="M50 110 C50 95 90 95 90 110 Z" fill="#444" />
+export const DossierSvg: React.FC = () => {
+  const isLoading = useBoardStore((state) => state.isLoading);
+  
+  return (
+    <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]">
+      {/* Folder Back */}
+      <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#4a3e30" />
+      <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#bfae93" opacity="0.85" />
       
-      {/* Typed details */}
-      <rect x="115" y="50" width="120" height="8" rx="1" fill="#443a2d" opacity="0.8" />
-      <rect x="115" y="65" width="90" height="6" rx="1" fill="#443a2d" opacity="0.6" />
-      <rect x="115" y="78" width="105" height="6" rx="1" fill="#443a2d" opacity="0.6" />
-      <rect x="115" y="91" width="75" height="6" rx="1" fill="#443a2d" opacity="0.6" />
+      {/* Folder Inside / Papers */}
+      <rect x="20" y="25" width="260" height="195" rx="2" fill="#eae1cb" transform="rotate(-1 150 120)" />
+      <rect x="25" y="20" width="250" height="200" rx="2" fill="#f4edd9" transform="rotate(1.5 150 120)" />
       
-      {/* Big Stamp */}
-      <g transform="translate(140, 110) rotate(-15)">
-        <rect x="0" y="0" width="100" height="35" rx="3" fill="none" stroke="#c41e1e" strokeWidth="3" strokeDasharray="3 1" />
-        <text x="50" y="22" fill="#c41e1e" fontSize="11" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-          ДЕТЕКТИВ
-        </text>
-        <text x="50" y="31" fill="#c41e1e" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-          КЛУБ СПБ
-        </text>
+      {/* File contents / Lines */}
+      <g transform="rotate(1.5 150 120)">
+        {/* Photo inside folder */}
+        <rect x="40" y="45" width="60" height="70" fill="#222" stroke="#fff" strokeWidth="3" />
+        <circle cx="70" cy="75" r="12" fill="#555" />
+        <path d="M50 110 C50 95 90 95 90 110 Z" fill="#444" />
+        
+        {/* Typed details */}
+        <rect x="115" y="50" width="120" height="8" rx="1" fill="#443a2d" opacity="0.8" />
+        <rect x="115" y="65" width="90" height="6" rx="1" fill="#443a2d" opacity="0.6" />
+        <rect x="115" y="78" width="105" height="6" rx="1" fill="#443a2d" opacity="0.6" />
+        <rect x="115" y="91" width="75" height="6" rx="1" fill="#443a2d" opacity="0.6" />
+        
+        {/* Big Stamp */}
+        <g transform="translate(140, 110) rotate(-15)">
+          <rect x="0" y="0" width="100" height="35" rx="3" fill="none" stroke="#c41e1e" strokeWidth="3" strokeDasharray="3 1" />
+          <text x="50" y="22" fill="#c41e1e" fontSize="11" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
+            ДЕТЕКТИВ
+          </text>
+          <text x="50" y="31" fill="#c41e1e" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
+            КЛУБ СПБ
+          </text>
+        </g>
+        
+        {/* Handwriting / Signature */}
+        <path d="M40 145 Q50 135 70 145 T100 135 T130 145" stroke="#1d2e54" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7" />
+      </g>
+
+      {/* Folder Front Flap */}
+      <path d="M10 40 L130 40 L150 50 L290 50 L290 230 L10 230 Z" fill="#a49377" />
+      <path d="M10 40 L290 40 L290 230 L10 230 Z" fill="#8f7e63" opacity="0.3" />
+      
+      {/* Clasp / String tie */}
+      <circle cx="150" cy="140" r="10" fill="#2d2217" />
+      <circle cx="150" cy="140" r="4" fill="#c8a96e" />
+      
+      {/* Detective Logo on cover */}
+      <g transform="translate(100, 70)" data-logo-target="true">
+        <circle cx="50" cy="50" r="48" fill="none" />
+        <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
+          <DetectiveLogoSvg className="w-[100px] h-[100px]" />
+        </g>
       </g>
       
-      {/* Handwriting / Signature */}
-      <path d="M40 145 Q50 135 70 145 T100 135 T130 145" stroke="#1d2e54" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7" />
-    </g>
-
-    {/* Folder Front Flap */}
-    <path d="M10 40 L130 40 L150 50 L290 50 L290 230 L10 230 Z" fill="#a49377" />
-    <path d="M10 40 L290 40 L290 230 L10 230 Z" fill="#8f7e63" opacity="0.3" />
-    
-    {/* Clasp / String tie */}
-    <circle cx="150" cy="140" r="10" fill="#2d2217" />
-    <circle cx="150" cy="140" r="4" fill="#c8a96e" />
-    
-    {/* Text on cover */}
-    <text x="150" y="90" fill="#2d2217" fontSize="14" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="1.5">
-      ДEЛО № 1853
-    </text>
-    <text x="150" y="105" fill="#5c1212" fontSize="10" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="1">
-      TOP SECRET
-    </text>
-  </svg>
-);
+      {/* Text below logo */}
+      <text x="150" y="195" fill="#2d2217" fontSize="13" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="1.2">
+        ДEЛО № 1853
+      </text>
+      <text x="150" y="210" fill="#5c1212" fontSize="9" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="0.8">
+        TOP SECRET
+      </text>
+    </svg>
+  );
+};
 
 // Polaroid Suspect 1 (The Femme Fatale / Agent)
 export const Suspect1Svg: React.FC = () => (
@@ -395,5 +408,86 @@ export const NewspaperSvg: React.FC = () => (
     {/* Paper aging stains */}
     <circle cx="30" cy="60" r="15" fill="#a48c68" opacity="0.15" filter="blur(4px)" />
     <circle cx="150" cy="180" r="20" fill="#a48c68" opacity="0.2" filter="blur(6px)" />
+  </svg>
+);
+
+export const DetectiveLogoSvg: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    viewBox="0 0 200 200"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Dark outer badge circular frame */}
+    <circle cx="100" cy="100" r="95" fill="#141413" stroke="#c8a96e" strokeWidth="3" />
+    <circle cx="100" cy="100" r="88" fill="#1c1b18" stroke="#c41e1e" strokeWidth="1.5" strokeDasharray="4 2" />
+
+    {/* Pop-art geometric background rays */}
+    <g opacity="0.15">
+      <path d="M100 100 L50 10 L80 5 Z" fill="#c41e1e" />
+      <path d="M100 100 L150 10 L120 5 Z" fill="#c41e1e" />
+      <path d="M100 100 L190 70 L195 90 Z" fill="#c41e1e" />
+      <path d="M100 100 L10 70 L5 90 Z" fill="#c41e1e" />
+      <path d="M100 100 L50 190 L20 180 Z" fill="#c41e1e" />
+      <path d="M100 100 L150 190 L180 180 Z" fill="#c41e1e" />
+    </g>
+
+    {/* Detective Face Silhouette (Pop art style) */}
+    <path
+      d="M100 45 C80 45 62 55 58 75 C85 68 115 68 142 75 C138 55 120 45 100 45 Z"
+      fill="#0c0907"
+    />
+    {/* Fedora brim */}
+    <path
+      d="M35 78 C78 62 122 62 165 78 C165 78 120 68 100 68 C80 68 35 78 35 78 Z"
+      fill="#c41e1e"
+    />
+    <path
+      d="M38 80 C79 66 121 66 162 80 L155 77 C118 67 82 67 45 77 Z"
+      fill="#0c0907"
+    />
+
+    {/* Face / Glasses / Shadow */}
+    <path
+      d="M60 80 C60 120 80 140 100 140 C120 140 140 120 140 80 H60 Z"
+      fill="#decfa8"
+    />
+    {/* Sunglasses */}
+    <path
+      d="M65 92 C72 88 85 88 92 95 C93 90 107 90 108 95 C115 88 128 88 135 92 C140 99 135 110 125 110 C115 110 110 102 108 98 C106 102 101 110 91 110 C81 110 76 99 65 92 Z"
+      fill="#0c0907"
+    />
+    {/* Sunglasses reflection highlight */}
+    <path d="M72 95 L85 102" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+    <path d="M115 95 L128 102" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" opacity="0.6" />
+
+    {/* Cheek and nose shadows */}
+    <path d="M96 95 L96 118 L104 118 Z" fill="#0c0907" />
+    <path d="M60 80 L80 135 L60 120 Z" fill="#0c0907" opacity="0.15" />
+    <path d="M140 80 L120 135 L140 120 Z" fill="#0c0907" opacity="0.15" />
+
+    {/* Collar / Coat / Tie */}
+    <path d="M60 140 L100 185 L140 140 Z" fill="#0c0907" />
+    <path d="M75 140 L100 165 L85 140 Z" fill="#decfa8" />
+    <path d="M125 140 L100 165 L115 140 Z" fill="#decfa8" />
+    <path d="M96 150 L100 185 L104 150 Z" fill="#c41e1e" />
+
+    {/* Text Logo */}
+    <defs>
+      <path id="textPathTop" d="M 22 100 A 78 78 0 0 1 178 100" />
+      <path id="textPathBottom" d="M 178 100 A 78 78 0 0 1 22 100" />
+    </defs>
+    
+    <text fontFamily="monospace" fontSize="12.5" fontWeight="900" letterSpacing="3.5" fill="#c8a96e">
+      <textPath href="#textPathTop" startOffset="50%" textAnchor="middle">
+        DETECTIVE
+      </textPath>
+    </text>
+    
+    <text fontFamily="monospace" fontSize="12" fontWeight="900" letterSpacing="2.5" fill="#e8dcc8">
+      <textPath href="#textPathBottom" startOffset="50%" textAnchor="middle">
+        TABLE TOP
+      </textPath>
+    </text>
   </svg>
 );
