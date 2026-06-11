@@ -17,6 +17,7 @@ import {
 import { ThreadCanvas } from "./ThreadCanvas";
 import { BoardPopup } from "./BoardPopup";
 import { DustParticles } from "./DustParticles";
+import { FluidGlassCursor } from "./FluidGlassCursor";
 
 export const DetectiveBoard: React.FC = () => {
   const boardRef = useRef<HTMLDivElement>(null);
@@ -358,6 +359,8 @@ export const DetectiveBoard: React.FC = () => {
       {/* 2.5 DUST PARTICLES OVERLAY */}
       <DustParticles />
 
+      {/* 2.7 WEBGL FLUID GLASS LENS OVERLAY */}
+      <FluidGlassCursor />
       {/* 3. POPUP MODAL DIALOG */}
       <BoardPopup />
 
