@@ -1,0 +1,38 @@
+import { create } from "zustand";
+
+interface Position {
+  x: number;
+  y: number;
+}
+
+interface BoardState {
+  pinPositions: Record<string, Position>;
+  activePopup: string | null;
+  panOffset: Position;
+  zoomScale: number;
+  isLoading: boolean;
+  setPinPosition: (id: string, pos: Position) => void;
+  setActivePopup: (id: string | null) => void;
+  setPanOffset: (pos: Position | ((prev: Position) => Position)) => void;
+  setZoomScale: (scale: number) => void;
+  setIsLoading: (loading: boolean) => void;
+}
+
+export const useBoardStore = create<BoardState>((set) => ({
+  pinPositions: {},
+  activePopup: null,
+  panOffset: { x: 0, y: 0 },
+  zoomScale: 1,
+  isLoading: true,
+  setPinPosition: (id, pos) =>
+    set((state) => ({
+      pinPositions: { ...state.pinPositions, [id]: pos },
+    })),
+  setActivePopup: (id) => set({ activePopup: id }),
+  setPanOffset: (pos) =>
+    set((state) => ({
+      panOffset: typeof pos === "function" ? pos(state.panOffset) : pos,
+    })),
+  setZoomScale: (scale) => set({ zoomScale: scale }),
+  setIsLoading: (loading) => set({ isLoading: loading }),
+}));
