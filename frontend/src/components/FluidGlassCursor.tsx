@@ -314,17 +314,23 @@ export const FluidGlassCursor: React.FC = () => {
             </div>
           </div>
 
-          {/* Glass glare gradients */}
+          {/* Glass glare and thickness gradients */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 75%)",
+              background: "radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.28) 0%, rgba(255, 255, 255, 0.08) 45%, transparent 70%)",
             }}
           />
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
-              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, transparent 55%, rgba(0, 0, 0, 0.18) 100%)",
+              background: "linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, transparent 55%, rgba(0, 0, 0, 0.2) 100%)",
+            }}
+          />
+          <div
+            className="absolute inset-0 pointer-events-none rounded-full"
+            style={{
+              boxShadow: "inset 0 0 25px rgba(0, 0, 0, 0.45), inset 0 4px 12px rgba(255, 255, 255, 0.35), inset 0 -4px 12px rgba(0, 0, 0, 0.55)",
             }}
           />
         </div>
@@ -404,18 +410,73 @@ export const FluidGlassCursor: React.FC = () => {
       </div>
 
       {/* SVG filter for lens bulge refraction */}
+      {/* SVG filter for lens bulge refraction and chromatic aberration */}
       <svg width="0" height="0" className="absolute">
         <defs>
           {displacementMapUrl && (
             <filter id="lens-bulge" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse">
               <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="map" x="0" y="0" width="240" height="240" />
+              
+              {/* Red Channel Displacement */}
               <feDisplacementMap
                 in="SourceGraphic"
                 in2="map"
-                scale="65"
+                scale="72"
                 xChannelSelector="R"
                 yChannelSelector="G"
+                result="red"
               />
+              <feColorMatrix
+                in="red"
+                type="matrix"
+                values="1 0 0 0 0
+                        0 0 0 0 0
+                        0 0 0 0 0
+                        0 0 0 1 0"
+                result="redChannel"
+              />
+              
+              {/* Green Channel Displacement */}
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="map"
+                scale="64"
+                xChannelSelector="R"
+                yChannelSelector="G"
+                result="green"
+              />
+              <feColorMatrix
+                in="green"
+                type="matrix"
+                values="0 0 0 0 0
+                        0 1 0 0 0
+                        0 0 0 0 0
+                        0 0 0 1 0"
+                result="greenChannel"
+              />
+              
+              {/* Blue Channel Displacement */}
+              <feDisplacementMap
+                in="SourceGraphic"
+                in2="map"
+                scale="56"
+                xChannelSelector="R"
+                yChannelSelector="G"
+                result="blue"
+              />
+              <feColorMatrix
+                in="blue"
+                type="matrix"
+                values="0 0 0 0 0
+                        0 0 0 0 0
+                        0 0 1 0 0
+                        0 0 0 1 0"
+                result="blueChannel"
+              />
+              
+              {/* Combine channels back together using screen blending */}
+              <feBlend in="redChannel" in2="greenChannel" mode="screen" result="rg" />
+              <feBlend in="rg" in2="blueChannel" mode="screen" />
             </filter>
           )}
         </defs>
