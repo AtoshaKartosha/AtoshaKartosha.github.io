@@ -364,21 +364,6 @@ export const DetectiveBoard: React.FC = () => {
       {/* 3. POPUP MODAL DIALOG */}
       <BoardPopup />
 
-      {/* Custom keyframes for grain and overlay animations */}
-      <style jsx global>{`
-        @keyframes grain {
-          0%, 100% { transform: translate(0, 0); }
-          10% { transform: translate(-2%, -4%); }
-          20% { transform: translate(-6%, 2%); }
-          30% { transform: translate(3%, -8%); }
-          40% { transform: translate(-2%, 8%); }
-          50% { transform: translate(-6%, 4%); }
-          60% { transform: translate(6%, 0); }
-          70% { transform: translate(0, 5%); }
-          80% { transform: translate(1%, 9%); }
-          90% { transform: translate(-4%, 3%); }
-        }
-      `}</style>
     </div>
   );
 };

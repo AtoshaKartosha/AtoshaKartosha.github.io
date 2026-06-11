@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect, memo } from "react";
 import { Canvas, createPortal, useFrame, useThree } from "@react-three/fiber";
-import { MeshTransmissionMaterial } from "@react-three/drei";
+import { MeshTransmissionMaterial, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 import gsap from "gsap";
 import { useBoardStore } from "../stores/useBoardStore";
@@ -107,7 +107,7 @@ const ModeWrapper = memo(function ModeWrapper({
   isLoading,
   size,
 }: ModeWrapperProps) {
-  const ref = useRef<THREE.Mesh>(null);
+  const ref = useRef<THREE.Group>(null);
   
   // Custom manual WebGLRenderTarget to avoid WebGL2 immutable texture errors
   const [renderTarget] = useState(() => new THREE.WebGLRenderTarget(512, 512, {
@@ -121,10 +121,11 @@ const ModeWrapper = memo(function ModeWrapper({
   const { viewport: vp, camera } = useThree();
   const [scene] = useState(() => new THREE.Scene());
 
-  // Keep render target size synchronized with canvas viewport
+  // Keep render target size synchronized with canvas viewport (accounting for DPR)
   useEffect(() => {
     if (size.width > 0 && size.height > 0) {
-      renderTarget.setSize(size.width, size.height);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      renderTarget.setSize(size.width * dpr, size.height * dpr);
     }
   }, [size, renderTarget]);
 
@@ -156,6 +157,15 @@ const ModeWrapper = memo(function ModeWrapper({
     ref.current.position.y = THREE.MathUtils.lerp(ref.current.position.y, targetY, 0.15);
     ref.current.position.z = 3.0; // Float above the board items
 
+    // Apply clean texture magnification center & repeat based on lens position
+    const u_L = (ref.current.position.x / (vp.width / 2) + 1) / 2;
+    const v_L = (ref.current.position.y / (vp.height / 2) + 1) / 2;
+    
+    const zoomFactor = isLoading ? 1.0 : 1.4; // Zoom by 1.4x
+    
+    // renderTarget.texture.center.set(u_L, v_L);
+    // renderTarget.texture.repeat.set(1 / zoomFactor, 1 / zoomFactor);
+
     // Render off-screen scene into renderTarget
     gl.setRenderTarget(renderTarget);
     gl.render(scene, camera);
@@ -174,6 +184,7 @@ const ModeWrapper = memo(function ModeWrapper({
         scene
       )}
 
+
       {/* Render the background FBO texture flat on screen (fades out after loading) */}
       <mesh scale={[vp.width, vp.height, 1]} position={[0, 0, 0]}>
         <planeGeometry />
@@ -185,22 +196,76 @@ const ModeWrapper = memo(function ModeWrapper({
         />
       </mesh>
 
-      {/* The refracting double-convex lens in the main scene (transparent background) */}
-      <mesh ref={ref} scale={[0.6, 0.6, 0.15]}>
-        <sphereGeometry args={[1, 32, 32]} />
-        <MeshTransmissionMaterial
-          buffer={renderTarget.texture} // Use our manual renderTarget texture!
-          ior={1.28}
-          thickness={1.5}
-          anisotropy={0.15}
-          chromaticAberration={0.05}
-          transmission={1.0}
-          roughness={0.0}
-          distortion={0.15}
-          distortionScale={0.05}
-          temporalDistortion={0.0}
-        />
-      </mesh>
+      {/* The 3D Vintage Magnifying Glass Lens following the mouse pointer */}
+      <group ref={ref}>
+        {/* 1. Gold/Brass Bezel Outer Ring */}
+        <mesh>
+          <torusGeometry args={[0.62, 0.03, 16, 64]} />
+          <meshPhysicalMaterial
+            color="#c8a96e"
+            roughness={0.15}
+            metalness={0.9}
+            clearcoat={1.0}
+            clearcoatRoughness={0.1}
+          />
+        </mesh>
+
+        {/* 2. Inner Red Bezel Accenting Ring */}
+        <mesh position={[0, 0, 0.01]}>
+          <torusGeometry args={[0.59, 0.006, 8, 64]} />
+          <meshBasicMaterial color="#c41e1e" />
+        </mesh>
+
+        {/* 3. The refracting glass lens body */}
+        <mesh scale={[0.58, 0.58, 0.15]} position={[0, 0, 0.005]}>
+          <sphereGeometry args={[1, 32, 32]} />
+          <MeshTransmissionMaterial
+            buffer={renderTarget.texture}
+            ior={1.20}
+            thickness={1.5}
+            anisotropy={0.1}
+            chromaticAberration={0.03}
+            transmission={1.0}
+            roughness={0.0}
+            distortion={0.0}
+            distortionScale={0.0}
+            temporalDistortion={0.0}
+          />
+        </mesh>
+
+        {/* 4. Wooden Handle and Brass Details */}
+        <group position={[0, 0, -0.01]}>
+          {/* Handle Brass Joint */}
+          <mesh position={[-0.46, -0.46, 0]} rotation={[0, 0, -Math.PI / 4]}>
+            <cylinderGeometry args={[0.03, 0.03, 0.08, 16]} />
+            <meshPhysicalMaterial
+              color="#c8a96e"
+              roughness={0.2}
+              metalness={0.8}
+            />
+          </mesh>
+
+          {/* Wooden Grip */}
+          <mesh position={[-0.61, -0.61, -0.01]} rotation={[0, 0, -Math.PI / 4]}>
+            <cylinderGeometry args={[0.025, 0.025, 0.4, 16]} />
+            <meshPhysicalMaterial
+              color="#3e2723"
+              roughness={0.65}
+              metalness={0.1}
+            />
+          </mesh>
+
+          {/* Handle Brass Tip */}
+          <mesh position={[-0.77, -0.77, -0.01]} rotation={[0, 0, -Math.PI / 4]}>
+            <cylinderGeometry args={[0.027, 0.027, 0.06, 16]} />
+            <meshPhysicalMaterial
+              color="#c8a96e"
+              roughness={0.2}
+              metalness={0.8}
+            />
+          </mesh>
+        </group>
+      </group>
     </>
   );
 });
@@ -216,16 +281,66 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
   const blackPlaneMatRef = useRef<THREE.MeshBasicMaterial>(null);
   const logoOpacityRef = useRef(1);
 
+  // Load high-fidelity textures using Drei's useTexture
+  const textures = useTexture({
+    dossier: "/images/board/dossier.png",
+    "suspect-1": "/images/board/suspect-1.png",
+    "suspect-2": "/images/board/suspect-2.png",
+    map: "/images/board/map.png",
+    phone: "/images/board/phone.png",
+    clock: "/images/board/clock.png",
+    evidence: "/images/board/evidence.png",
+    newspaper: "/images/board/newspaper.png",
+    note: "/images/board/note.png",
+  });
+
+  // Ensure textures use correct sRGB encoding
+  useEffect(() => {
+    Object.values(textures).forEach((tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+    });
+  }, [textures]);
+
+  // Procedural gradient corkboard texture
+  const [bgTexture] = useState(() => {
+    if (typeof window === "undefined") return null;
+    const canvas = document.createElement("canvas");
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const grad = ctx.createRadialGradient(256, 256, 0, 256, 256, 360);
+      grad.addColorStop(0, "#201811");
+      grad.addColorStop(1, "#0a0806");
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Add noise
+      const imgData = ctx.getImageData(0, 0, 512, 512);
+      const data = imgData.data;
+      for (let i = 0; i < data.length; i += 4) {
+        const noise = (Math.random() - 0.5) * 8;
+        data[i] = Math.min(255, Math.max(0, data[i] + noise));
+        data[i+1] = Math.min(255, Math.max(0, data[i+1] + noise));
+        data[i+2] = Math.min(255, Math.max(0, data[i+2] + noise));
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+    const texture = new THREE.CanvasTexture(canvas);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    return texture;
+  });
+
   // Animate the WebGL logo flight and fade out the black preloader plane
   useEffect(() => {
-    if (!isLoading && logoRef.current && blackPlaneMatRef.current) {
+    if (!isLoading && logoRef.current) {
       const boardW = viewport.width * (isMobile ? 1.7 : 0.94);
       const boardH = viewport.height * (isMobile ? 2.1 : 0.92);
       const pos = isMobile ? boardItems[0].mobile : boardItems[0].desktop; // dossier coordinates
 
       const targetX = -boardW / 2 + (pos.left / 100) * boardW + ((pos.width / 2) / 100) * boardW;
-      const targetY = boardH / 2 - (pos.top / 100) * boardH - ((pos.width * 0.85 / 2) / 100) * boardH;
       const targetW = (pos.width / 100) * boardW;
+      const targetY = boardH / 2 - (pos.top / 100) * boardH - (targetW * 0.8 / 2);
 
       // 1. Fly the WebGL logo to the dossier cover in local space
       gsap.to(logoRef.current.position, {
@@ -244,19 +359,7 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
         ease: "power2.inOut",
       });
 
-      // 2. Fade out WebGL loading screen black background
-      gsap.to(blackPlaneMatRef.current, {
-        opacity: 0,
-        duration: 1.0,
-        ease: "power2.out",
-        onComplete: () => {
-          if (blackPlaneMatRef.current) {
-            blackPlaneMatRef.current.visible = false;
-          }
-        },
-      });
-
-      // 3. Once logo lands, fade it out to 0 opacity over 0.5s to reveal the HTML dossier logo
+      // 2. Once logo lands, fade it out to 0 opacity over 0.5s to reveal the HTML dossier logo
       gsap.to(logoOpacityRef, {
         current: 0,
         duration: 0.5,
@@ -297,10 +400,12 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
       </mesh>
 
       {/* The WebGL loading screen background (black plane that fades out) */}
-      <mesh scale={[viewport.width * 3, viewport.height * 3, 1]} position={[0, 0, 0.15]}>
-        <planeGeometry />
-        <meshBasicMaterial ref={blackPlaneMatRef} color="#080808" transparent opacity={1} />
-      </mesh>
+      {isLoading && (
+        <mesh scale={[viewport.width * 3, viewport.height * 3, 1]} position={[0, 0, 0.15]}>
+          <planeGeometry />
+          <meshBasicMaterial ref={blackPlaneMatRef} color="#080808" transparent opacity={1} />
+        </mesh>
+      )}
 
       {/* Render WebGL representation of each board item using basic geometries */}
       {boardItems.map((item) => {
@@ -309,10 +414,30 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
         const boardW = viewport.width * (isMobile ? 1.7 : 0.94);
         const boardH = viewport.height * (isMobile ? 2.1 : 0.92);
 
-        const x = -boardW / 2 + (pos.left / 100) * boardW + ((pos.width / 2) / 100) * boardW;
-        const y = boardH / 2 - (pos.top / 100) * boardH - ((pos.width * 1.2 / 2) / 100) * boardH;
         const w = (pos.width / 100) * boardW;
-        const h = w * (item.id === "dossier" ? 0.8 : item.id === "map" ? 1.0 : 1.2);
+        
+        let aspect = 1.2;
+        if (item.id === "dossier") aspect = 0.8;
+        else if (item.id === "map" || item.id === "phone" || item.id === "clock") aspect = 1.0;
+        else if (item.id === "evidence") aspect = 1.25;
+        else if (item.id === "newspaper") aspect = 1.22;
+        const h = w * aspect;
+
+        const x = -boardW / 2 + (pos.left / 100) * boardW + w / 2;
+        const y = boardH / 2 - (pos.top / 100) * boardH - h / 2;
+
+        const texture = (textures as any)[item.id];
+
+        if (texture) {
+          return (
+            <group key={item.id} position={[x, y, 0.1]} rotation={[0, 0, (pos.rotation * Math.PI) / 180]}>
+              <mesh scale={[w, h, 1]}>
+                <planeGeometry />
+                <meshBasicMaterial map={texture} transparent={true} />
+              </mesh>
+            </group>
+          );
+        }
 
         return (
           <group key={item.id} position={[x, y, 0.1]} rotation={[0, 0, (pos.rotation * Math.PI) / 180]}>
@@ -437,6 +562,7 @@ const WebGlBoardScene: React.FC<{ isMobile: boolean; panOffset: { x: number; y: 
   );
 };
 
+
 export const FluidGlassCursor: React.FC = () => {
   const mouseRef = useRef({ x: 0, y: 0 });
   
@@ -493,7 +619,9 @@ export const FluidGlassCursor: React.FC = () => {
           size={size}
         >
           {/* Renders the matching WebGL scene inside the FBO only */}
-          <WebGlBoardScene isMobile={isMobile} panOffset={panOffset} />
+          <React.Suspense fallback={null}>
+            <WebGlBoardScene isMobile={isMobile} panOffset={panOffset} />
+          </React.Suspense>
         </ModeWrapper>
       </Canvas>
     </div>
