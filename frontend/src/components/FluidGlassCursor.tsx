@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems } from "../data/boardItems";
+import { boardItems, threadConnections } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -14,7 +14,6 @@ import {
   EvidenceBagSvg,
   NewspaperSvg,
 } from "./BoardSvgs";
-import { ThreadCanvas } from "./ThreadCanvas";
 
 const LENS_RADIUS = 120; // Radius in pixels
 const ZOOM_FACTOR = 1.35; // Magnification factor
@@ -25,6 +24,7 @@ export const FluidGlassCursor: React.FC = () => {
   
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
+  const pinPositions = useBoardStore((state) => state.pinPositions);
   const [isMobile, setIsMobile] = useState(false);
   const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
 
@@ -228,20 +228,55 @@ export const FluidGlassCursor: React.FC = () => {
             {/* Cloned Board */}
             <div
               ref={clonedBoardRef}
-              className="absolute origin-top-left"
+              className={`absolute origin-top-left ${
+                isMobile 
+                  ? "border-[16px] border-[#38281b]" 
+                  : "rounded-sm border-[12px] border-[#38281b]"
+              }`}
               style={{
                 backgroundImage: "url(/background_detective.svg)",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 pointerEvents: "none",
+                left: 0,
+                top: 0,
+                boxSizing: "border-box",
               }}
             >
               {/* Repeating cork board texture in background */}
               <CorkboardTexture />
 
-              {/* Red thread canvas overlay */}
-              <ThreadCanvas />
+              {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+                {threadConnections.map((conn, idx) => {
+                  const p1 = pinPositions[conn.from];
+                  const p2 = pinPositions[conn.to];
+                  if (!p1 || !p2) return null;
 
+                  const cx = (p1.x + p2.x) / 2;
+                  const cy = (p1.y + p2.y) / 2;
+                  const dx = p2.x - p1.x;
+                  const dy = p2.y - p1.y;
+                  const dist = Math.sqrt(dx * dx + dy * dy);
+                  const sag = Math.min(15, dist * 0.04);
+                  const controlY = cy + sag;
+
+                  return (
+                    <path
+                      key={idx}
+                      d={`M ${p1.x} ${p1.y} Q ${cx} ${controlY} ${p2.x} ${p2.y}`}
+                      stroke="#c41e1e"
+                      strokeWidth="3.5"
+                      fill="none"
+                      strokeLinecap="round"
+                      opacity="0.95"
+                      style={{
+                        filter: "drop-shadow(0 2.5px 3px rgba(0,0,0,0.6))"
+                      }}
+                    />
+                  );
+                })}
+              </svg>
               {/* Cloned Board Items */}
               {boardItems.map((item) => {
                 const pos = isMobile ? item.mobile : item.desktop;
@@ -372,12 +407,12 @@ export const FluidGlassCursor: React.FC = () => {
       <svg width="0" height="0" className="absolute">
         <defs>
           {displacementMapUrl && (
-            <filter id="lens-bulge">
-              <feImage href={displacementMapUrl} result="map" />
+            <filter id="lens-bulge" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse">
+              <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="map" x="0" y="0" width="240" height="240" />
               <feDisplacementMap
                 in="SourceGraphic"
                 in2="map"
-                scale="45"
+                scale="65"
                 xChannelSelector="R"
                 yChannelSelector="G"
               />
