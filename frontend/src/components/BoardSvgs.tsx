@@ -66,7 +66,7 @@ export const DossierSvg: React.FC = () => {
       <g transform="translate(100, 70)" data-logo-target="true">
         <circle cx="50" cy="50" r="48" fill="none" />
         <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
-          <DetectiveLogoSvg className="w-[100px] h-[100px]" />
+          <DetectiveLogoSvg width={100} height={100} />
         </g>
       </g>
       
@@ -411,12 +411,14 @@ export const NewspaperSvg: React.FC = () => (
   </svg>
 );
 
-export const DetectiveLogoSvg: React.FC<{ className?: string }> = ({ className }) => (
+export const DetectiveLogoSvg: React.FC<{ className?: string; width?: string | number; height?: string | number }> = ({ className, width = "100%", height = "100%" }) => (
   <svg
     viewBox="0 0 200 200"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     className={className}
+    width={width}
+    height={height}
   >
     {/* Dark outer badge circular frame */}
     <circle cx="100" cy="100" r="95" fill="#141413" stroke="#c8a96e" strokeWidth="3" />
