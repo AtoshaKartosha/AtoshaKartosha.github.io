@@ -71,9 +71,9 @@ export const FluidGlassCursor: React.FC = () => {
           // Normalized distance from center (0 to 1)
           const normR = r / LENS_RADIUS;
           
-          // Bulge distortion profile: peaks inside, zero at center/edges
-          // Sine profile: sin(normR * Math.PI) * strength
-          const factor = Math.sin(normR * Math.PI) * 0.35;
+          // Bulge distortion profile: exponential ramp towards edges
+          // Zero at center, maximum right before the gold bezel
+          const factor = Math.pow(normR, 2.5) * 0.38;
           
           // Displacement vectors point inwards for magnifying convex lens effect
           const dispX = -(dx / (r || 1)) * factor;
