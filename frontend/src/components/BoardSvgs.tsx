@@ -13,8 +13,9 @@ export const CorkboardTexture: React.FC = () => (
 );
 
 // Dossier / Main case folder
-export const DossierSvg: React.FC = () => {
-  const isLoading = useBoardStore((state) => state.isLoading);
+export const DossierSvg: React.FC<{ forceLogo?: boolean }> = ({ forceLogo = false }) => {
+  const storeIsLoading = useBoardStore((state) => state.isLoading);
+  const isLoading = forceLogo ? false : storeIsLoading;
   
   return (
     <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]">
@@ -66,7 +67,7 @@ export const DossierSvg: React.FC = () => {
       <g transform="translate(100, 70)" data-logo-target="true">
         <circle cx="50" cy="50" r="48" fill="none" />
         <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
-          <DetectiveLogoSvg width={100} height={100} />
+          <image href="/logo_detective.svg" width="100" height="100" />
         </g>
       </g>
       

@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { useBoardStore } from "../stores/useBoardStore";
+import Image from "next/image";
 
 export const LoadingScreen: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -35,10 +36,10 @@ export const LoadingScreen: React.FC = () => {
               gsap.to(textContainer, { opacity: 0, duration: 0.3 });
             }
 
-            // 2. Trigger WebGL logo flight & background fade by updating store state
+            // 2. Trigger WebGL board rendering by updating store state
             setIsLoading(false);
 
-            // 3. Fade out HTML preloader background
+            // 3. Fade out HTML preloader black background
             gsap.to(container, {
               opacity: 0,
               duration: 1.0,
@@ -73,8 +74,18 @@ export const LoadingScreen: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 w-full h-full bg-transparent z-50 flex flex-col items-center justify-center select-none"
+      className="fixed inset-0 w-full h-full bg-[#080808] z-50 flex flex-col items-center justify-center select-none"
     >
+      {/* Centered Detective Logo SVG */}
+      <Image
+        src="/logo_detective.svg"
+        alt="Detective Table Top Logo"
+        width={440}
+        height={220}
+        priority
+        className="w-[280px] h-[140px] sm:w-[360px] sm:h-[180px] md:w-[440px] md:h-[220px] object-contain mb-8 z-10 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
+      />
+
       {/* Typewriter Text */}
       <div
         ref={textContainerRef}
