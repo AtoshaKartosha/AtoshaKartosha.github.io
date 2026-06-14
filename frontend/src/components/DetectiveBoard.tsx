@@ -55,7 +55,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
 
-  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (isMobile) return;
     const cardEl = cardRef.current;
     if (!cardEl) return;
@@ -80,7 +80,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     // No separate shadow div to update
   };
 
-  const handlePointerEnter = (e: React.PointerEvent<HTMLButtonElement>) => {
+  const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     setHoveredItemId(item.id);
     cardRectRef.current = e.currentTarget.getBoundingClientRect();
 
@@ -113,7 +113,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         zIndex: isHovered ? 30 : item.zIndex,
       }}
     >
-      <button
+      <div
         onClick={() => {
           if (isDraggingRef.current) return;
           setActivePopup(item.popupId);
@@ -125,8 +125,18 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         style={{
           transformStyle: "preserve-3d",
         }}
+        role="button"
+        tabIndex={0}
         aria-haspopup="dialog"
         aria-label={item.name}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            if (!isDraggingRef.current) {
+              setActivePopup(item.popupId);
+            }
+          }
+        }}
       >
         {/* Red Pin Pierce-point (Stays flat on the board) */}
         <div
@@ -175,7 +185,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             }}
           />
         )}
-      </button>
+      </div>
     </div>
   );
 };
