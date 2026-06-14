@@ -619,11 +619,11 @@ export const DetectiveBoard: React.FC = () => {
         onPointerUp={handlePointerUp}
         className={`relative ${
           isMobile 
-            ? "w-[170vw] h-[210vh] border-[16px] border-[#38281b]" 
-            : "w-[94%] h-[92%] max-w-[1800px] max-h-[1000px] rounded-sm absolute top-1/2 left-1/2 border-[12px] border-[#38281b]"
+            ? "w-[170vw] h-[210vh]" 
+            : "w-[94%] h-[92%] max-w-[1800px] max-h-[1000px] rounded-sm absolute top-1/2 left-1/2"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
-          backgroundImage: "url(/background_detective.svg)",
+          backgroundImage: "url(/background_detective_bg.svg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           transform: isMobile
@@ -654,6 +654,16 @@ export const DetectiveBoard: React.FC = () => {
             {renderItemSvg(item.id, hoveredItemId === item.id)}
           </BoardItemComponent>
         ))}
+
+        {/* Foreground elements (table, hat, jacket) overlay for depth of field */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-20"
+          style={{
+            backgroundImage: "url(/background_detective_fg.svg)",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
       </div>
 
       {/* 2.5 DUST PARTICLES OVERLAY */}
