@@ -6,8 +6,8 @@ export const NoirPinboard: React.FC = () => {
       className="absolute z-[2] select-none pointer-events-none overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,0.9)]"
       style={{
         boxSizing: "border-box",
-        left: "9.75%",
-        right: "15.3%",
+        left: "12.75%",
+        right: "18.3%",
         top: "9.9%",
         bottom: "28.2%",
         background: "radial-gradient(circle at 85% 15%, #30241b 0%, #15100d 60%, #080605 100%)",
