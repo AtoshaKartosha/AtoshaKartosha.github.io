@@ -395,13 +395,9 @@ export const FluidGlassCursor: React.FC = () => {
             {/* Cloned Board */}
             <div
               ref={clonedBoardRef}
-              className={`absolute origin-top-left ${
-                isMobile 
-                  ? "border-[16px] border-[#38281b]" 
-                  : "rounded-sm border-[12px] border-[#38281b]"
-              }`}
+              className="absolute origin-top-left rounded-sm"
               style={{
-                backgroundImage: "url(/background_detective.svg)",
+                backgroundImage: "url(/background_detective_bg.svg)",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 pointerEvents: "none",
@@ -492,6 +488,16 @@ export const FluidGlassCursor: React.FC = () => {
                   </div>
                 );
               })}
+
+              {/* Foreground elements (table, hat, jacket) overlay inside magnifier */}
+              <div 
+                className="absolute inset-0 pointer-events-none z-20"
+                style={{
+                  backgroundImage: "url(/background_detective_fg.svg)",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
             </div>
           </div>
 
