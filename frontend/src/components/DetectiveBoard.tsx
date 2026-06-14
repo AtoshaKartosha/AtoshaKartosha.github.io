@@ -48,11 +48,12 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top; // approximate vertical center
 
-  // Light falloff dimming overlay values
+  // Light falloff dimming values
   const lampX = 85;
   const lampY = 15;
   const distFromLamp = Math.hypot((centerX - lampX) / 100, (centerY - lampY) / 100);
-  const dimmingOpacity = Math.min(distFromLamp * 0.35, 0.22);
+  const dimmingOpacity = item.id === "dossier" ? 0 : Math.min(distFromLamp * 0.35, 0.22);
+  const brightnessVal = 1.0 - dimmingOpacity;
 
   // Focus blur values
   const focusCenterX = 50;
@@ -128,7 +129,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     if (cardEl) {
       cardEl.style.transition = "transform 0.08s ease-out, filter 0.15s ease-out";
       if (!isMobile) {
-        cardEl.style.filter = "none";
+        cardEl.style.filter = "brightness(1) blur(0px)";
       }
     }
 
@@ -146,7 +147,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       cardEl.style.transition = "transform 0.4s ease-out, filter 0.4s ease-out";
       cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
       if (!isMobile) {
-        cardEl.style.filter = clampedBlur > 0.05 ? `blur(${clampedBlur.toFixed(2)}px)` : "none";
+        cardEl.style.filter = `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`;
       }
     }
 
@@ -233,25 +234,14 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             transformStyle: "preserve-3d",
             filter: isMobile
               ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))`
-              : (isHovered ? "none" : (clampedBlur > 0.05 ? `blur(${clampedBlur.toFixed(2)}px)` : "none")),
+              : (isHovered 
+                  ? "brightness(1) blur(0px)" 
+                  : `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`),
             zIndex: 1,
           }}
         >
           {children}
         </div>
-        {/* Light falloff dimming overlay */}
-        {!isMobile && (
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundColor: `rgba(0, 0, 0, ${dimmingOpacity.toFixed(3)})`,
-              borderRadius: item.id === "clock" ? "50%" : "4px",
-              zIndex: 2,
-              transition: "background-color 0.3s ease-out",
-              mixBlendMode: "multiply",
-            }}
-          />
-        )}
       </button>
     </div>
   );
