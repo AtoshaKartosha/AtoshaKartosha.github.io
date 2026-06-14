@@ -54,9 +54,9 @@ export const boardItems: BoardItem[] = [
     id: "map",
     name: "Карта Вокзал 1853",
     popupId: "location",
-    zIndex: 10,
-    desktop: { left: 44, top: 56, width: 13, rotation: -4 },
-    mobile: { left: 42, top: 72, width: 32, rotation: -4 },
+    zIndex: 15,
+    desktop: { left: 35, top: 56, width: 13, rotation: -4 },
+    mobile: { left: 28, top: 72, width: 32, rotation: -4 },
   },
   {
     id: "phone",

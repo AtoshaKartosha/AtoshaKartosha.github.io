@@ -126,7 +126,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         width: `${pos.width}%`,
         transform: `rotate(${rotation}deg) scale(${isHovered ? 1.04 : 1})`,
         transformStyle: "preserve-3d",
-        zIndex: isZIndexRaised ? 30 : item.zIndex,
+        zIndex: isZIndexRaised ? (item.id === "map" ? 18 : 30) : item.zIndex,
       }}
     >
       <div
