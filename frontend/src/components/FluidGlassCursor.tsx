@@ -460,7 +460,7 @@ export const FluidGlassCursor: React.FC = () => {
                       top: `${pos.top}%`,
                       width: `${pos.width}%`,
                       transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
-                      zIndex: isHovered ? 30 : 10,
+                      zIndex: isHovered ? 30 : item.zIndex,
                     }}
                   >
                     {/* Red Pin Pierce-point */}
