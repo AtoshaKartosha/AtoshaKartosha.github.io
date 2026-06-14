@@ -45,6 +45,41 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const pos = isMobile ? item.mobile : item.desktop;
   const isHovered = hoveredItemId === item.id;
 
+  const centerX = pos.left + pos.width / 2;
+  const centerY = pos.top; // approximate vertical center
+
+  // Light falloff dimming overlay values
+  const lampX = 85;
+  const lampY = 15;
+  const distFromLamp = Math.hypot((centerX - lampX) / 100, (centerY - lampY) / 100);
+  const dimmingOpacity = Math.min(distFromLamp * 0.35, 0.22);
+
+  // Focus blur values
+  const focusCenterX = 50;
+  const focusCenterY = 45; // board center focus
+  const distFromFocus = Math.hypot(
+    (centerX - focusCenterX) / 100,
+    (centerY - focusCenterY) / 100
+  );
+  // Blur: 0px at center, up to 0.6px at far edges — very subtle
+  const depthBlur = Math.max(0, (distFromFocus - 0.2) * 1.8);
+  const clampedBlur = Math.min(depthBlur, 0.6);
+
+  // Shadow elevation based on zIndex
+  const shadowElevation = (item.zIndex - 8) / 8; // normalized 0..1 across the range 8-16
+  const restShadowBlur = 10 + shadowElevation * 6;  // 10-16px
+  const restShadowSpread = 4 + shadowElevation * 3; // 4-7px
+  const restOpacity = 0.45 + shadowElevation * 0.1;  // 0.45-0.55
+
+  // Rest state shadow offset
+  const dx = pos.left - 85;
+  const dy = pos.top - 15;
+  const distMultiplier = 0.14;
+  const shadowX = dx * distMultiplier;
+  const shadowY = dy * distMultiplier + 5;
+
+  const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
+
   const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (isMobile) return;
     const cardEl = cardRef.current;
@@ -70,16 +105,16 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     // Direct DOM style updates for dynamic shadow offset and blur
     const shadowEl = shadowRef.current;
     if (shadowEl) {
-      const dx = pos.left - 85;
-      const dy = pos.top - 15;
-      const distMultiplier = 0.14;
+      const dxMove = pos.left - 85;
+      const dyMove = pos.top - 15;
+      const distMultiplierMove = 0.14;
 
       // Shadow moves further from light source and gets more blurred when lifted
-      const shadowX = dx * distMultiplier * 2.2;
-      const shadowY = (dy * distMultiplier + 5) * 2.2;
+      const shadowXMove = dxMove * distMultiplierMove * 2.2;
+      const shadowYMove = (dyMove * distMultiplierMove + 5) * 2.2;
 
-      shadowEl.style.transform = `translate3d(${shadowX}px, ${shadowY}px, -20px)`;
-      shadowEl.style.boxShadow = "0 0 16px 6px rgba(0, 0, 0, 0.45)";
+      shadowEl.style.transform = `translate3d(${shadowXMove}px, ${shadowYMove}px, 0px)`;
+      shadowEl.style.boxShadow = `0 0 ${16 + shadowElevation * 6}px ${6 + shadowElevation * 4}px rgba(0, 0, 0, ${0.35 + shadowElevation * 0.1})`;
       shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.35)";
     }
   };
@@ -90,7 +125,10 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const cardEl = cardRef.current;
     if (cardEl) {
-      cardEl.style.transition = "transform 0.08s ease-out";
+      cardEl.style.transition = "transform 0.08s ease-out, filter 0.15s ease-out";
+      if (!isMobile) {
+        cardEl.style.filter = "none";
+      }
     }
 
     const shadowEl = shadowRef.current;
@@ -104,33 +142,28 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const cardEl = cardRef.current;
     if (cardEl) {
-      cardEl.style.transition = "transform 0.4s ease-out";
+      cardEl.style.transition = "transform 0.4s ease-out, filter 0.4s ease-out";
       cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
+      if (!isMobile) {
+        cardEl.style.filter = clampedBlur > 0.05 ? `blur(${clampedBlur.toFixed(2)}px)` : "none";
+      }
     }
 
     const shadowEl = shadowRef.current;
     if (shadowEl) {
       shadowEl.style.transition = "transform 0.4s ease-out, box-shadow 0.4s ease-out, background-color 0.4s ease-out";
-      const dx = pos.left - 85;
-      const dy = pos.top - 15;
-      const distMultiplier = 0.14;
-      const shadowX = dx * distMultiplier;
-      const shadowY = dy * distMultiplier + 5;
+      const dxLeave = pos.left - 85;
+      const dyLeave = pos.top - 15;
+      const distMultiplierLeave = 0.14;
+      const shadowXLeave = dxLeave * distMultiplierLeave;
+      const shadowYLeave = dyLeave * distMultiplierLeave + 5;
 
-      shadowEl.style.transform = `translate3d(${shadowX}px, ${shadowY}px, 0px)`;
-      shadowEl.style.boxShadow = "0 0 10px 4px rgba(0, 0, 0, 0.65)";
+      shadowEl.style.transform = `translate3d(${shadowXLeave}px, ${shadowYLeave}px, 0px)`;
+      shadowEl.style.boxShadow = `0 0 ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`;
       shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.45)";
     }
   };
 
-  // Rest state shadow offset
-  const dx = pos.left - 85;
-  const dy = pos.top - 15;
-  const distMultiplier = 0.14;
-  const shadowX = dx * distMultiplier;
-  const shadowY = dy * distMultiplier + 5;
-
-  const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
 
   return (
     <div
@@ -141,7 +174,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         width: `${pos.width}%`,
         transform: `rotate(${rotation}deg)`,
         transformStyle: "preserve-3d",
-        zIndex: isHovered ? 30 : 10,
+        zIndex: isHovered ? 30 : item.zIndex,
       }}
     >
       <button
@@ -181,7 +214,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             className="absolute inset-0 pointer-events-none opacity-60 mix-blend-multiply"
             style={{
               backgroundColor: "rgba(0, 0, 0, 0.45)",
-              boxShadow: "0 0 10px 4px rgba(0, 0, 0, 0.65)",
+              boxShadow: `0 0 ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`,
               transform: `translate3d(${shadowX}px, ${shadowY}px, 0px)`,
               borderRadius: item.id === "clock" ? "50%" : "4px",
               transformOrigin: "top center",
@@ -196,12 +229,27 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           style={{
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
-            filter: isMobile ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))` : "none",
+            filter: isMobile
+              ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))`
+              : (isHovered ? "none" : (clampedBlur > 0.05 ? `blur(${clampedBlur.toFixed(2)}px)` : "none")),
             zIndex: 1,
           }}
         >
           {children}
         </div>
+        {/* Light falloff dimming overlay */}
+        {!isMobile && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundColor: `rgba(0, 0, 0, ${dimmingOpacity.toFixed(3)})`,
+              borderRadius: item.id === "clock" ? "50%" : "4px",
+              zIndex: 2,
+              transition: "background-color 0.3s ease-out",
+              mixBlendMode: "multiply",
+            }}
+          />
+        )}
       </button>
     </div>
   );
@@ -271,7 +319,7 @@ export const DetectiveBoard: React.FC = () => {
     // Run after layout paint is completed
     const timer = setTimeout(() => {
       measurePins();
-    }, 200);
+    }, 300);
 
     window.addEventListener("resize", measurePins);
     return () => {
