@@ -97,7 +97,7 @@ export const ThreadCanvas: React.FC = () => {
   const hoverProgressesRef = useRef<Record<string, number>>({});
   const vibrationProgressesRef = useRef<Record<string, number>>({});
   const prevHoveredStateRef = useRef<Record<string, boolean>>({});
-  const activeConnectionsRef = useRef<any[]>([]);
+  const activeConnectionsRef = useRef<{ from: string; to: string }[]>([]);
 
   useEffect(() => {
     hoveredItemIdRef.current = hoveredItemId;
@@ -309,7 +309,7 @@ export const ThreadCanvas: React.FC = () => {
     });
     console.log("ThreadCanvas geometry built. Connections:", activeConnections.length, "Positions:", allPositions.length, "Indices:", allIndices.length);
     console.log("Positions sample:", allPositions.slice(0, 10));
-  }, [pinPositions, size]);
+  }, [pinPositions, size, hoveredItemId]);
 
   // Animation loop
   useEffect(() => {

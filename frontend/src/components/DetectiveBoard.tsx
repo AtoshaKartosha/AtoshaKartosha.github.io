@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems } from "../data/boardItems";
+import { boardItems, BoardItem } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -19,6 +19,187 @@ import { BoardPopup } from "./BoardPopup";
 import { DustParticles } from "./DustParticles";
 import { FluidGlassCursor } from "./FluidGlassCursor";
 
+interface BoardItemProps {
+  item: BoardItem;
+  isMobile: boolean;
+  isDraggingRef: React.RefObject<boolean>;
+  setActivePopup: (id: string | null) => void;
+  hoveredItemId: string | null;
+  setHoveredItemId: (id: string | null) => void;
+  children: React.ReactNode;
+}
+
+const BoardItemComponent: React.FC<BoardItemProps> = ({
+  item,
+  isMobile,
+  isDraggingRef,
+  setActivePopup,
+  hoveredItemId,
+  setHoveredItemId,
+  children,
+}) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const shadowRef = useRef<HTMLDivElement>(null);
+
+  const pos = isMobile ? item.mobile : item.desktop;
+  const isHovered = hoveredItemId === item.id;
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (isMobile) return;
+    const cardEl = cardRef.current;
+    if (!cardEl) return;
+
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    const maxTiltX = 14; // rotateY
+    const maxTiltY = 14; // rotateX
+
+    const tiltX = x * maxTiltX;
+    const tiltY = -y * maxTiltY;
+
+    // Direct DOM style updates for 3D rotation and scale
+    cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(20px) scale(1.04)`;
+
+    // Direct DOM style updates for dynamic shadow offset and blur
+    const shadowEl = shadowRef.current;
+    if (shadowEl) {
+      const dx = pos.left - 85;
+      const dy = pos.top - 15;
+      const distMultiplier = 0.14;
+
+      // Shadow moves further from light source and gets more blurred when lifted
+      const shadowX = dx * distMultiplier * 2.2;
+      const shadowY = (dy * distMultiplier + 5) * 2.2;
+
+      shadowEl.style.transform = `translate3d(${shadowX}px, ${shadowY}px, -20px)`;
+      shadowEl.style.boxShadow = "0 0 16px 6px rgba(0, 0, 0, 0.45)";
+      shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.35)";
+    }
+  };
+
+  const handlePointerEnter = () => {
+    setHoveredItemId(item.id);
+
+    const cardEl = cardRef.current;
+    if (cardEl) {
+      cardEl.style.transition = "transform 0.08s ease-out";
+    }
+
+    const shadowEl = shadowRef.current;
+    if (shadowEl) {
+      shadowEl.style.transition = "transform 0.08s ease-out, box-shadow 0.15s ease-out, background-color 0.15s ease-out";
+    }
+  };
+
+  const handlePointerLeave = () => {
+    setHoveredItemId(null);
+
+    const cardEl = cardRef.current;
+    if (cardEl) {
+      cardEl.style.transition = "transform 0.4s ease-out";
+      cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
+    }
+
+    const shadowEl = shadowRef.current;
+    if (shadowEl) {
+      shadowEl.style.transition = "transform 0.4s ease-out, box-shadow 0.4s ease-out, background-color 0.4s ease-out";
+      const dx = pos.left - 85;
+      const dy = pos.top - 15;
+      const distMultiplier = 0.14;
+      const shadowX = dx * distMultiplier;
+      const shadowY = dy * distMultiplier + 5;
+
+      shadowEl.style.transform = `translate3d(${shadowX}px, ${shadowY}px, 0px)`;
+      shadowEl.style.boxShadow = "0 0 10px 4px rgba(0, 0, 0, 0.65)";
+      shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.45)";
+    }
+  };
+
+  // Rest state shadow offset
+  const dx = pos.left - 85;
+  const dy = pos.top - 15;
+  const distMultiplier = 0.14;
+  const shadowX = dx * distMultiplier;
+  const shadowY = dy * distMultiplier + 5;
+
+  const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
+
+  return (
+    <div
+      className="absolute group"
+      style={{
+        left: `${pos.left}%`,
+        top: `${pos.top}%`,
+        width: `${pos.width}%`,
+        transform: `rotate(${rotation}deg)`,
+        transformStyle: "preserve-3d",
+        zIndex: isHovered ? 30 : 10,
+      }}
+    >
+      <button
+        onClick={() => {
+          if (isDraggingRef.current) return;
+          setActivePopup(item.popupId);
+        }}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        onPointerMove={handlePointerMove}
+        className="w-full focus:outline-none block relative touch-manipulation cursor-pointer"
+        style={{
+          transformStyle: "preserve-3d",
+        }}
+        aria-haspopup="dialog"
+        aria-label={item.name}
+      >
+        {/* Red Pin Pierce-point (Stays flat on the board) */}
+        <div
+          className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
+            isHovered
+              ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
+              : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+          }`}
+        >
+          <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
+          <div
+            data-pin-id={item.id}
+            className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
+          />
+        </div>
+
+        {/* Dynamic Hardware-Accelerated Shadow (Separate DOM element) */}
+        {!isMobile && (
+          <div
+            ref={shadowRef}
+            className="absolute inset-0 pointer-events-none opacity-60 mix-blend-multiply"
+            style={{
+              backgroundColor: "rgba(0, 0, 0, 0.45)",
+              boxShadow: "0 0 10px 4px rgba(0, 0, 0, 0.65)",
+              transform: `translate3d(${shadowX}px, ${shadowY}px, 0px)`,
+              borderRadius: item.id === "clock" ? "50%" : "4px",
+              transformOrigin: "top center",
+              zIndex: 0,
+            }}
+          />
+        )}
+
+        {/* Visual SVG Content (Tilts and lifts under the pin) */}
+        <div
+          ref={cardRef}
+          style={{
+            transformOrigin: "top center",
+            transformStyle: "preserve-3d",
+            filter: isMobile ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))` : "none",
+            zIndex: 1,
+          }}
+        >
+          {children}
+        </div>
+      </button>
+    </div>
+  );
+};
 export const DetectiveBoard: React.FC = () => {
   const boardRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -388,7 +569,8 @@ export const DetectiveBoard: React.FC = () => {
         backgroundImage: `
           radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%),
           repeating-linear-gradient(90deg, #1b120c, #1b120c 120px, #100a06 120px, #100a06 122px)
-        `
+        `,
+        perspective: "1600px",
       }}
     >
       {/* 1. ATMOSPHERIC OVERLAYS */}
@@ -443,6 +625,7 @@ export const DetectiveBoard: React.FC = () => {
             : "translate3d(-50%, -50%, 0)",
           transformOrigin: isMobile ? "top left" : "center center",
           cursor: isMobile ? (isDraggingState ? "grabbing" : "grab") : "default",
+          transformStyle: "preserve-3d",
         }}
       >
         {/* Repeating cork board texture in background */}
@@ -452,60 +635,19 @@ export const DetectiveBoard: React.FC = () => {
         <ThreadCanvas />
 
         {/* Board Items */}
-        {boardItems.map((item) => {
-          const pos = isMobile ? item.mobile : item.desktop;
-
-          return (
-            <div
-              key={item.id}
-              className="absolute group transition-all duration-300 ease-out"
-              style={{
-                left: `${pos.left}%`,
-                top: `${pos.top}%`,
-                width: `${pos.width}%`,
-                transform: `rotate(${pos.rotation + (hoveredItemId === item.id ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${hoveredItemId === item.id ? 1.04 : 1})`,
-                zIndex: hoveredItemId === item.id ? 30 : 10,
-              }}
-            >
-              {/* Clue button wrapping asset */}
-              <button
-                onClick={() => {
-                  // Ignore click if it was a drag gesture
-                  if (isDragging.current) return;
-                  setActivePopup(item.popupId);
-                }}
-                onPointerEnter={() => setHoveredItemId(item.id)}
-                onPointerLeave={() => setHoveredItemId(null)}
-                className="w-full focus:outline-none block relative"
-                aria-haspopup="dialog"
-                aria-label={item.name}
-              >
-                {/* Red Pin Pierce-point */}
-                <div
-                  className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
-                    hoveredItemId === item.id
-                      ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
-                      : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
-                  }`}
-                >
-                  {/* Pinhead metal shine */}
-                  <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
-                  
-                  {/* Pin anchor node in layout for thread coordinates */}
-                  <div
-                    data-pin-id={item.id}
-                    className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
-                  />
-                </div>
-
-                {/* Visual SVG Content */}
-                <div className="transition-transform duration-300 ease-out">
-                  {renderItemSvg(item.id, hoveredItemId === item.id)}
-                </div>
-              </button>
-            </div>
-          );
-        })}
+        {boardItems.map((item) => (
+          <BoardItemComponent
+            key={item.id}
+            item={item}
+            isMobile={isMobile}
+            isDraggingRef={isDragging}
+            setActivePopup={setActivePopup}
+            hoveredItemId={hoveredItemId}
+            setHoveredItemId={setHoveredItemId}
+          >
+            {renderItemSvg(item.id, hoveredItemId === item.id)}
+          </BoardItemComponent>
+        ))}
       </div>
 
       {/* 2.5 DUST PARTICLES OVERLAY */}

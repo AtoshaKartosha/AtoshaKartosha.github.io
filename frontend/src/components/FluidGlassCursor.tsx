@@ -31,7 +31,6 @@ export const FluidGlassCursor: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
   const [aberrationMapUrl, setAberrationMapUrl] = useState<string | null>(null);
-  if (isMobile) return null;
 
   // Mouse position in viewport coordinates
   const mouseRef = useRef({
@@ -323,6 +322,7 @@ export const FluidGlassCursor: React.FC = () => {
     }
   };
 
+  if (isMobile) return null;
   return (
     <div 
       className="absolute inset-0 w-full h-full pointer-events-none z-25 overflow-hidden"
