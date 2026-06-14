@@ -23,13 +23,16 @@ void main() {
     vUv = uv;
     vHovered = hovered;
     
-    // Organic sway (middle sways, ends are fixed)
+    // Organic sway envelope (ends are fixed, middle sways)
     float env = sin(uv.x * 3.14159);
     
-    // If hovered, vibrate faster and with more amplitude
-    float speed = mix(1.8, 4.5, hovered);
-    float amp = mix(4.0, 8.0, hovered);
-    float sway = sin(uTime * speed + uv.x * 6.28) * env * amp;
+    // Slow background sway (constant frequency, constant amplitude)
+    float slowSway = sin(uTime * 1.8 + uv.x * 6.28) * env * 3.0;
+    
+    // Fast high-frequency vibration (constant frequency, fades in with hovered)
+    float fastVibe = sin(uTime * 8.0 + uv.x * 12.56) * env * 5.0 * hovered;
+    
+    float sway = slowSway + fastVibe;
     
     vec2 pos = position;
     pos.y += sway;
@@ -68,10 +71,9 @@ void main() {
     vec3 activeColor = mix(uColor * 0.5, vec3(1.0, 0.35, 0.35), glow);
     vec3 color = mix(baseColor, activeColor, vHovered);
     
-    // Pulse highlight runs faster and stronger if hovered
-    float pulseSpeed = mix(2.5, 5.5, vHovered);
+    // Soft pulsing highlight traveling along the string (constant speed, more intense if hovered)
     float pulseAmp = mix(0.08, 0.18, vHovered);
-    float pulse = sin(vUv.x * 12.0 - uTime * pulseSpeed) * pulseAmp + (1.0 - pulseAmp * 0.5);
+    float pulse = sin(vUv.x * 12.0 - uTime * 3.0) * pulseAmp + (1.0 - pulseAmp * 0.5);
     
     gl_FragColor = vec4(color, glow * mix(0.95, 1.0, vHovered) * pulse);
 }
