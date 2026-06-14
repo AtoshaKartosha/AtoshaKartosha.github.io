@@ -129,19 +129,19 @@ export const BoardPopup: React.FC = () => {
           `,
         }}
       >
-        {/* Stamped Wax Seal Close Button */}
+        {/* Stamped Red Corner Ribbon Close Button */}
         <button
           onClick={() => setActivePopup(null)}
           aria-label="Закрыть"
-          className="absolute top-5 left-5 w-10 h-10 flex items-center justify-center bg-[radial-gradient(circle_at_35%_35%,#e53e3e_0%,#c53030_45%,#9b2c2c_80%,#742a2a_100%)] text-[#5c1c1c] text-shadow-[0_1px_0_rgba(255,255,255,0.15)] font-bold text-sm rounded-[42%_56%_48%_52%/_50%_45%_55%_50%] border border-[#742a2a]/30 shadow-[0_4px_8px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.5)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.55),inset_0_2px_4px_rgba(255,255,255,0.35),inset_0_-2px_4px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out hover:scale-105 active:scale-95 cursor-pointer z-30 transform hover:rotate-12 select-none"
+          className="absolute top-0 right-0 w-16 h-16 overflow-hidden cursor-pointer group focus:outline-none z-30 select-none"
         >
-          {/* Stamped X emblem */}
-          <span className="font-serif tracking-tighter opacity-80 mix-blend-multiply">✕</span>
+          <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out group-hover:bg-[#e53e3e] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.4)] group-active:scale-95 flex items-center justify-center">
+            {/* Stamped X on the ribbon (rotated -45deg to offset parent rotation) */}
+            <span className="font-serif text-[10px] text-[#1c160e] font-bold rotate-[-45deg] transform translate-y-[2px] opacity-75 group-hover:opacity-100 transition-opacity">
+              ✕
+            </span>
+          </div>
         </button>
-        {/* Red ribbon corner detail */}
-        <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden pointer-events-none select-none">
-          <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
-        </div>
 
         {/* Vintage header */}
         <div className="border-b-2 border-[#1c160e] pb-4 mb-6">
