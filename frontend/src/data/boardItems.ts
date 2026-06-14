@@ -23,7 +23,7 @@ export const boardItems: BoardItem[] = [
     name: "Главное дело",
     popupId: "event-info",
     zIndex: 14,
-    desktop: { left: 34, top: 26, width: 26, rotation: -2 },
+    desktop: { left: 34, top: 14, width: 26, rotation: -2 },
     mobile: { left: 28, top: 32, width: 42, rotation: -2 },
   },
   {
@@ -55,7 +55,7 @@ export const boardItems: BoardItem[] = [
     name: "Карта Вокзал 1853",
     popupId: "location",
     zIndex: 15,
-    desktop: { left: 35, top: 56, width: 13, rotation: -4 },
+    desktop: { left: 51, top: 58, width: 13, rotation: -4 },
     mobile: { left: 28, top: 72, width: 32, rotation: -4 },
   },
   {
@@ -63,7 +63,7 @@ export const boardItems: BoardItem[] = [
     name: "Телефон регистрации",
     popupId: "registration",
     zIndex: 13,
-    desktop: { left: 58, top: 64, width: 11, rotation: 6 },
+    desktop: { left: 12, top: 72, width: 11, rotation: 6 },
     mobile: { left: 54, top: 102, width: 28, rotation: 6 },
   },
   {
@@ -71,7 +71,7 @@ export const boardItems: BoardItem[] = [
     name: "Часы начала",
     popupId: "schedule",
     zIndex: 12,
-    desktop: { left: 45, top: 13, width: 8, rotation: -12 },
+    desktop: { left: 64, top: 52, width: 8, rotation: -12 },
     mobile: { left: 44, top: 12, width: 20, rotation: -12 },
   },
   {
@@ -79,7 +79,7 @@ export const boardItems: BoardItem[] = [
     name: "Пакет с уликами",
     popupId: "games",
     zIndex: 10,
-    desktop: { left: 70, top: 48, width: 10, rotation: 12 },
+    desktop: { left: 74, top: 48, width: 10, rotation: 12 },
     mobile: { left: 64, top: 92, width: 24, rotation: 12 },
   },
   {
