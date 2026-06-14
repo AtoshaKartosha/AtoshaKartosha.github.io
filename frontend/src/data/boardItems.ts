@@ -79,7 +79,7 @@ export const boardItems: BoardItem[] = [
     name: "Пакет с уликами",
     popupId: "games",
     zIndex: 10,
-    desktop: { left: 74, top: 48, width: 10, rotation: 12 },
+    desktop: { left: 32, top: 68, width: 10, rotation: 12 },
     mobile: { left: 64, top: 92, width: 24, rotation: 12 },
   },
   {
@@ -87,7 +87,7 @@ export const boardItems: BoardItem[] = [
     name: "Газетная вырезка",
     popupId: "newspaper",
     zIndex: 9,
-    desktop: { left: 69, top: 26, width: 11, rotation: -5 },
+    desktop: { left: 72, top: 48, width: 11, rotation: -5 },
     mobile: { left: 64, top: 50, width: 26, rotation: -5 },
   },
 ];
