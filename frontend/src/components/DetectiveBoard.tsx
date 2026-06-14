@@ -173,13 +173,26 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             zIndex: 1,
           }}
         >
-          {isMobile ? (
-            <div style={{ filter: "drop-shadow(2px 4px 6px rgba(0,0,0,0.6))" }}>
-              {children}
-            </div>
-          ) : (
-            children
-          )}
+          <div
+            className="w-full h-full transition-all duration-300 ease-out"
+            style={{
+              filter: isMobile
+                ? "drop-shadow(2px 4px 6px rgba(0,0,0,0.5))"
+                : (isHovered
+                    ? (item.id === "phone"
+                        ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
+                        : item.id === "dossier"
+                          ? "drop-shadow(0 20px 35px rgba(0,0,0,0.65))"
+                          : "drop-shadow(0 18px 30px rgba(0,0,0,0.55))")
+                    : (item.id === "phone"
+                        ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
+                        : item.id === "dossier"
+                          ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
+                          : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")),
+            }}
+          >
+            {children}
+          </div>
         </div>
 
         {/* Light falloff dimming overlay */}
@@ -451,96 +464,60 @@ export const DetectiveBoard: React.FC = () => {
 
   // Helper to render proper board items SVGs
   // Helper to render proper board items SVGs
-  const renderItemSvg = (id: string, isHovered: boolean) => {
+  const renderItemSvg = (id: string) => {
     switch (id) {
       case "dossier":
         return (
           <DossierSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
-                : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "suspect-1":
         return (
           <Suspect1Svg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "suspect-2":
         return (
           <Suspect2Svg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "map":
         return (
           <MapSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "phone":
         return (
           <RotaryPhoneSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]"
-                : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "clock":
         return (
           <VintageClockSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "evidence":
         return (
           <EvidenceBagSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "newspaper":
         return (
           <NewspaperSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full transition-all duration-300 ease-out"
           />
         );
       case "note":
         return (
           <div
-            className={`w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out ${
-              isHovered
-                ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
-                : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
-            }`}
+            className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out"
           >
             <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
               РАСПИСАНИЕ
@@ -644,7 +621,7 @@ export const DetectiveBoard: React.FC = () => {
             hoveredItemId={hoveredItemId}
             setHoveredItemId={setHoveredItemId}
           >
-            {renderItemSvg(item.id, hoveredItemId === item.id)}
+            {renderItemSvg(item.id)}
           </BoardItemComponent>
         ))}
 
