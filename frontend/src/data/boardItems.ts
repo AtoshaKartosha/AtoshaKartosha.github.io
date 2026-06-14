@@ -23,7 +23,7 @@ export const boardItems: BoardItem[] = [
     name: "Главное дело",
     popupId: "event-info",
     zIndex: 14,
-    desktop: { left: 34, top: 22, width: 26, rotation: -2 },
+    desktop: { left: 34, top: 52, width: 26, rotation: -2 },
     mobile: { left: 28, top: 32, width: 42, rotation: -2 },
   },
   {
@@ -55,7 +55,7 @@ export const boardItems: BoardItem[] = [
     name: "Карта Вокзал 1853",
     popupId: "location",
     zIndex: 15,
-    desktop: { left: 53, top: 52, width: 13, rotation: -4 },
+    desktop: { left: 51, top: 56, width: 13, rotation: -4 },
     mobile: { left: 28, top: 72, width: 32, rotation: -4 },
   },
   {
@@ -71,7 +71,7 @@ export const boardItems: BoardItem[] = [
     name: "Часы начала",
     popupId: "schedule",
     zIndex: 12,
-    desktop: { left: 38, top: 66, width: 8, rotation: -12 },
+    desktop: { left: 45, top: 20, width: 8, rotation: -12 },
     mobile: { left: 44, top: 12, width: 20, rotation: -12 },
   },
   {
