@@ -67,9 +67,8 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   // Shadow elevation based on zIndex
   const shadowElevation = (item.zIndex - 8) / 8; // normalized 0..1 across the range 8-16
-  const restShadowBlur = 10 + shadowElevation * 6;  // 10-16px
-  const restShadowSpread = 4 + shadowElevation * 3; // 4-7px
-  const restOpacity = 0.65 + shadowElevation * 0.15; // 0.65-0.80
+  const restShadowBlur = 8 + shadowElevation * 4;  // 8-12px
+  const restShadowScale = 1.01 + shadowElevation * 0.02; // 1.01-1.03
 
   // Rest state shadow offset
   const dx = pos.left - 85;
@@ -113,9 +112,9 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       const shadowXMove = dxMove * distMultiplierMove * 2.2;
       const shadowYMove = (dyMove * distMultiplierMove + 5) * 2.2;
 
-      shadowEl.style.transform = `translate3d(${shadowXMove}px, ${shadowYMove}px, 0px)`;
-      shadowEl.style.boxShadow = `0 0 ${16 + shadowElevation * 6}px ${6 + shadowElevation * 4}px rgba(0, 0, 0, ${0.55 + shadowElevation * 0.15})`;
-      shadowEl.style.backgroundColor = "transparent";
+      shadowEl.style.transform = `translate3d(${shadowXMove}px, ${shadowYMove}px, 0px) scale(${1.05 + shadowElevation * 0.03})`;
+      shadowEl.style.filter = `blur(${14 + shadowElevation * 4}px)`;
+      shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
     }
   };
 
@@ -133,7 +132,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const shadowEl = shadowRef.current;
     if (shadowEl) {
-      shadowEl.style.transition = "transform 0.08s ease-out, box-shadow 0.15s ease-out";
+      shadowEl.style.transition = "transform 0.08s ease-out, filter 0.15s ease-out, background-color 0.15s ease-out";
     }
   };
 
@@ -151,16 +150,16 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const shadowEl = shadowRef.current;
     if (shadowEl) {
-      shadowEl.style.transition = "transform 0.4s ease-out, box-shadow 0.4s ease-out";
+      shadowEl.style.transition = "transform 0.4s ease-out, filter 0.4s ease-out, background-color 0.4s ease-out";
       const dxLeave = pos.left - 85;
       const dyLeave = pos.top - 15;
       const distMultiplierLeave = 0.14;
       const shadowXLeave = dxLeave * distMultiplierLeave;
       const shadowYLeave = dyLeave * distMultiplierLeave + 5;
 
-      shadowEl.style.transform = `translate3d(${shadowXLeave}px, ${shadowYLeave}px, 0px)`;
-      shadowEl.style.boxShadow = `0 0 ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`;
-      shadowEl.style.backgroundColor = "transparent";
+      shadowEl.style.transform = `translate3d(${shadowXLeave}px, ${shadowYLeave}px, 0px) scale(${restShadowScale})`;
+      shadowEl.style.filter = `blur(${restShadowBlur}px)`;
+      shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
     }
   };
 
@@ -211,11 +210,11 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         {!isMobile && (
           <div
             ref={shadowRef}
-            className="absolute inset-0 pointer-events-none opacity-90 mix-blend-multiply"
+            className="absolute inset-0 pointer-events-none opacity-85 mix-blend-multiply"
             style={{
-              backgroundColor: "transparent",
-              boxShadow: `0 0 ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`,
-              transform: `translate3d(${shadowX}px, ${shadowY}px, 0px)`,
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              filter: `blur(${restShadowBlur}px)`,
+              transform: `translate3d(${shadowX}px, ${shadowY}px, 0px) scale(${restShadowScale})`,
               borderRadius: item.id === "clock" ? "50%" : "4px",
               transformOrigin: "top center",
               zIndex: 0,
@@ -507,94 +506,72 @@ export const DetectiveBoard: React.FC = () => {
   // Helper to render proper board items SVGs
   // Helper to render proper board items SVGs
   const renderItemSvg = (id: string, isHovered: boolean) => {
+    const shadowClass = isMobile
+      ? (id === "phone"
+          ? (isHovered ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]" : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]")
+          : id === "dossier"
+            ? (isHovered ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]" : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]")
+            : (isHovered ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]" : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"))
+      : "";
+
     switch (id) {
       case "dossier":
         return (
           <DossierSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
-                : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "suspect-1":
         return (
           <Suspect1Svg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "suspect-2":
         return (
           <Suspect2Svg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "map":
         return (
           <MapSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "phone":
         return (
           <RotaryPhoneSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]"
-                : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "clock":
         return (
           <VintageClockSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "evidence":
         return (
           <EvidenceBagSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "newspaper":
         return (
           <NewspaperSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${
-              isHovered
-                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
-                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
-            }`}
+            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
           />
         );
       case "note":
         return (
           <div
             className={`w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out ${
-              isHovered
-                ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
-                : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
+              isMobile
+                ? (isHovered
+                    ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
+                    : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]")
+                : ""
             }`}
           >
             <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
