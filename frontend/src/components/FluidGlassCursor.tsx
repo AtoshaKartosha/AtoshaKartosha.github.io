@@ -435,7 +435,7 @@ export const FluidGlassCursor: React.FC = () => {
       <svg width="0" height="0" className="absolute">
         <defs>
           {displacementMapUrl && aberrationMapUrl && (
-            <filter id="lens-bulge" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse">
+            <filter id="lens-bulge" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
               <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="lensMap" x="0" y="0" width="240" height="240" />
               <feImage href={aberrationMapUrl} xlinkHref={aberrationMapUrl} result="abMap" x="0" y="0" width="240" height="240" />
               
