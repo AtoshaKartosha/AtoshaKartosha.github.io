@@ -139,7 +139,7 @@ export const BoardPopup: React.FC = () => {
           <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out group-hover:bg-[#e53e3e] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.4)] group-active:scale-95" />
           
           {/* Centered Stamped X emblem (upright, positioned in the center of the triangle) */}
-          <span className="absolute top-[14px] right-[14px] font-serif text-[11px] text-[#1c160e] font-bold opacity-75 group-hover:opacity-100 transition-opacity mix-blend-multiply pointer-events-none">
+          <span className="absolute top-[9px] right-[9px] font-serif text-[11px] text-[#1c160e] font-bold opacity-75 group-hover:opacity-100 transition-opacity mix-blend-multiply pointer-events-none">
             ✕
           </span>
         </button>
