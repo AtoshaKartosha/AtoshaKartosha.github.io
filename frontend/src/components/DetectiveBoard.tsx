@@ -75,7 +75,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     const tiltY = -y * maxTiltY;
 
     // Direct DOM style updates for 3D rotation and scale
-    cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(20px) scale(1.04)`;
+    cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(20px)`;
 
     // No separate shadow div to update
   };
@@ -96,19 +96,19 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     const cardEl = cardRef.current;
     if (cardEl) {
       cardEl.style.transition = "transform 0.4s ease-out";
-      cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
+      cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)";
     }
   };
 
 
   return (
     <div
-      className="absolute group"
+      className="absolute group transition-all duration-300 ease-out"
       style={{
         left: `${pos.left}%`,
         top: `${pos.top}%`,
         width: `${pos.width}%`,
-        transform: `rotate(${rotation}deg)`,
+        transform: `rotate(${rotation}deg) scale(${isHovered ? 1.04 : 1})`,
         transformStyle: "preserve-3d",
         zIndex: isHovered ? 30 : item.zIndex,
       }}
@@ -118,6 +118,9 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           if (isDraggingRef.current) return;
           setActivePopup(item.popupId);
         }}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        onPointerMove={handlePointerMove}
         className="w-full focus:outline-none block relative touch-manipulation cursor-pointer"
         style={{
           transformStyle: "preserve-3d",
@@ -154,9 +157,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         {/* Visual SVG Content (Tilts and lifts under the pin) */}
         <div
           ref={cardRef}
-          onPointerEnter={handlePointerEnter}
-          onPointerLeave={handlePointerLeave}
-          onPointerMove={handlePointerMove}
           style={{
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
