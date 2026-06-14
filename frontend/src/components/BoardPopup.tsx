@@ -135,12 +135,13 @@ export const BoardPopup: React.FC = () => {
           aria-label="Закрыть"
           className="absolute top-0 right-0 w-16 h-16 overflow-hidden cursor-pointer group focus:outline-none z-30 select-none"
         >
-          <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out group-hover:bg-[#e53e3e] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.4)] group-active:scale-95 flex items-center justify-center">
-            {/* Stamped X on the ribbon (rotated -45deg to offset parent rotation) */}
-            <span className="font-serif text-[10px] text-[#1c160e] font-bold rotate-[-45deg] transform translate-y-[2px] opacity-75 group-hover:opacity-100 transition-opacity">
-              ✕
-            </span>
-          </div>
+          {/* Visual diagonal ribbon background */}
+          <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out group-hover:bg-[#e53e3e] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.4)] group-active:scale-95" />
+          
+          {/* Centered Stamped X emblem (upright, positioned in the center of the triangle) */}
+          <span className="absolute top-[14px] right-[14px] font-serif text-[11px] text-[#1c160e] font-bold opacity-75 group-hover:opacity-100 transition-opacity mix-blend-multiply pointer-events-none">
+            ✕
+          </span>
         </button>
 
         {/* Vintage header */}
