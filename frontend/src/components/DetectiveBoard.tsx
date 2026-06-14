@@ -40,6 +40,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const shadowRef = useRef<HTMLDivElement>(null);
+  const cardRectRef = useRef<DOMRect | null>(null);
 
   const pos = isMobile ? item.mobile : item.desktop;
   const isHovered = hoveredItemId === item.id;
@@ -49,7 +50,11 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     const cardEl = cardRef.current;
     if (!cardEl) return;
 
-    const rect = e.currentTarget.getBoundingClientRect();
+    let rect = cardRectRef.current;
+    if (!rect) {
+      rect = e.currentTarget.getBoundingClientRect();
+      cardRectRef.current = rect;
+    }
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
 
@@ -79,8 +84,9 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     }
   };
 
-  const handlePointerEnter = () => {
+  const handlePointerEnter = (e: React.PointerEvent<HTMLButtonElement>) => {
     setHoveredItemId(item.id);
+    cardRectRef.current = e.currentTarget.getBoundingClientRect();
 
     const cardEl = cardRef.current;
     if (cardEl) {

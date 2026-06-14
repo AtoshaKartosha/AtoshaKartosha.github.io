@@ -128,6 +128,36 @@ export const FluidGlassCursor: React.FC = () => {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+  const boardRectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
+
+  // Measure board rectangle once on mount, resize, or load complete to avoid layout thrashing
+  useEffect(() => {
+    if (isMobile) return;
+
+    const updateBoardRect = () => {
+      const boardEl = document.querySelector('[data-board="true"]');
+      if (boardEl && clonedBoardRef.current) {
+        const rect = boardEl.getBoundingClientRect();
+        boardRectRef.current = {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        };
+        clonedBoardRef.current.style.width = `${rect.width}px`;
+        clonedBoardRef.current.style.height = `${rect.height}px`;
+      }
+    };
+
+    // Run measurement with slight delay to ensure layout is settled and image sizes are computed
+    const timer = setTimeout(updateBoardRect, 250);
+
+    window.addEventListener("resize", updateBoardRect);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateBoardRect);
+    };
+  }, [isMobile, isLoading]);
 
   // Track mouse coordinates globally
   useEffect(() => {
@@ -176,9 +206,21 @@ export const FluidGlassCursor: React.FC = () => {
       swingAngle.current = Math.min(Math.max(swingAngle.current, -20), 20);
 
       const boardEl = document.querySelector('[data-board="true"]');
-      if (magnifierRef.current && clonedBoardRef.current && boardEl) {
-        const boardRect = boardEl.getBoundingClientRect();
-        
+      let boardRect = boardRectRef.current;
+      if (!boardRect && boardEl && clonedBoardRef.current) {
+        const rect = boardEl.getBoundingClientRect();
+        boardRect = {
+          left: rect.left,
+          top: rect.top,
+          width: rect.width,
+          height: rect.height,
+        };
+        boardRectRef.current = boardRect;
+        clonedBoardRef.current.style.width = `${rect.width}px`;
+        clonedBoardRef.current.style.height = `${rect.height}px`;
+      }
+
+      if (magnifierRef.current && clonedBoardRef.current && boardEl && boardRect) {
         // Centered position of the lens on screen
         const clientX = lerpedPos.current.x;
         const clientY = lerpedPos.current.y;
@@ -192,10 +234,6 @@ export const FluidGlassCursor: React.FC = () => {
         // Calculate mouse relative coordinates to the board
         const mouseX = clientX - boardRect.left;
         const mouseY = clientY - boardRect.top;
-
-        // Apply same size as original board to make relative positions match perfectly
-        clonedBoardRef.current.style.width = `${boardRect.width}px`;
-        clonedBoardRef.current.style.height = `${boardRect.height}px`;
 
         // Scale and shift cloned board so the point under cursor aligns perfectly with center of lens
         const tx = LENS_RADIUS - mouseX * ZOOM_FACTOR;

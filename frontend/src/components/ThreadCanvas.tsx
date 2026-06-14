@@ -331,9 +331,6 @@ export const ThreadCanvas: React.FC = () => {
       const delta = lastTime ? (now - lastTime) / 1000 : 0;
       lastTime = now;
 
-      if (Math.random() < 0.02) {
-        console.log("DrawProgress:", drawProgress.current, "isLoading:", isLoading, "meshExists:", !!mesh, "time:", time.current);
-      }
 
       time.current += delta;
       program.uniforms.uTime.value = time.current;
@@ -364,7 +361,6 @@ export const ThreadCanvas: React.FC = () => {
         let needsUpdate = false;
         const activeHoveredId = hoveredItemIdRef.current;
 
-        let vertexIndex = 0;
         activeConnections.forEach((conn) => {
           const key = `${conn.from}-${conn.to}`;
           const isCurrentlyHovered = (conn.from === activeHoveredId || conn.to === activeHoveredId);
@@ -372,9 +368,11 @@ export const ThreadCanvas: React.FC = () => {
           
           if (currentProgresses[key] === undefined) {
             currentProgresses[key] = 0.0;
+            needsUpdate = true;
           }
           if (currentVibrations[key] === undefined) {
             currentVibrations[key] = 0.0;
+            needsUpdate = true;
           }
           if (prevHoveredState[key] === undefined) {
             prevHoveredState[key] = false;
@@ -383,6 +381,7 @@ export const ThreadCanvas: React.FC = () => {
           // Pluck trigger: transition from unhovered to hovered
           if (isCurrentlyHovered && !prevHoveredState[key]) {
             currentVibrations[key] = 1.0;
+            needsUpdate = true;
           }
           prevHoveredState[key] = isCurrentlyHovered;
 
@@ -416,19 +415,24 @@ export const ThreadCanvas: React.FC = () => {
             currentVibrations[key] = newVibe;
             needsUpdate = true;
           }
-
-          const hVal = currentProgresses[key];
-          const vVal = currentVibrations[key];
-          
-          const count = (SEGMENTS_PER_LINE + 1) * 2;
-          for (let i = 0; i < count; i++) {
-            hoveredData[vertexIndex + i] = hVal;
-            vibrationData[vertexIndex + i] = vVal;
-          }
-          vertexIndex += count;
         });
 
+        // Only update WebGL attribute arrays and flag upload to GPU when active state transitions are occurring
         if (needsUpdate) {
+          let vertexIndex = 0;
+          activeConnections.forEach((conn) => {
+            const key = `${conn.from}-${conn.to}`;
+            const hVal = currentProgresses[key];
+            const vVal = currentVibrations[key];
+            
+            const count = (SEGMENTS_PER_LINE + 1) * 2;
+            for (let i = 0; i < count; i++) {
+              hoveredData[vertexIndex + i] = hVal;
+              vibrationData[vertexIndex + i] = vVal;
+            }
+            vertexIndex += count;
+          });
+
           hoveredAttr.needsUpdate = true;
           vibrationAttr.needsUpdate = true;
         }
