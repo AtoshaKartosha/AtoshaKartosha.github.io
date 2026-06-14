@@ -52,19 +52,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const lampY = 15;
   const distFromLamp = Math.hypot((centerX - lampX) / 100, (centerY - lampY) / 100);
   const dimmingOpacity = item.id === "dossier" ? 0 : Math.min(distFromLamp * 0.35, 0.22);
-  const brightnessVal = 1.0 - dimmingOpacity;
-
-  // Focus blur values
-  const focusCenterX = 50;
-  const focusCenterY = 45; // board center focus
-  const distFromFocus = Math.hypot(
-    (centerX - focusCenterX) / 100,
-    (centerY - focusCenterY) / 100
-  );
-  // Blur: 0px at center, up to 0.6px at far edges — very subtle
-  const depthBlur = Math.max(0, (distFromFocus - 0.2) * 1.8);
-  const clampedBlur = Math.min(depthBlur, 0.6);
-
 
   const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
 
@@ -100,11 +87,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     const cardEl = cardRef.current;
     if (cardEl) {
       cardEl.style.transition = "transform 0.08s ease-out";
-      const filterEl = cardEl.firstElementChild as HTMLElement;
-      if (filterEl && !isMobile) {
-        filterEl.style.transition = "filter 0.15s ease-out";
-        filterEl.style.filter = "brightness(1) blur(0px)";
-      }
     }
   };
 
@@ -115,11 +97,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     if (cardEl) {
       cardEl.style.transition = "transform 0.4s ease-out";
       cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
-      const filterEl = cardEl.firstElementChild as HTMLElement;
-      if (filterEl && !isMobile) {
-        filterEl.style.transition = "filter 0.4s ease-out";
-        filterEl.style.filter = `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`;
-      }
     }
   };
 
@@ -176,19 +153,28 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             zIndex: 1,
           }}
         >
-          <div
-            style={{
-              transition: "filter 0.3s ease-out",
-              filter: isMobile
-                ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))`
-                : (isHovered 
-                    ? "brightness(1) blur(0px)" 
-                    : `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`),
-            }}
-          >
-            {children}
-          </div>
+          {isMobile ? (
+            <div style={{ filter: "drop-shadow(2px 4px 6px rgba(0,0,0,0.6))" }}>
+              {children}
+            </div>
+          ) : (
+            children
+          )}
         </div>
+
+        {/* Light falloff dimming overlay */}
+        {!isMobile && item.id !== "dossier" && (
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              backgroundColor: `rgba(0, 0, 0, ${isHovered ? 0 : dimmingOpacity.toFixed(3)})`,
+              borderRadius: item.id === "clock" ? "50%" : "4px",
+              zIndex: 2,
+              transition: "background-color 0.3s ease-out",
+              mixBlendMode: "multiply",
+            }}
+          />
+        )}
       </button>
     </div>
   );
