@@ -49,6 +49,11 @@ export const BoardPopup: React.FC = () => {
 
       // Animate entry: paper slaps onto desk with slight rotation
       gsap.killTweensOf(content);
+      const paragraphs = content.querySelectorAll('.font-typewriter p');
+      
+      // Reset paragraphs inline style to make sure tween is fresh
+      gsap.set(paragraphs, { opacity: 0, y: 10 });
+
       gsap.fromTo(
         content,
         {
@@ -64,6 +69,19 @@ export const BoardPopup: React.FC = () => {
           y: 0,
           duration: 0.35,
           ease: "power2.out",
+          onComplete: () => {
+            gsap.fromTo(
+              paragraphs,
+              { opacity: 0, y: 10 },
+              {
+                opacity: 1,
+                y: 0,
+                duration: 0.4,
+                stagger: 0.12,
+                ease: "power1.out",
+              }
+            );
+          }
         }
       );
     } else if (dialog.open) {
@@ -99,7 +117,7 @@ export const BoardPopup: React.FC = () => {
     <dialog
       ref={dialogRef}
       onClick={handleBackdropClick}
-      className="bg-transparent border-0 outline-none p-4 max-w-lg w-full max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible"
+      className="bg-transparent border-0 outline-none p-4 max-w-lg w-full max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible m-auto"
     >
       <div
         ref={contentRef}
@@ -111,6 +129,15 @@ export const BoardPopup: React.FC = () => {
           `,
         }}
       >
+        {/* Stamped Wax Seal Close Button */}
+        <button
+          onClick={() => setActivePopup(null)}
+          aria-label="Закрыть"
+          className="absolute top-5 left-5 w-10 h-10 flex items-center justify-center bg-[radial-gradient(circle_at_35%_35%,#e53e3e_0%,#c53030_45%,#9b2c2c_80%,#742a2a_100%)] text-[#5c1c1c] text-shadow-[0_1px_0_rgba(255,255,255,0.15)] font-bold text-sm rounded-[42%_56%_48%_52%/_50%_45%_55%_50%] border border-[#742a2a]/30 shadow-[0_4px_8px_rgba(0,0,0,0.4),inset_0_2px_4px_rgba(255,255,255,0.2),inset_0_-2px_4px_rgba(0,0,0,0.5)] hover:shadow-[0_6px_12px_rgba(0,0,0,0.55),inset_0_2px_4px_rgba(255,255,255,0.35),inset_0_-2px_4px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out hover:scale-105 active:scale-95 cursor-pointer z-30 transform hover:rotate-12 select-none"
+        >
+          {/* Stamped X emblem */}
+          <span className="font-serif tracking-tighter opacity-80 mix-blend-multiply">✕</span>
+        </button>
         {/* Red ribbon corner detail */}
         <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden pointer-events-none select-none">
           <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)]" />
@@ -131,7 +158,9 @@ export const BoardPopup: React.FC = () => {
         {/* Body content (Typewriter style) */}
         <div className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] select-text">
           {data.content.map((p, idx) => (
-            <p key={idx}>{p}</p>
+            <p key={idx} className="opacity-0 translate-y-2.5">
+              {p}
+            </p>
           ))}
         </div>
 
@@ -153,14 +182,6 @@ export const BoardPopup: React.FC = () => {
           </div>
         )}
 
-        {/* Close Button / Stamped Wax Seal */}
-        <button
-          onClick={() => setActivePopup(null)}
-          aria-label="Закрыть"
-          className="absolute top-4 left-4 font-typewriter text-xs font-bold w-7 h-7 flex items-center justify-center border-2 border-[#1c160e] rounded-full hover:bg-[#c41e1e] hover:text-[#f4edd9] hover:border-[#c41e1e] transition-colors"
-        >
-          ✕
-        </button>
       </div>
     </dialog>
   );
