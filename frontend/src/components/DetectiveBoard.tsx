@@ -43,6 +43,21 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   const pos = isMobile ? item.mobile : item.desktop;
   const isHovered = hoveredItemId === item.id;
+  const [isZIndexRaised, setIsZIndexRaised] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) {
+      const timer = setTimeout(() => {
+        setIsZIndexRaised(true);
+      }, 0);
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => {
+        setIsZIndexRaised(false);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [isHovered]);
 
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top; // approximate vertical center
@@ -69,14 +84,14 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
 
-    const maxTiltX = 14; // rotateY
-    const maxTiltY = 14; // rotateX
+    const maxTiltX = 10; // rotateY
+    const maxTiltY = 10; // rotateX
 
     const tiltX = x * maxTiltX;
     const tiltY = -y * maxTiltY;
 
     // Direct DOM style updates for 3D rotation and scale
-    cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(20px)`;
+    cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(80px)`;
 
     // No separate shadow div to update
   };
@@ -111,7 +126,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         width: `${pos.width}%`,
         transform: `rotate(${rotation}deg) scale(${isHovered ? 1.04 : 1})`,
         transformStyle: "preserve-3d",
-        zIndex: isHovered ? 30 : item.zIndex,
+        zIndex: isZIndexRaised ? 30 : item.zIndex,
       }}
     >
       <div
@@ -144,7 +159,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           <div
             className="absolute pointer-events-auto"
             style={{
-              inset: "-17.5%",
+              inset: "-30%",
               zIndex: -1,
             }}
           />

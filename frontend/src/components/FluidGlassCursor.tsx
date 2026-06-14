@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, threadConnections } from "../data/boardItems";
+import { boardItems, threadConnections, BoardItem } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -18,6 +18,95 @@ import {
 const LENS_RADIUS = 120; // Radius in pixels
 const ZOOM_FACTOR = 1.35; // Magnification factor
 
+interface ClonedBoardItemProps {
+  item: BoardItem;
+  hoveredItemId: string | null;
+  isMobile: boolean;
+  renderItemSvg: (id: string) => React.ReactNode;
+}
+
+const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
+  item,
+  hoveredItemId,
+  isMobile,
+  renderItemSvg,
+}) => {
+  const pos = isMobile ? item.mobile : item.desktop;
+  const isHovered = hoveredItemId === item.id;
+  const [isZIndexRaised, setIsZIndexRaised] = useState(false);
+
+  useEffect(() => {
+    if (isHovered) {
+      const timer = setTimeout(() => {
+        setIsZIndexRaised(true);
+      }, 0);
+      return () => clearTimeout(timer);
+    } else {
+      const timer = setTimeout(() => {
+        setIsZIndexRaised(false);
+      }, 400);
+      return () => clearTimeout(timer);
+    }
+  }, [isHovered]);
+
+  const centerX = pos.left + pos.width / 2;
+  const centerY = pos.top;
+  const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
+  const dimBrightness = item.id === "dossier" ? 1 : Math.max(1 - distFromLamp * 0.4, 0.78);
+
+  return (
+    <div
+      className="absolute group transition-all duration-300 ease-out"
+      style={{
+        left: `${pos.left}%`,
+        top: `${pos.top}%`,
+        width: `${pos.width}%`,
+        transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
+        zIndex: isZIndexRaised ? 30 : item.zIndex,
+      }}
+    >
+      {/* Red Pin Pierce-point */}
+      <div
+        className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
+          isHovered
+            ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
+            : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+        }`}
+      >
+        {/* Pinhead metal shine */}
+        <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
+        
+        {/* Pin anchor node in layout for thread coordinates */}
+        <div
+          data-pin-id={item.id}
+          className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
+        />
+      </div>
+
+      {/* Visual SVG Content */}
+      <div className="transition-transform duration-300 ease-out">
+        <div
+          className="w-full h-full transition-all duration-300 ease-out"
+          style={{
+            filter: `${isHovered
+              ? (item.id === "phone"
+                  ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
+                  : item.id === "dossier"
+                    ? "drop-shadow(0 20px 35px rgba(0,0,0,0.65))"
+                    : "drop-shadow(0 18px 30px rgba(0,0,0,0.55))")
+              : (item.id === "phone"
+                  ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
+                  : item.id === "dossier"
+                    ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
+                    : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")} brightness(${isHovered ? 1 : dimBrightness})`,
+          }}
+        >
+          {renderItemSvg(item.id)}
+        </div>
+      </div>
+    </div>
+  );
+};
 export const FluidGlassCursor: React.FC = () => {
   const magnifierRef = useRef<HTMLDivElement>(null);
   const clonedBoardRef = useRef<HTMLDivElement>(null);
@@ -410,68 +499,15 @@ export const FluidGlassCursor: React.FC = () => {
                 })}
               </svg>
               {/* Cloned Board Items */}
-              {boardItems.map((item) => {
-                const pos = isMobile ? item.mobile : item.desktop;
-                const isHovered = hoveredItemId === item.id;
-                const centerX = pos.left + pos.width / 2;
-                const centerY = pos.top;
-                const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
-                const dimBrightness = item.id === "dossier" ? 1 : Math.max(1 - distFromLamp * 0.4, 0.78);
-
-                return (
-                  <div
-                    key={item.id}
-                    className="absolute group transition-all duration-300 ease-out"
-                    style={{
-                      left: `${pos.left}%`,
-                      top: `${pos.top}%`,
-                      width: `${pos.width}%`,
-                      transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
-                      zIndex: isHovered ? 30 : item.zIndex,
-                    }}
-                  >
-                    {/* Red Pin Pierce-point */}
-                    <div
-                      className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
-                        isHovered
-                          ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
-                          : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
-                      }`}
-                    >
-                      {/* Pinhead metal shine */}
-                      <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
-                      
-                      {/* Pin anchor node in layout for thread coordinates */}
-                      <div
-                        data-pin-id={item.id}
-                        className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
-                      />
-                    </div>
-
-                    {/* Visual SVG Content */}
-                    <div className="transition-transform duration-300 ease-out">
-                      <div
-                        className="w-full h-full transition-all duration-300 ease-out"
-                        style={{
-                          filter: `${isHovered
-                            ? (item.id === "phone"
-                                ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
-                                : item.id === "dossier"
-                                  ? "drop-shadow(0 20px 35px rgba(0,0,0,0.65))"
-                                  : "drop-shadow(0 18px 30px rgba(0,0,0,0.55))")
-                            : (item.id === "phone"
-                                ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
-                                : item.id === "dossier"
-                                  ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
-                                  : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")} brightness(${isHovered ? 1 : dimBrightness})`,
-                        }}
-                      >
-                        {renderItemSvg(item.id)}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {boardItems.map((item) => (
+                <ClonedBoardItem
+                  key={item.id}
+                  item={item}
+                  hoveredItemId={hoveredItemId}
+                  isMobile={isMobile}
+                  renderItemSvg={renderItemSvg}
+                />
+              ))}
 
               {/* Foreground elements (table, hat, jacket) overlay inside magnifier */}
               <div 
