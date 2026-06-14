@@ -18,6 +18,7 @@ import { ThreadCanvas } from "./ThreadCanvas";
 import { BoardPopup } from "./BoardPopup";
 import { DustParticles } from "./DustParticles";
 import { FluidGlassCursor } from "./FluidGlassCursor";
+import { NoirPinboard } from "./NoirPinboard";
 
 interface BoardItemProps {
   item: BoardItem;
@@ -609,6 +610,8 @@ export const DetectiveBoard: React.FC = () => {
         {/* Repeating cork board texture in background */}
         <CorkboardTexture />
 
+        {/* 2nd layer from bottom: Pinboard in noir and comic style */}
+        <NoirPinboard />
         {/* WebGL red thread canvas overlay */}
         <ThreadCanvas />
 

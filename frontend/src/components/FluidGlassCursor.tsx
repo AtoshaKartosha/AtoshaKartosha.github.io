@@ -14,6 +14,7 @@ import {
   EvidenceBagSvg,
   NewspaperSvg,
 } from "./BoardSvgs";
+import { NoirPinboard } from "./NoirPinboard";
 
 const LENS_RADIUS = 120; // Radius in pixels
 const ZOOM_FACTOR = 1.35; // Magnification factor
@@ -460,6 +461,9 @@ export const FluidGlassCursor: React.FC = () => {
             >
               {/* Repeating cork board texture in background */}
               <CorkboardTexture />
+
+              {/* 2nd layer from bottom: Pinboard in noir and comic style */}
+              <NoirPinboard />
 
               {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
               {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
