@@ -27,6 +27,7 @@ export const FluidGlassCursor: React.FC = () => {
   const pinPositions = useBoardStore((state) => state.pinPositions);
   const [isMobile, setIsMobile] = useState(false);
   const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
+  const [aberrationMapUrl, setAberrationMapUrl] = useState<string | null>(null);
 
   // Mouse position in viewport coordinates
   const mouseRef = useRef({
@@ -41,6 +42,7 @@ export const FluidGlassCursor: React.FC = () => {
   });
 
   // Generate the lens displacement map once on mount
+  // Generate the lens displacement map once on mount
   useEffect(() => {
     const size = LENS_RADIUS * 2;
     const canvas = document.createElement("canvas");
@@ -51,6 +53,9 @@ export const FluidGlassCursor: React.FC = () => {
 
     const imgData = ctx.createImageData(size, size);
     const data = imgData.data;
+    
+    const imgDataAb = ctx.createImageData(size, size);
+    const dataAb = imgDataAb.data;
 
     for (let y = 0; y < size; y++) {
       for (let x = 0; x < size; x++) {
@@ -67,31 +72,47 @@ export const FluidGlassCursor: React.FC = () => {
           data[idx + 1] = 128; // G
           data[idx + 2] = 128; // B
           data[idx + 3] = 255; // A
+          
+          dataAb[idx] = 128;
+          dataAb[idx + 1] = 128;
+          dataAb[idx + 2] = 128;
+          dataAb[idx + 3] = 255;
         } else {
           // Normalized distance from center (0 to 1)
           const normR = r / LENS_RADIUS;
           
-          // Bulge distortion profile: exponential ramp towards edges
-          // Zero at center, maximum right before the gold bezel
+          // Base bulge distortion profile: exponential ramp towards edges
           const factor = Math.pow(normR, 2.5) * 0.38;
-          
-          // Displacement vectors point inwards for magnifying convex lens effect
           const dispX = -(dx / (r || 1)) * factor;
           const dispY = -(dy / (r || 1)) * factor;
 
-          // Map displacement (-1 to 1) to color range (0 to 255)
           data[idx] = Math.max(0, Math.min(255, Math.round(128 + dispX * 127)));
           data[idx + 1] = Math.max(0, Math.min(255, Math.round(128 + dispY * 127)));
-          data[idx + 2] = 128; // B (not used)
+          data[idx + 2] = 128; // B
           data[idx + 3] = 255; // A
+          
+          // Aberration distortion profile: very flat in center, sharp at edges
+          const abFactor = Math.pow(normR, 6.0) * 0.25;
+          const abDispX = -(dx / (r || 1)) * abFactor;
+          const abDispY = -(dy / (r || 1)) * abFactor;
+          
+          dataAb[idx] = Math.max(0, Math.min(255, Math.round(128 + abDispX * 127)));
+          dataAb[idx + 1] = Math.max(0, Math.min(255, Math.round(128 + abDispY * 127)));
+          dataAb[idx + 2] = 128;
+          dataAb[idx + 3] = 255;
         }
       }
     }
 
     ctx.putImageData(imgData, 0, 0);
-    const url = canvas.toDataURL();
+    const url1 = canvas.toDataURL();
+    
+    ctx.putImageData(imgDataAb, 0, 0);
+    const url2 = canvas.toDataURL();
+
     requestAnimationFrame(() => {
-      setDisplacementMapUrl(url);
+      setDisplacementMapUrl(url1);
+      setAberrationMapUrl(url2);
     });
   }, []);
 
@@ -413,21 +434,32 @@ export const FluidGlassCursor: React.FC = () => {
       {/* SVG filter for lens bulge refraction and chromatic aberration */}
       <svg width="0" height="0" className="absolute">
         <defs>
-          {displacementMapUrl && (
+          {displacementMapUrl && aberrationMapUrl && (
             <filter id="lens-bulge" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse">
-              <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="map" x="0" y="0" width="240" height="240" />
+              <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="lensMap" x="0" y="0" width="240" height="240" />
+              <feImage href={aberrationMapUrl} xlinkHref={aberrationMapUrl} result="abMap" x="0" y="0" width="240" height="240" />
               
-              {/* Red Channel Displacement */}
+              {/* Base lens displacement applied to all channels equally */}
               <feDisplacementMap
                 in="SourceGraphic"
-                in2="map"
-                scale="72"
+                in2="lensMap"
+                scale="64"
                 xChannelSelector="R"
                 yChannelSelector="G"
-                result="red"
+                result="bulged"
+              />
+
+              {/* Red Channel Aberration */}
+              <feDisplacementMap
+                in="bulged"
+                in2="abMap"
+                scale="40"
+                xChannelSelector="R"
+                yChannelSelector="G"
+                result="r_disp"
               />
               <feColorMatrix
-                in="red"
+                in="r_disp"
                 type="matrix"
                 values="1 0 0 0 0
                         0 0 0 0 0
@@ -436,17 +468,9 @@ export const FluidGlassCursor: React.FC = () => {
                 result="redChannel"
               />
               
-              {/* Green Channel Displacement */}
-              <feDisplacementMap
-                in="SourceGraphic"
-                in2="map"
-                scale="64"
-                xChannelSelector="R"
-                yChannelSelector="G"
-                result="green"
-              />
+              {/* Green Channel (No extra displacement) */}
               <feColorMatrix
-                in="green"
+                in="bulged"
                 type="matrix"
                 values="0 0 0 0 0
                         0 1 0 0 0
@@ -455,17 +479,17 @@ export const FluidGlassCursor: React.FC = () => {
                 result="greenChannel"
               />
               
-              {/* Blue Channel Displacement */}
+              {/* Blue Channel Aberration */}
               <feDisplacementMap
-                in="SourceGraphic"
-                in2="map"
-                scale="56"
+                in="bulged"
+                in2="abMap"
+                scale="-40"
                 xChannelSelector="R"
                 yChannelSelector="G"
-                result="blue"
+                result="b_disp"
               />
               <feColorMatrix
-                in="blue"
+                in="b_disp"
                 type="matrix"
                 values="0 0 0 0 0
                         0 0 0 0 0
