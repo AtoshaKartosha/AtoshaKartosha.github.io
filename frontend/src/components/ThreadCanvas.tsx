@@ -12,6 +12,7 @@ precision mediump float;
 attribute vec2 position;
 attribute vec2 uv;
 attribute float hovered;
+attribute float vibration;
 
 varying vec2 vUv;
 varying float vHovered;
@@ -29,8 +30,8 @@ void main() {
     // Slow background sway (constant frequency, constant amplitude)
     float slowSway = sin(uTime * 1.8 + uv.x * 6.28) * env * 3.0;
     
-    // Fast high-frequency vibration (constant frequency, fades in with hovered)
-    float fastVibe = sin(uTime * 8.0 + uv.x * 12.56) * env * 5.0 * hovered;
+    // Fast high-frequency vibration (constant frequency, fades in with vibration intensity)
+    float fastVibe = sin(uTime * 8.0 + uv.x * 12.56) * env * 5.0 * vibration;
     
     float sway = slowSway + fastVibe;
     
@@ -94,6 +95,8 @@ export const ThreadCanvas: React.FC = () => {
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const hoveredItemIdRef = useRef<string | null>(null);
   const hoverProgressesRef = useRef<Record<string, number>>({});
+  const vibrationProgressesRef = useRef<Record<string, number>>({});
+  const prevHoveredStateRef = useRef<Record<string, boolean>>({});
   const activeConnectionsRef = useRef<any[]>([]);
 
   useEffect(() => {
@@ -208,9 +211,11 @@ export const ThreadCanvas: React.FC = () => {
     if (activeConnections.length === 0) return;
 
     // Build merged geometry for all active connections
+    // Build merged geometry for all active connections
     const allPositions: number[] = [];
     const allUvs: number[] = [];
     const allHovered: number[] = [];
+    const allVibration: number[] = [];
     const allIndices: number[] = [];
     let vertexOffset = 0;
     activeConnections.forEach((conn) => {
@@ -224,10 +229,16 @@ export const ThreadCanvas: React.FC = () => {
 
       const key = `${conn.from}-${conn.to}`;
       const isConnectionHovered = conn.from === hoveredItemId || conn.to === hoveredItemId;
+      
       if (hoverProgressesRef.current[key] === undefined) {
         hoverProgressesRef.current[key] = isConnectionHovered ? 1.0 : 0.0;
       }
       const hoveredVal = hoverProgressesRef.current[key];
+
+      if (vibrationProgressesRef.current[key] === undefined) {
+        vibrationProgressesRef.current[key] = isConnectionHovered ? 0.12 : 0.0;
+      }
+      const vibrationVal = vibrationProgressesRef.current[key];
 
       for (let i = 0; i <= SEGMENTS_PER_LINE; i++) {
         const t = i / SEGMENTS_PER_LINE;
@@ -256,10 +267,12 @@ export const ThreadCanvas: React.FC = () => {
         allPositions.push(px + nx * THICKNESS, py + ny * THICKNESS);
         allUvs.push(t, 1.0);
         allHovered.push(hoveredVal);
+        allVibration.push(vibrationVal);
 
         allPositions.push(px - nx * THICKNESS, py - ny * THICKNESS);
         allUvs.push(t, -1.0);
         allHovered.push(hoveredVal);
+        allVibration.push(vibrationVal);
       }
 
       for (let i = 0; i < SEGMENTS_PER_LINE; i++) {
@@ -284,6 +297,7 @@ export const ThreadCanvas: React.FC = () => {
       position: { size: 2, data: new Float32Array(allPositions) },
       uv: { size: 2, data: new Float32Array(allUvs) },
       hovered: { size: 1, data: new Float32Array(allHovered) },
+      vibration: { size: 1, data: new Float32Array(allVibration) },
       index: { data: new Uint16Array(allIndices) },
     });
 
@@ -334,46 +348,89 @@ export const ThreadCanvas: React.FC = () => {
       }
       program.uniforms.uDrawProgress.value = drawProgress.current;
 
-      // Smoothly update hover values for each active connection
+      // Smoothly update hover and vibration values for each active connection
       const currentProgresses = hoverProgressesRef.current;
-      const hoveredAttr = mesh.geometry.attributes.hovered;
-      const data = hoveredAttr?.data as Float32Array | undefined;
+      const currentVibrations = vibrationProgressesRef.current;
+      const prevHoveredState = prevHoveredStateRef.current;
 
-      if (hoveredAttr && data) {
+      const hoveredAttr = mesh.geometry.attributes.hovered;
+      const vibrationAttr = mesh.geometry.attributes.vibration;
+
+      const hoveredData = hoveredAttr?.data as Float32Array | undefined;
+      const vibrationData = vibrationAttr?.data as Float32Array | undefined;
+
+      if (hoveredAttr && vibrationAttr && hoveredData && vibrationData) {
         const activeConnections = activeConnectionsRef.current;
         let needsUpdate = false;
-        const speed = 6.0; // Transition speed
         const activeHoveredId = hoveredItemIdRef.current;
 
         let vertexIndex = 0;
         activeConnections.forEach((conn) => {
           const key = `${conn.from}-${conn.to}`;
-          const target = (conn.from === activeHoveredId || conn.to === activeHoveredId) ? 1.0 : 0.0;
+          const isCurrentlyHovered = (conn.from === activeHoveredId || conn.to === activeHoveredId);
+          const targetHover = isCurrentlyHovered ? 1.0 : 0.0;
           
           if (currentProgresses[key] === undefined) {
             currentProgresses[key] = 0.0;
           }
+          if (currentVibrations[key] === undefined) {
+            currentVibrations[key] = 0.0;
+          }
+          if (prevHoveredState[key] === undefined) {
+            prevHoveredState[key] = false;
+          }
 
-          const currentVal = currentProgresses[key];
-          if (currentVal !== target) {
-            let newVal = currentVal + (target - currentVal) * (1.0 - Math.exp(-delta * speed));
-            if (Math.abs(newVal - target) < 0.001) {
-              newVal = target;
+          // Pluck trigger: transition from unhovered to hovered
+          if (isCurrentlyHovered && !prevHoveredState[key]) {
+            currentVibrations[key] = 1.0;
+          }
+          prevHoveredState[key] = isCurrentlyHovered;
+
+          // 1. Smoothly update hover value (for glow)
+          const currentHover = currentProgresses[key];
+          if (currentHover !== targetHover) {
+            const hoverSpeed = 6.0;
+            let newHover = currentHover + (targetHover - currentHover) * (1.0 - Math.exp(-delta * hoverSpeed));
+            if (Math.abs(newHover - targetHover) < 0.001) {
+              newHover = targetHover;
             }
-            currentProgresses[key] = newVal;
+            currentProgresses[key] = newHover;
             needsUpdate = true;
           }
 
-          const val = currentProgresses[key];
+          // 2. Smoothly update vibration value (for physics)
+          const currentVibe = currentVibrations[key];
+          let targetVibe = 0.0;
+          let vibeDecaySpeed = 4.0; // decay speed when unhovered
+          
+          if (isCurrentlyHovered) {
+            targetVibe = 0.12; // hum rest vibration amplitude
+            vibeDecaySpeed = 1.5; // dampening speed when hovered
+          }
+
+          if (currentVibe !== targetVibe) {
+            let newVibe = currentVibe + (targetVibe - currentVibe) * (1.0 - Math.exp(-delta * vibeDecaySpeed));
+            if (Math.abs(newVibe - targetVibe) < 0.001) {
+              newVibe = targetVibe;
+            }
+            currentVibrations[key] = newVibe;
+            needsUpdate = true;
+          }
+
+          const hVal = currentProgresses[key];
+          const vVal = currentVibrations[key];
+          
           const count = (SEGMENTS_PER_LINE + 1) * 2;
           for (let i = 0; i < count; i++) {
-            data[vertexIndex + i] = val;
+            hoveredData[vertexIndex + i] = hVal;
+            vibrationData[vertexIndex + i] = vVal;
           }
           vertexIndex += count;
         });
 
         if (needsUpdate) {
           hoveredAttr.needsUpdate = true;
+          vibrationAttr.needsUpdate = true;
         }
       }
 
