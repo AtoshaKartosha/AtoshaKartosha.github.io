@@ -99,12 +99,13 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const cardEl = cardRef.current;
     if (cardEl) {
-      cardEl.style.transition = "transform 0.08s ease-out, filter 0.15s ease-out";
-      if (!isMobile) {
-        cardEl.style.filter = "brightness(1) blur(0px)";
+      cardEl.style.transition = "transform 0.08s ease-out";
+      const filterEl = cardEl.firstElementChild as HTMLElement;
+      if (filterEl && !isMobile) {
+        filterEl.style.transition = "filter 0.15s ease-out";
+        filterEl.style.filter = "brightness(1) blur(0px)";
       }
     }
-
   };
 
   const handlePointerLeave = () => {
@@ -112,10 +113,12 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const cardEl = cardRef.current;
     if (cardEl) {
-      cardEl.style.transition = "transform 0.4s ease-out, filter 0.4s ease-out";
+      cardEl.style.transition = "transform 0.4s ease-out";
       cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px) scale(1)";
-      if (!isMobile) {
-        cardEl.style.filter = `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`;
+      const filterEl = cardEl.firstElementChild as HTMLElement;
+      if (filterEl && !isMobile) {
+        filterEl.style.transition = "filter 0.4s ease-out";
+        filterEl.style.filter = `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`;
       }
     }
   };
@@ -170,15 +173,21 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           style={{
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
-            filter: isMobile
-              ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))`
-              : (isHovered 
-                  ? "brightness(1) blur(0px)" 
-                  : `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`),
             zIndex: 1,
           }}
         >
-          {children}
+          <div
+            style={{
+              transition: "filter 0.3s ease-out",
+              filter: isMobile
+                ? `drop-shadow(2px 4px 6px rgba(0,0,0,0.6))`
+                : (isHovered 
+                    ? "brightness(1) blur(0px)" 
+                    : `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`),
+            }}
+          >
+            {children}
+          </div>
         </div>
       </button>
     </div>
