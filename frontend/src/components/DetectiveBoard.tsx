@@ -34,6 +34,7 @@ export const DetectiveBoard: React.FC = () => {
 
   const [isMobile, setIsMobile] = useState(false);
   const [isDraggingState, setIsDraggingState] = useState(false);
+  const [zoom, setZoom] = useState(1.0);
 
 
   // Drag interaction state
@@ -51,6 +52,7 @@ export const DetectiveBoard: React.FC = () => {
       setIsMobile(mobile);
       if (!mobile) {
         setPanOffset({ x: 0, y: 0 });
+        setZoom(1.0);
       }
     };
     handleResize();
@@ -58,6 +60,7 @@ export const DetectiveBoard: React.FC = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [setPanOffset]);
 
+  // Helper function to measure pin positions relative to the board
   // Helper function to measure pin positions relative to the board
   const measurePins = useCallback(() => {
     const boardEl = boardRef.current;
@@ -68,13 +71,13 @@ export const DetectiveBoard: React.FC = () => {
       const pinAnchor = boardEl.querySelector(`[data-pin-id="${item.id}"]`);
       if (pinAnchor) {
         const pinRect = pinAnchor.getBoundingClientRect();
-        // Since both boardRect and pinRect shift by panOffset, their difference is invariant
-        const x = pinRect.left - boardRect.left;
-        const y = pinRect.top - boardRect.top;
+        // Divide by current zoom to get invariant logical coordinates
+        const x = (pinRect.left - boardRect.left) / zoom;
+        const y = (pinRect.top - boardRect.top) / zoom;
         setPinPosition(item.id, { x, y });
       }
     });
-  }, [setPinPosition]);
+  }, [setPinPosition, zoom]);
 
   // Run pin measurement on mount and resize
   useEffect(() => {
@@ -142,15 +145,28 @@ export const DetectiveBoard: React.FC = () => {
       const nextX = prev.x + dx;
       const nextY = prev.y + dy;
 
+      const boardWidth = boardEl.clientWidth * zoom;
+      const boardHeight = boardEl.clientHeight * zoom;
+
       const maxDragX = 0;
       const maxDragY = 0;
       // Clamping limits so user can't pan beyond canvas edges
-      const minDragX = -(boardEl.clientWidth - window.innerWidth);
-      const minDragY = -(boardEl.clientHeight - window.innerHeight);
+      const minDragX = -(boardWidth - window.innerWidth);
+      const minDragY = -(boardHeight - window.innerHeight);
+
+      // Apply rubber-banding (resistance) when dragging beyond boundaries
+      const applyRubberBand = (val: number, min: number, max: number) => {
+        if (val > max) {
+          return max + (val - max) * 0.3;
+        } else if (val < min) {
+          return min + (val - min) * 0.3;
+        }
+        return val;
+      };
 
       return {
-        x: Math.max(minDragX, Math.min(maxDragX, nextX)),
-        y: Math.max(minDragY, Math.min(maxDragY, nextY)),
+        x: applyRubberBand(nextX, minDragX, maxDragX),
+        y: applyRubberBand(nextY, minDragY, maxDragY),
       };
     });
   };
@@ -168,36 +184,86 @@ export const DetectiveBoard: React.FC = () => {
     // If it was just a tiny click/tap, don't run inertia
     if (dist < 6) return;
 
-    // Inertia physics loop
+    // Inertia and Spring-back physics loop
     const decay = 0.95;
+    
+    // Spring physics constants for boundary snap-back
+    const springTension = 180.0;
+    const springDamping = 15.0;
+    const dt = 0.016; // approx 16ms frame step
+
     const runInertia = () => {
-      const vx = dragVelocity.current.x;
-      const vy = dragVelocity.current.y;
+      const boardEl = boardRef.current;
+      if (!boardEl) return;
 
-      if (Math.hypot(vx, vy) < 0.05) return;
+      const boardWidth = boardEl.clientWidth * zoom;
+      const boardHeight = boardEl.clientHeight * zoom;
 
-      dragVelocity.current.x *= decay;
-      dragVelocity.current.y *= decay;
+      const maxDragX = 0;
+      const maxDragY = 0;
+      const minDragX = -(boardWidth - window.innerWidth);
+      const minDragY = -(boardHeight - window.innerHeight);
 
       setPanOffset((prev) => {
-        const boardEl = boardRef.current;
-        if (!boardEl) return prev;
+        let nextX = prev.x;
+        let nextY = prev.y;
 
-        const nextX = prev.x + vx * 16; // approx 16ms frame step
-        const nextY = prev.y + vy * 16;
+        const isOutOfBoundsX = prev.x > maxDragX || prev.x < minDragX;
+        const isOutOfBoundsY = prev.y > maxDragY || prev.y < minDragY;
 
-        const maxDragX = 0;
-        const maxDragY = 0;
-        const minDragX = -(boardEl.clientWidth - window.innerWidth);
-        const minDragY = -(boardEl.clientHeight - window.innerHeight);
+        // X Axis Physics
+        if (isOutOfBoundsX) {
+          const targetX = prev.x > maxDragX ? maxDragX : minDragX;
+          const forceX = -springTension * (prev.x - targetX) - springDamping * (dragVelocity.current.x * 1000);
+          dragVelocity.current.x += (forceX * dt) / 1000;
+          nextX += dragVelocity.current.x * dt * 1000;
+          
+          if (Math.abs(dragVelocity.current.x) < 0.01 && Math.abs(prev.x - targetX) < 0.5) {
+            nextX = targetX;
+            dragVelocity.current.x = 0;
+          }
+        } else {
+          dragVelocity.current.x *= decay;
+          nextX += dragVelocity.current.x * dt * 1000;
+        }
+
+        // Y Axis Physics
+        if (isOutOfBoundsY) {
+          const targetY = prev.y > maxDragY ? maxDragY : minDragY;
+          const forceY = -springTension * (prev.y - targetY) - springDamping * (dragVelocity.current.y * 1000);
+          dragVelocity.current.y += (forceY * dt) / 1000;
+          nextY += dragVelocity.current.y * dt * 1000;
+
+          if (Math.abs(dragVelocity.current.y) < 0.01 && Math.abs(prev.y - targetY) < 0.5) {
+            nextY = targetY;
+            dragVelocity.current.y = 0;
+          }
+        } else {
+          dragVelocity.current.y *= decay;
+          nextY += dragVelocity.current.y * dt * 1000;
+        }
+
+        // Stop loop if everything settled and inside bounds
+        const xSettled = !isOutOfBoundsX || (nextX === maxDragX || nextX === minDragX);
+        const ySettled = !isOutOfBoundsY || (nextY === maxDragY || nextY === minDragY);
+        const velocitySettled = Math.hypot(dragVelocity.current.x, dragVelocity.current.y) < 0.005;
+
+        if (xSettled && ySettled && velocitySettled && !isOutOfBoundsX && !isOutOfBoundsY) {
+          if (animationRef.current) {
+            cancelAnimationFrame(animationRef.current);
+            animationRef.current = null;
+          }
+        }
 
         return {
-          x: Math.max(minDragX, Math.min(maxDragX, nextX)),
-          y: Math.max(minDragY, Math.min(maxDragY, nextY)),
+          x: nextX,
+          y: nextY,
         };
       });
 
-      animationRef.current = requestAnimationFrame(runInertia);
+      if (animationRef.current !== null) {
+        animationRef.current = requestAnimationFrame(runInertia);
+      }
     };
 
     animationRef.current = requestAnimationFrame(runInertia);
@@ -373,8 +439,9 @@ export const DetectiveBoard: React.FC = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           transform: isMobile
-            ? `translate3d(${panOffset.x}px, ${panOffset.y}px, 0)`
+            ? `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoom})`
             : "translate3d(-50%, -50%, 0)",
+          transformOrigin: isMobile ? "top left" : "center center",
           cursor: isMobile ? (isDraggingState ? "grabbing" : "grab") : "default",
         }}
       >
@@ -449,6 +516,53 @@ export const DetectiveBoard: React.FC = () => {
       {/* 3. POPUP MODAL DIALOG */}
       <BoardPopup />
 
+      {/* Floating Zoom Controls (Mobile/Tablet only) */}
+      {isMobile && (
+        <div className="absolute bottom-6 right-6 flex flex-col gap-2.5 z-35">
+          <button
+            onClick={() => {
+              setZoom(z => Math.min(z + 0.1, 1.3));
+              setTimeout(measurePins, 50);
+            }}
+            className="w-11 h-11 rounded-full bg-black/75 border border-[#8b6d3b]/60 text-[#e8dcc8] flex items-center justify-center font-bold text-xl focus:outline-none active:bg-[#8b6d3b]/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] cursor-pointer select-none"
+            aria-label="Zoom In"
+          >
+            +
+          </button>
+          <button
+            onClick={() => {
+              setZoom(z => Math.max(z - 0.1, 0.45));
+              setTimeout(measurePins, 50);
+            }}
+            className="w-11 h-11 rounded-full bg-black/75 border border-[#8b6d3b]/60 text-[#e8dcc8] flex items-center justify-center font-bold text-xl focus:outline-none active:bg-[#8b6d3b]/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] cursor-pointer select-none"
+            aria-label="Zoom Out"
+          >
+            −
+          </button>
+          <button
+            onClick={() => {
+              setZoom(1.0);
+              setPanOffset((prev) => {
+                const boardEl = boardRef.current;
+                if (!boardEl) return prev;
+                const maxDragX = 0;
+                const maxDragY = 0;
+                const minDragX = -(boardEl.clientWidth - window.innerWidth);
+                const minDragY = -(boardEl.clientHeight - window.innerHeight);
+                return {
+                  x: Math.max(minDragX, Math.min(maxDragX, prev.x)),
+                  y: Math.max(minDragY, Math.min(maxDragY, prev.y)),
+                };
+              });
+              setTimeout(measurePins, 50);
+            }}
+            className="w-11 h-11 rounded-full bg-black/75 border border-[#8b6d3b]/60 text-[#e8dcc8] flex items-center justify-center text-[10px] font-bold focus:outline-none active:bg-[#8b6d3b]/40 shadow-[0_4px_12px_rgba(0,0,0,0.5)] cursor-pointer select-none font-typewriter"
+            aria-label="Reset Zoom"
+          >
+            1:1
+          </button>
+        </div>
+      )}
     </div>
   );
 };
