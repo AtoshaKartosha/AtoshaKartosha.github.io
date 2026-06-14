@@ -48,6 +48,12 @@ export const DustParticles: React.FC = () => {
       particles.push(createParticle(true));
     }
 
+    const mouse = { x: -1000, y: -1000 };
+    const handleMouseMove = (e: MouseEvent) => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    };
+    window.addEventListener("mousemove", handleMouseMove);
     const handleResize = () => {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
@@ -62,6 +68,20 @@ export const DustParticles: React.FC = () => {
       ctx.fillStyle = "rgba(224, 204, 168, 1)";
 
       particles.forEach((p, idx) => {
+        // Physical mouse disturbance (push away from magnifying glass cursor)
+        const mdx = p.x - mouse.x;
+        const mdy = p.y - mouse.y;
+        const dist = Math.hypot(mdx, mdy);
+        const influenceRadius = 150;
+
+        if (dist < influenceRadius) {
+          const force = (influenceRadius - dist) / influenceRadius;
+          const angle = Math.atan2(mdy, mdx);
+          // Gently push particles away
+          p.x += Math.cos(angle) * force * 1.8;
+          p.y += Math.sin(angle) * force * 1.8;
+        }
+
         // Move
         p.x += p.vx;
         p.y += p.vy;
@@ -97,6 +117,7 @@ export const DustParticles: React.FC = () => {
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      window.removeEventListener("mousemove", handleMouseMove);
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

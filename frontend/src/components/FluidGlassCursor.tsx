@@ -21,6 +21,7 @@ const ZOOM_FACTOR = 1.35; // Magnification factor
 export const FluidGlassCursor: React.FC = () => {
   const magnifierRef = useRef<HTMLDivElement>(null);
   const clonedBoardRef = useRef<HTMLDivElement>(null);
+  const velocity = useRef({ x: 0, y: 0 });
   
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
@@ -28,6 +29,7 @@ export const FluidGlassCursor: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
   const [aberrationMapUrl, setAberrationMapUrl] = useState<string | null>(null);
+  if (isMobile) return null;
 
   // Mouse position in viewport coordinates
   const mouseRef = useRef({
@@ -143,9 +145,19 @@ export const FluidGlassCursor: React.FC = () => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const update = () => {
+      const prevX = lerpedPos.current.x;
+      const prevY = lerpedPos.current.y;
+
       // Smoothly lerp towards target mouse coordinates (damping factor 0.15 matches original WebGL)
       lerpedPos.current.x = lerp(lerpedPos.current.x, mouseRef.current.x, 0.15);
       lerpedPos.current.y = lerp(lerpedPos.current.y, mouseRef.current.y, 0.15);
+
+      const vx = lerpedPos.current.x - prevX;
+      const vy = lerpedPos.current.y - prevY;
+
+      // Smooth the velocity to prevent jitter in 3D tilt
+      velocity.current.x = lerp(velocity.current.x, vx, 0.1);
+      velocity.current.y = lerp(velocity.current.y, vy, 0.1);
 
       const boardEl = document.querySelector('[data-board="true"]');
       if (magnifierRef.current && clonedBoardRef.current && boardEl) {
@@ -155,8 +167,11 @@ export const FluidGlassCursor: React.FC = () => {
         const clientX = lerpedPos.current.x;
         const clientY = lerpedPos.current.y;
         
-        magnifierRef.current.style.transform = `translate3d(${clientX - LENS_RADIUS}px, ${clientY - LENS_RADIUS}px, 0)`;
+        // Calculate 3D tilt angles based on velocity
+        const tiltX = Math.min(Math.max(-velocity.current.y * 0.25, -12), 12);
+        const tiltY = Math.min(Math.max(velocity.current.x * 0.25, -12), 12);
 
+        magnifierRef.current.style.transform = `translate3d(${clientX - LENS_RADIUS}px, ${clientY - LENS_RADIUS}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
         // Calculate mouse relative coordinates to the board
         const mouseX = clientX - boardRect.left;
         const mouseY = clientY - boardRect.top;
@@ -179,27 +194,99 @@ export const FluidGlassCursor: React.FC = () => {
   }, []);
 
   // Render SVG based on ID
-  const renderItemSvg = (id: string) => {
+  // Render SVG based on ID
+  const renderItemSvg = (id: string, isHovered: boolean) => {
     switch (id) {
       case "dossier":
-        return <DossierSvg forceLogo={true} />;
+        return (
+          <DossierSvg
+            forceLogo={true}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
+                : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
+            }`}
+          />
+        );
       case "suspect-1":
-        return <Suspect1Svg />;
+        return (
+          <Suspect1Svg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "suspect-2":
-        return <Suspect2Svg />;
+        return (
+          <Suspect2Svg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "map":
-        return <MapSvg />;
+        return (
+          <MapSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "phone":
-        return <RotaryPhoneSvg />;
+        return (
+          <RotaryPhoneSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]"
+                : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
+            }`}
+          />
+        );
       case "clock":
-        return <VintageClockSvg />;
+        return (
+          <VintageClockSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "evidence":
-        return <EvidenceBagSvg />;
+        return (
+          <EvidenceBagSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "newspaper":
-        return <NewspaperSvg />;
+        return (
+          <NewspaperSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "note":
         return (
-          <div className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] shadow-[0_6px_12px_rgba(0,0,0,0.5)] flex flex-col justify-between select-none">
+          <div
+            className={`w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out ${
+              isHovered
+                ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
+                : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
+            }`}
+          >
             <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
               РАСПИСАНИЕ
             </div>
@@ -219,7 +306,10 @@ export const FluidGlassCursor: React.FC = () => {
   };
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none z-25 overflow-hidden">
+    <div 
+      className="absolute inset-0 w-full h-full pointer-events-none z-25 overflow-hidden"
+      style={{ perspective: 1000 }}
+    >
       <div
         ref={magnifierRef}
         className="absolute pointer-events-none transition-opacity duration-500"
@@ -268,6 +358,7 @@ export const FluidGlassCursor: React.FC = () => {
               <CorkboardTexture />
 
               {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
+              {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
                 {threadConnections.map((conn, idx) => {
                   const p1 = pinPositions[conn.from];
@@ -282,17 +373,22 @@ export const FluidGlassCursor: React.FC = () => {
                   const sag = Math.min(15, dist * 0.04);
                   const controlY = cy + sag;
 
+                  const isHoveredConn = conn.from === hoveredItemId || conn.to === hoveredItemId;
+
                   return (
                     <path
                       key={idx}
                       d={`M ${p1.x} ${p1.y} Q ${cx} ${controlY} ${p2.x} ${p2.y}`}
-                      stroke="#c41e1e"
-                      strokeWidth="3.5"
+                      stroke={isHoveredConn ? "#ff3b3b" : "#c41e1e"}
+                      strokeWidth={isHoveredConn ? "4.5" : "3.5"}
                       fill="none"
                       strokeLinecap="round"
-                      opacity="0.95"
+                      opacity={isHoveredConn ? "1.0" : "0.85"}
+                      className="transition-all duration-300 ease-out"
                       style={{
-                        filter: "drop-shadow(0 2.5px 3px rgba(0,0,0,0.6))"
+                        filter: isHoveredConn
+                          ? "drop-shadow(0 0 6px rgba(255,59,59,0.8)) drop-shadow(0 2px 4px rgba(0,0,0,0.7))"
+                          : "drop-shadow(0 2.5px 3px rgba(0,0,0,0.6))"
                       }}
                     />
                   );
@@ -306,19 +402,27 @@ export const FluidGlassCursor: React.FC = () => {
                 return (
                   <div
                     key={item.id}
-                    className={`absolute transition-all duration-200 ease-out z-10 ${
-                      isHovered ? "scale-105 z-30" : ""
-                    }`}
+                    className="absolute group transition-all duration-300 ease-out"
                     style={{
                       left: `${pos.left}%`,
                       top: `${pos.top}%`,
                       width: `${pos.width}%`,
-                      transform: `rotate(${pos.rotation}deg)`,
+                      transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
+                      zIndex: isHovered ? 30 : 10,
                     }}
                   >
                     {/* Red Pin Pierce-point */}
-                    <div className="absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#c41e1e] border-2 border-[#1c160e] shadow-[0_4px_8px_rgba(0,0,0,0.6)] flex items-center justify-center z-40">
+                    <div
+                      className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
+                        isHovered
+                          ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
+                          : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+                      }`}
+                    >
+                      {/* Pinhead metal shine */}
                       <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
+                      
+                      {/* Pin anchor node in layout for thread coordinates */}
                       <div
                         data-pin-id={item.id}
                         className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
@@ -326,8 +430,8 @@ export const FluidGlassCursor: React.FC = () => {
                     </div>
 
                     {/* Visual SVG Content */}
-                    <div className="transition-transform duration-200">
-                      {renderItemSvg(item.id)}
+                    <div className="transition-transform duration-300 ease-out">
+                      {renderItemSvg(item.id, isHovered)}
                     </div>
                   </div>
                 );
