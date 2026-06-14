@@ -67,8 +67,9 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   // Shadow elevation based on zIndex
   const shadowElevation = (item.zIndex - 8) / 8; // normalized 0..1 across the range 8-16
-  const restShadowBlur = 8 + shadowElevation * 4;  // 8-12px
-  const restShadowScale = 1.01 + shadowElevation * 0.02; // 1.01-1.03
+  const restShadowBlur = 10 + shadowElevation * 6;  // 10-16px
+  const restShadowSpread = 4 + shadowElevation * 3; // 4-7px
+  const restOpacity = 0.45 + shadowElevation * 0.1;  // 0.45-0.55
 
   // Rest state shadow offset
   const dx = pos.left - 85;
@@ -112,9 +113,10 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       const shadowXMove = dxMove * distMultiplierMove * 2.2;
       const shadowYMove = (dyMove * distMultiplierMove + 5) * 2.2;
 
-      shadowEl.style.transform = `translate3d(${shadowXMove}px, ${shadowYMove}px, 0px) scale(${1.05 + shadowElevation * 0.03})`;
-      shadowEl.style.filter = `blur(${14 + shadowElevation * 4}px)`;
-      shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.4)";
+      shadowEl.style.transform = "translate3d(0px, 0px, 0px)";
+      shadowEl.style.boxShadow = `${shadowXMove}px ${shadowYMove}px ${16 + shadowElevation * 6}px ${6 + shadowElevation * 4}px rgba(0, 0, 0, ${0.35 + shadowElevation * 0.1})`;
+      shadowEl.style.filter = "none";
+      shadowEl.style.backgroundColor = "transparent";
     }
   };
 
@@ -132,7 +134,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const shadowEl = shadowRef.current;
     if (shadowEl) {
-      shadowEl.style.transition = "transform 0.08s ease-out, filter 0.15s ease-out, background-color 0.15s ease-out";
+      shadowEl.style.transition = "box-shadow 0.15s ease-out";
     }
   };
 
@@ -150,16 +152,17 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const shadowEl = shadowRef.current;
     if (shadowEl) {
-      shadowEl.style.transition = "transform 0.4s ease-out, filter 0.4s ease-out, background-color 0.4s ease-out";
+      shadowEl.style.transition = "box-shadow 0.4s ease-out";
       const dxLeave = pos.left - 85;
       const dyLeave = pos.top - 15;
       const distMultiplierLeave = 0.14;
       const shadowXLeave = dxLeave * distMultiplierLeave;
       const shadowYLeave = dyLeave * distMultiplierLeave + 5;
 
-      shadowEl.style.transform = `translate3d(${shadowXLeave}px, ${shadowYLeave}px, 0px) scale(${restShadowScale})`;
-      shadowEl.style.filter = `blur(${restShadowBlur}px)`;
-      shadowEl.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+      shadowEl.style.transform = "translate3d(0px, 0px, 0px)";
+      shadowEl.style.boxShadow = `${shadowXLeave}px ${shadowYLeave}px ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`;
+      shadowEl.style.filter = "none";
+      shadowEl.style.backgroundColor = "transparent";
     }
   };
 
@@ -210,11 +213,11 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         {!isMobile && (
           <div
             ref={shadowRef}
-            className="absolute inset-0 pointer-events-none opacity-85 mix-blend-multiply"
+            className="absolute inset-0 pointer-events-none opacity-60 mix-blend-multiply"
             style={{
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
-              filter: `blur(${restShadowBlur}px)`,
-              transform: `translate3d(${shadowX}px, ${shadowY}px, 0px) scale(${restShadowScale})`,
+              backgroundColor: "transparent",
+              boxShadow: `${shadowX}px ${shadowY}px ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`,
+              transform: "translate3d(0px, 0px, 0px)",
               borderRadius: item.id === "clock" ? "50%" : "4px",
               transformOrigin: "top center",
               zIndex: 0,
