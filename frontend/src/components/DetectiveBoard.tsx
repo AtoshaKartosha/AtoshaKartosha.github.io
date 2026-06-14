@@ -118,9 +118,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           if (isDraggingRef.current) return;
           setActivePopup(item.popupId);
         }}
-        onPointerEnter={handlePointerEnter}
-        onPointerLeave={handlePointerLeave}
-        onPointerMove={handlePointerMove}
         className="w-full focus:outline-none block relative touch-manipulation cursor-pointer"
         style={{
           transformStyle: "preserve-3d",
@@ -157,6 +154,9 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         {/* Visual SVG Content (Tilts and lifts under the pin) */}
         <div
           ref={cardRef}
+          onPointerEnter={handlePointerEnter}
+          onPointerLeave={handlePointerLeave}
+          onPointerMove={handlePointerMove}
           style={{
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
