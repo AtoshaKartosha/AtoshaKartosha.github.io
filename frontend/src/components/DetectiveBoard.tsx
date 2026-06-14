@@ -138,6 +138,16 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           }
         }}
       >
+        {/* Hitbox expansion to match magnifying glass scale (1.35x) and avoid premature leave */}
+        {isHovered && !isMobile && (
+          <div
+            className="absolute pointer-events-auto"
+            style={{
+              inset: "-17.5%",
+              zIndex: -1,
+            }}
+          />
+        )}
         {/* Red Pin Pierce-point (Stays flat on the board) */}
         <div
           className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
