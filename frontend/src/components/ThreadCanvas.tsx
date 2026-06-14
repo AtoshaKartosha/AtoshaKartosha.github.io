@@ -5,6 +5,8 @@ import { Renderer, Program, Mesh, Geometry, OGLRenderingContext, Camera } from "
 import { useBoardStore } from "../stores/useBoardStore";
 import { threadConnections } from "../data/boardItems";
 
+const SEGMENTS_PER_LINE = 40;
+const THICKNESS = 2.5; // 5px total ribbon width for a delicate, organic thread glow
 const vertexShader = `
 precision mediump float;
 attribute vec2 position;
@@ -88,6 +90,13 @@ export const ThreadCanvas: React.FC = () => {
   const pinPositions = useBoardStore((state) => state.pinPositions);
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
+  const hoveredItemIdRef = useRef<string | null>(null);
+  const hoverProgressesRef = useRef<Record<string, number>>({});
+  const activeConnectionsRef = useRef<any[]>([]);
+
+  useEffect(() => {
+    hoveredItemIdRef.current = hoveredItemId;
+  }, [hoveredItemId]);
 
   // Uniform values
   const drawProgress = useRef(0.0);
@@ -192,19 +201,16 @@ export const ThreadCanvas: React.FC = () => {
     const activeConnections = threadConnections.filter(
       (c) => pinPositions[c.from] && pinPositions[c.to]
     );
+    activeConnectionsRef.current = activeConnections;
 
     if (activeConnections.length === 0) return;
 
     // Build merged geometry for all active connections
-    const segmentsPerLine = 40;
-    const thickness = 2.5; // 5px total ribbon width for a delicate, organic thread glow
-
     const allPositions: number[] = [];
     const allUvs: number[] = [];
     const allHovered: number[] = [];
     const allIndices: number[] = [];
     let vertexOffset = 0;
-
     activeConnections.forEach((conn) => {
       const from = pinPositions[conn.from];
       const to = pinPositions[conn.to];
@@ -214,11 +220,15 @@ export const ThreadCanvas: React.FC = () => {
       const dist = Math.hypot(dx, dy);
       const sag = Math.max(25, dist * 0.12);
 
+      const key = `${conn.from}-${conn.to}`;
       const isConnectionHovered = conn.from === hoveredItemId || conn.to === hoveredItemId;
-      const hoveredVal = isConnectionHovered ? 1.0 : 0.0;
+      if (hoverProgressesRef.current[key] === undefined) {
+        hoverProgressesRef.current[key] = isConnectionHovered ? 1.0 : 0.0;
+      }
+      const hoveredVal = hoverProgressesRef.current[key];
 
-      for (let i = 0; i <= segmentsPerLine; i++) {
-        const t = i / segmentsPerLine;
+      for (let i = 0; i <= SEGMENTS_PER_LINE; i++) {
+        const t = i / SEGMENTS_PER_LINE;
 
         // Bezier quadratic curve
         const cx = (from.x + to.x) / 2;
@@ -241,16 +251,16 @@ export const ThreadCanvas: React.FC = () => {
         }
 
         // Side vertices (+thickness and -thickness)
-        allPositions.push(px + nx * thickness, py + ny * thickness);
+        allPositions.push(px + nx * THICKNESS, py + ny * THICKNESS);
         allUvs.push(t, 1.0);
         allHovered.push(hoveredVal);
 
-        allPositions.push(px - nx * thickness, py - ny * thickness);
+        allPositions.push(px - nx * THICKNESS, py - ny * THICKNESS);
         allUvs.push(t, -1.0);
         allHovered.push(hoveredVal);
       }
 
-      for (let i = 0; i < segmentsPerLine; i++) {
+      for (let i = 0; i < SEGMENTS_PER_LINE; i++) {
         const v0 = vertexOffset + i * 2;
         const v1 = vertexOffset + i * 2 + 1;
         const v2 = vertexOffset + (i + 1) * 2;
@@ -260,7 +270,7 @@ export const ThreadCanvas: React.FC = () => {
         allIndices.push(v2, v1, v3);
       }
 
-      vertexOffset += (segmentsPerLine + 1) * 2;
+      vertexOffset += (SEGMENTS_PER_LINE + 1) * 2;
     });
 
     // Remove previous mesh from render cycle if it exists
@@ -283,7 +293,7 @@ export const ThreadCanvas: React.FC = () => {
     });
     console.log("ThreadCanvas geometry built. Connections:", activeConnections.length, "Positions:", allPositions.length, "Indices:", allIndices.length);
     console.log("Positions sample:", allPositions.slice(0, 10));
-  }, [pinPositions, size, hoveredItemId]);
+  }, [pinPositions, size]);
 
   // Animation loop
   useEffect(() => {
@@ -321,6 +331,49 @@ export const ThreadCanvas: React.FC = () => {
         drawProgress.current = 0.0;
       }
       program.uniforms.uDrawProgress.value = drawProgress.current;
+
+      // Smoothly update hover values for each active connection
+      const currentProgresses = hoverProgressesRef.current;
+      const hoveredAttr = mesh.geometry.attributes.hovered;
+      const data = hoveredAttr?.data as Float32Array | undefined;
+
+      if (hoveredAttr && data) {
+        const activeConnections = activeConnectionsRef.current;
+        let needsUpdate = false;
+        const speed = 6.0; // Transition speed
+        const activeHoveredId = hoveredItemIdRef.current;
+
+        let vertexIndex = 0;
+        activeConnections.forEach((conn) => {
+          const key = `${conn.from}-${conn.to}`;
+          const target = (conn.from === activeHoveredId || conn.to === activeHoveredId) ? 1.0 : 0.0;
+          
+          if (currentProgresses[key] === undefined) {
+            currentProgresses[key] = 0.0;
+          }
+
+          const currentVal = currentProgresses[key];
+          if (currentVal !== target) {
+            let newVal = currentVal + (target - currentVal) * (1.0 - Math.exp(-delta * speed));
+            if (Math.abs(newVal - target) < 0.001) {
+              newVal = target;
+            }
+            currentProgresses[key] = newVal;
+            needsUpdate = true;
+          }
+
+          const val = currentProgresses[key];
+          const count = (SEGMENTS_PER_LINE + 1) * 2;
+          for (let i = 0; i < count; i++) {
+            data[vertexIndex + i] = val;
+          }
+          vertexIndex += count;
+        });
+
+        if (needsUpdate) {
+          hoveredAttr.needsUpdate = true;
+        }
+      }
 
       // Render
       renderer.render({ scene: mesh, camera });
