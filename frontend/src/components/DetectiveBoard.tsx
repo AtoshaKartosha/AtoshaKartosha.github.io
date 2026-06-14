@@ -47,11 +47,12 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top; // approximate vertical center
 
-  // Light falloff dimming values
+  // Light falloff — brightness decreases with distance from lamp
   const lampX = 85;
   const lampY = 15;
   const distFromLamp = Math.hypot((centerX - lampX) / 100, (centerY - lampY) / 100);
-  const dimmingOpacity = item.id === "dossier" ? 0 : Math.min(distFromLamp * 0.35, 0.22);
+  // brightness: 1.0 at lamp, down to ~0.78 at farthest item. Dossier always full brightness.
+  const dimBrightness = item.id === "dossier" ? 1 : Math.max(1 - distFromLamp * 0.4, 0.78);
 
   const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
 
@@ -178,7 +179,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             style={{
               filter: isMobile
                 ? "drop-shadow(2px 4px 6px rgba(0,0,0,0.5))"
-                : (isHovered
+                : `${isHovered
                     ? (item.id === "phone"
                         ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
                         : item.id === "dossier"
@@ -188,26 +189,13 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
                         ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
                         : item.id === "dossier"
                           ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
-                          : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")),
+                          : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")} brightness(${isHovered ? 1 : dimBrightness})`,
             }}
           >
             {children}
           </div>
         </div>
 
-        {/* Light falloff dimming overlay */}
-        {!isMobile && item.id !== "dossier" && (
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              backgroundColor: `rgba(0, 0, 0, ${isHovered ? 0 : dimmingOpacity.toFixed(3)})`,
-              borderRadius: item.id === "clock" ? "50%" : "4px",
-              zIndex: 2,
-              transition: "background-color 0.3s ease-out",
-              mixBlendMode: "multiply",
-            }}
-          />
-        )}
       </div>
     </div>
   );
@@ -462,7 +450,6 @@ export const DetectiveBoard: React.FC = () => {
     animationRef.current = requestAnimationFrame(runInertia);
   };
 
-  // Helper to render proper board items SVGs
   // Helper to render proper board items SVGs
   const renderItemSvg = (id: string) => {
     switch (id) {

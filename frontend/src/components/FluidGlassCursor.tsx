@@ -249,7 +249,6 @@ export const FluidGlassCursor: React.FC = () => {
   }, []);
 
   // Render SVG based on ID
-  // Render SVG based on ID
   const renderItemSvg = (id: string) => {
     switch (id) {
       case "dossier":
@@ -414,6 +413,10 @@ export const FluidGlassCursor: React.FC = () => {
               {boardItems.map((item) => {
                 const pos = isMobile ? item.mobile : item.desktop;
                 const isHovered = hoveredItemId === item.id;
+                const centerX = pos.left + pos.width / 2;
+                const centerY = pos.top;
+                const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
+                const dimBrightness = item.id === "dossier" ? 1 : Math.max(1 - distFromLamp * 0.4, 0.78);
 
                 return (
                   <div
@@ -450,7 +453,7 @@ export const FluidGlassCursor: React.FC = () => {
                       <div
                         className="w-full h-full transition-all duration-300 ease-out"
                         style={{
-                          filter: isHovered
+                          filter: `${isHovered
                             ? (item.id === "phone"
                                 ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
                                 : item.id === "dossier"
@@ -460,7 +463,7 @@ export const FluidGlassCursor: React.FC = () => {
                                 ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
                                 : item.id === "dossier"
                                   ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
-                                  : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))"),
+                                  : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")} brightness(${isHovered ? 1 : dimBrightness})`,
                         }}
                       >
                         {renderItemSvg(item.id)}
