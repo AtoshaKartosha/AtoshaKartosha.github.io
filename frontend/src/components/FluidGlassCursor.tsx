@@ -22,6 +22,8 @@ export const FluidGlassCursor: React.FC = () => {
   const magnifierRef = useRef<HTMLDivElement>(null);
   const clonedBoardRef = useRef<HTMLDivElement>(null);
   const velocity = useRef({ x: 0, y: 0 });
+  const swingAngle = useRef(0);
+  const swingVelocity = useRef(0);
   
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
@@ -159,6 +161,21 @@ export const FluidGlassCursor: React.FC = () => {
       velocity.current.x = lerp(velocity.current.x, vx, 0.1);
       velocity.current.y = lerp(velocity.current.y, vy, 0.1);
 
+      // Spring-Mass-Damper simulation for the 2D pendulum swing of the handle
+      // Target angle based on horizontal velocity (lags behind the lens center)
+      const targetAngle = -velocity.current.x * 0.8;
+      
+      const springTension = 150.0;
+      const springDamping = 12.0;
+      const dt = 0.016; // Standard frame step ~60fps
+      
+      const acceleration = -springTension * (swingAngle.current - targetAngle) - springDamping * swingVelocity.current;
+      swingVelocity.current += acceleration * dt;
+      swingAngle.current += swingVelocity.current * dt;
+      
+      // Cap the swing angle to keep it looking clean and realistic
+      swingAngle.current = Math.min(Math.max(swingAngle.current, -20), 20);
+
       const boardEl = document.querySelector('[data-board="true"]');
       if (magnifierRef.current && clonedBoardRef.current && boardEl) {
         const boardRect = boardEl.getBoundingClientRect();
@@ -171,7 +188,8 @@ export const FluidGlassCursor: React.FC = () => {
         const tiltX = Math.min(Math.max(-velocity.current.y * 0.25, -12), 12);
         const tiltY = Math.min(Math.max(velocity.current.x * 0.25, -12), 12);
 
-        magnifierRef.current.style.transform = `translate3d(${clientX - LENS_RADIUS}px, ${clientY - LENS_RADIUS}px, 0) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        // Apply both the 2D pendulum swing and the 3D tilt
+        magnifierRef.current.style.transform = `translate3d(${clientX - LENS_RADIUS}px, ${clientY - LENS_RADIUS}px, 0) rotate(${swingAngle.current}deg) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
         // Calculate mouse relative coordinates to the board
         const mouseX = clientX - boardRect.left;
         const mouseY = clientY - boardRect.top;
