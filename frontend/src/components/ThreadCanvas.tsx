@@ -9,18 +9,25 @@ const vertexShader = `
 precision mediump float;
 attribute vec2 position;
 attribute vec2 uv;
+attribute float hovered;
 
 varying vec2 vUv;
+varying float vHovered;
 
 uniform vec2 uResolution;
 uniform float uTime;
 
 void main() {
     vUv = uv;
+    vHovered = hovered;
     
     // Organic sway (middle sways, ends are fixed)
     float env = sin(uv.x * 3.14159);
-    float sway = sin(uTime * 1.8 + uv.x * 6.28) * env * 4.0;
+    
+    // If hovered, vibrate faster and with more amplitude
+    float speed = mix(1.8, 4.5, hovered);
+    float amp = mix(4.0, 8.0, hovered);
+    float sway = sin(uTime * speed + uv.x * 6.28) * env * amp;
     
     vec2 pos = position;
     pos.y += sway;
@@ -37,27 +44,34 @@ const fragmentShader = `
 precision mediump float;
 
 varying vec2 vUv;
+varying float vHovered;
 
 uniform float uDrawProgress;
 uniform vec3 uColor;
 uniform float uTime;
+
 void main() {
     // Reveal animation
     if (vUv.x > uDrawProgress) {
         discard;
     }
     
-    // Soft glowing line profile
+    // Soft glowing line profile (glow gets slightly wider/stronger if hovered)
     float dist = abs(vUv.y);
-    float glow = exp(-dist * dist * 4.5);
+    float glowCoeff = mix(4.5, 3.5, vHovered);
+    float glow = exp(-dist * dist * glowCoeff);
     
-    // Crimson core with soft outer glow
-    vec3 color = mix(uColor * 0.3, vec3(1.0, 0.15, 0.15), glow);
+    // Crimson core with soft outer glow - make it brighter and more vibrant if hovered
+    vec3 baseColor = mix(uColor * 0.3, vec3(1.0, 0.15, 0.15), glow);
+    vec3 activeColor = mix(uColor * 0.5, vec3(1.0, 0.35, 0.35), glow);
+    vec3 color = mix(baseColor, activeColor, vHovered);
     
-    // Soft pulsing highlight traveling along the string
-    float pulse = sin(vUv.x * 12.0 - uTime * 2.5) * 0.08 + 0.92;
+    // Pulse highlight runs faster and stronger if hovered
+    float pulseSpeed = mix(2.5, 5.5, vHovered);
+    float pulseAmp = mix(0.08, 0.18, vHovered);
+    float pulse = sin(vUv.x * 12.0 - uTime * pulseSpeed) * pulseAmp + (1.0 - pulseAmp * 0.5);
     
-    gl_FragColor = vec4(color, glow * 0.95 * pulse);
+    gl_FragColor = vec4(color, glow * mix(0.95, 1.0, vHovered) * pulse);
 }
 `;
 
@@ -73,6 +87,7 @@ export const ThreadCanvas: React.FC = () => {
 
   const pinPositions = useBoardStore((state) => state.pinPositions);
   const isLoading = useBoardStore((state) => state.isLoading);
+  const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
 
   // Uniform values
   const drawProgress = useRef(0.0);
@@ -186,6 +201,7 @@ export const ThreadCanvas: React.FC = () => {
 
     const allPositions: number[] = [];
     const allUvs: number[] = [];
+    const allHovered: number[] = [];
     const allIndices: number[] = [];
     let vertexOffset = 0;
 
@@ -197,6 +213,9 @@ export const ThreadCanvas: React.FC = () => {
       const dy = to.y - from.y;
       const dist = Math.hypot(dx, dy);
       const sag = Math.max(25, dist * 0.12);
+
+      const isConnectionHovered = conn.from === hoveredItemId || conn.to === hoveredItemId;
+      const hoveredVal = isConnectionHovered ? 1.0 : 0.0;
 
       for (let i = 0; i <= segmentsPerLine; i++) {
         const t = i / segmentsPerLine;
@@ -224,9 +243,11 @@ export const ThreadCanvas: React.FC = () => {
         // Side vertices (+thickness and -thickness)
         allPositions.push(px + nx * thickness, py + ny * thickness);
         allUvs.push(t, 1.0);
+        allHovered.push(hoveredVal);
 
         allPositions.push(px - nx * thickness, py - ny * thickness);
         allUvs.push(t, -1.0);
+        allHovered.push(hoveredVal);
       }
 
       for (let i = 0; i < segmentsPerLine; i++) {
@@ -250,6 +271,7 @@ export const ThreadCanvas: React.FC = () => {
     const geometry = new Geometry(gl, {
       position: { size: 2, data: new Float32Array(allPositions) },
       uv: { size: 2, data: new Float32Array(allUvs) },
+      hovered: { size: 1, data: new Float32Array(allHovered) },
       index: { data: new Uint16Array(allIndices) },
     });
 
@@ -261,7 +283,7 @@ export const ThreadCanvas: React.FC = () => {
     });
     console.log("ThreadCanvas geometry built. Connections:", activeConnections.length, "Positions:", allPositions.length, "Indices:", allIndices.length);
     console.log("Positions sample:", allPositions.slice(0, 10));
-  }, [pinPositions, size]);
+  }, [pinPositions, size, hoveredItemId]);
 
   // Animation loop
   useEffect(() => {

@@ -13,12 +13,12 @@ export const CorkboardTexture: React.FC = () => (
 );
 
 // Dossier / Main case folder
-export const DossierSvg: React.FC<{ forceLogo?: boolean }> = ({ forceLogo = false }) => {
+export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> = ({ forceLogo = false, className = "w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]" }) => {
   const storeIsLoading = useBoardStore((state) => state.isLoading);
   const isLoading = forceLogo ? false : storeIsLoading;
   
   return (
-    <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]">
+    <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       {/* Folder Back */}
       <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#4a3e30" />
       <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#bfae93" opacity="0.85" />
@@ -83,8 +83,8 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean }> = ({ forceLogo = fals
 };
 
 // Polaroid Suspect 1 (The Femme Fatale / Agent)
-export const Suspect1Svg: React.FC = () => (
-  <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]">
+export const Suspect1Svg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+  <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Paper backing */}
     <rect width="160" height="190" fill="#f1ece1" rx="2" />
     <rect x="5" y="5" width="150" height="145" fill="#141414" />
@@ -125,8 +125,8 @@ export const Suspect1Svg: React.FC = () => (
 );
 
 // Polaroid Suspect 2 (The Mobster / Informant)
-export const Suspect2Svg: React.FC = () => (
-  <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]">
+export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+  <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Paper backing */}
     <rect width="160" height="190" fill="#eae3d5" rx="2" />
     <rect x="5" y="5" width="150" height="145" fill="#141414" />
@@ -165,9 +165,8 @@ export const Suspect2Svg: React.FC = () => (
   </svg>
 );
 
-// Map / Location Card
-export const MapSvg: React.FC = () => (
-  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]">
+export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Map Paper */}
     <rect width="200" height="200" rx="4" fill="#decfa8" />
     <rect x="4" y="4" width="192" height="192" rx="2" fill="#e8dcba" stroke="#b4a377" strokeWidth="2" />
@@ -215,9 +214,8 @@ export const MapSvg: React.FC = () => (
   </svg>
 );
 
-// Rotary Phone
-export const RotaryPhoneSvg: React.FC = () => (
-  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]">
+export const RotaryPhoneSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]" }) => (
+  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Base of phone */}
     <path d="M40 140 C40 100 60 70 100 70 C140 70 160 100 160 140 C160 160 150 170 100 170 C50 170 40 160 40 140 Z" fill="#1c1b18" />
     <path d="M45 138 C45 105 62 76 100 76 C138 76 155 105 155 138 Z" fill="#2d2b27" opacity="0.5" />
@@ -261,9 +259,8 @@ export const RotaryPhoneSvg: React.FC = () => (
   </svg>
 );
 
-// Vintage Analog Clock / Watch (Set to 16:00)
-export const VintageClockSvg: React.FC = () => (
-  <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]">
+export const VintageClockSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+  <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Pocketwatch loop at the top */}
     <circle cx="80" cy="15" r="12" fill="none" stroke="#c8a96e" strokeWidth="4" />
     <rect x="76" y="22" width="8" height="10" fill="#c8a96e" />
@@ -304,9 +301,8 @@ export const VintageClockSvg: React.FC = () => (
   </svg>
 );
 
-// Evidence Bag with Dice
-export const EvidenceBagSvg: React.FC = () => (
-  <svg viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]">
+export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+  <svg viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Plastic Bag Back */}
     <rect width="160" height="200" rx="6" fill="#fff" fillOpacity="0.08" />
     <rect x="2" y="2" width="156" height="196" rx="4" fill="none" stroke="#fff" strokeWidth="2" strokeOpacity="0.15" />
@@ -354,9 +350,8 @@ export const EvidenceBagSvg: React.FC = () => (
   </svg>
 );
 
-// Newspaper Clipping
-export const NewspaperSvg: React.FC = () => (
-  <svg viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]">
+export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+  <svg viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Torn Paper base */}
     <path d="M 5 10 L 175 5 L 178 210 L 160 215 L 140 208 L 120 215 L 90 205 L 60 218 L 30 210 L 5 215 Z" fill="#dfd6c0" />
     

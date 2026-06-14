@@ -204,27 +204,98 @@ export const DetectiveBoard: React.FC = () => {
   };
 
   // Helper to render proper board items SVGs
-  const renderItemSvg = (id: string) => {
+  // Helper to render proper board items SVGs
+  const renderItemSvg = (id: string, isHovered: boolean) => {
     switch (id) {
       case "dossier":
-        return <DossierSvg />;
+        return (
+          <DossierSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
+                : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
+            }`}
+          />
+        );
       case "suspect-1":
-        return <Suspect1Svg />;
+        return (
+          <Suspect1Svg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "suspect-2":
-        return <Suspect2Svg />;
+        return (
+          <Suspect2Svg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "map":
-        return <MapSvg />;
+        return (
+          <MapSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "phone":
-        return <RotaryPhoneSvg />;
+        return (
+          <RotaryPhoneSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]"
+                : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
+            }`}
+          />
+        );
       case "clock":
-        return <VintageClockSvg />;
+        return (
+          <VintageClockSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "evidence":
-        return <EvidenceBagSvg />;
+        return (
+          <EvidenceBagSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "newspaper":
-        return <NewspaperSvg />;
+        return (
+          <NewspaperSvg
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
+          />
+        );
       case "note":
         return (
-          <div className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] shadow-[0_6px_12px_rgba(0,0,0,0.5)] flex flex-col justify-between">
+          <div
+            className={`w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out ${
+              isHovered
+                ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
+                : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
+            }`}
+          >
             <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
               РАСПИСАНИЕ
             </div>
@@ -320,15 +391,15 @@ export const DetectiveBoard: React.FC = () => {
           return (
             <div
               key={item.id}
-              className="absolute z-10 group"
+              className="absolute group transition-all duration-300 ease-out"
               style={{
                 left: `${pos.left}%`,
                 top: `${pos.top}%`,
                 width: `${pos.width}%`,
-                transform: `rotate(${pos.rotation}deg)`,
+                transform: `rotate(${pos.rotation + (hoveredItemId === item.id ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${hoveredItemId === item.id ? 1.04 : 1})`,
+                zIndex: hoveredItemId === item.id ? 30 : 10,
               }}
             >
-              {/* Clue button wrapping asset */}
               {/* Clue button wrapping asset */}
               <button
                 onClick={() => {
@@ -338,14 +409,18 @@ export const DetectiveBoard: React.FC = () => {
                 }}
                 onPointerEnter={() => setHoveredItemId(item.id)}
                 onPointerLeave={() => setHoveredItemId(null)}
-                className={`w-full focus:outline-none transition-all duration-200 ease-out block relative ${
-                  hoveredItemId === item.id ? "scale-105 z-30" : "hover:scale-105 hover:z-30"
-                }`}
+                className="w-full focus:outline-none block relative"
                 aria-haspopup="dialog"
                 aria-label={item.name}
               >
                 {/* Red Pin Pierce-point */}
-                <div className="absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#c41e1e] border-2 border-[#1c160e] shadow-[0_4px_8px_rgba(0,0,0,0.6)] flex items-center justify-center z-40 pointer-events-none">
+                <div
+                  className={`absolute top-[-8px] left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
+                    hoveredItemId === item.id
+                      ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
+                      : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
+                  }`}
+                >
                   {/* Pinhead metal shine */}
                   <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
                   
@@ -357,8 +432,8 @@ export const DetectiveBoard: React.FC = () => {
                 </div>
 
                 {/* Visual SVG Content */}
-                <div className="transition-transform duration-200 group-hover:scale-[1.02]">
-                  {renderItemSvg(item.id)}
+                <div className="transition-transform duration-300 ease-out">
+                  {renderItemSvg(item.id, hoveredItemId === item.id)}
                 </div>
               </button>
             </div>
