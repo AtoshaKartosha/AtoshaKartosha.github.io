@@ -39,7 +39,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   children,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
-  const shadowRef = useRef<HTMLDivElement>(null);
   const cardRectRef = useRef<DOMRect | null>(null);
 
   const pos = isMobile ? item.mobile : item.desktop;
@@ -66,18 +65,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const depthBlur = Math.max(0, (distFromFocus - 0.2) * 1.8);
   const clampedBlur = Math.min(depthBlur, 0.6);
 
-  // Shadow elevation based on zIndex
-  const shadowElevation = (item.zIndex - 8) / 8; // normalized 0..1 across the range 8-16
-  const restShadowBlur = 10 + shadowElevation * 6;  // 10-16px
-  const restShadowSpread = 4 + shadowElevation * 3; // 4-7px
-  const restOpacity = 0.45 + shadowElevation * 0.1;  // 0.45-0.55
-
-  // Rest state shadow offset
-  const dx = pos.left - 85;
-  const dy = pos.top - 15;
-  const distMultiplier = 0.14;
-  const shadowX = dx * distMultiplier;
-  const shadowY = dy * distMultiplier + 5;
 
   const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
 
@@ -103,22 +90,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     // Direct DOM style updates for 3D rotation and scale
     cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(20px) scale(1.04)`;
 
-    // Direct DOM style updates for dynamic shadow offset and blur
-    const shadowEl = shadowRef.current;
-    if (shadowEl) {
-      const dxMove = pos.left - 85;
-      const dyMove = pos.top - 15;
-      const distMultiplierMove = 0.14;
-
-      // Shadow moves further from light source and gets more blurred when lifted
-      const shadowXMove = dxMove * distMultiplierMove * 2.2;
-      const shadowYMove = (dyMove * distMultiplierMove + 5) * 2.2;
-
-      shadowEl.style.transform = "translate3d(0px, 0px, 0px)";
-      shadowEl.style.boxShadow = `${shadowXMove}px ${shadowYMove}px ${16 + shadowElevation * 6}px ${6 + shadowElevation * 4}px rgba(0, 0, 0, ${0.35 + shadowElevation * 0.1})`;
-      shadowEl.style.filter = "none";
-      shadowEl.style.backgroundColor = "transparent";
-    }
+    // No separate shadow div to update
   };
 
   const handlePointerEnter = (e: React.PointerEvent<HTMLButtonElement>) => {
@@ -133,10 +105,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       }
     }
 
-    const shadowEl = shadowRef.current;
-    if (shadowEl) {
-      shadowEl.style.transition = "box-shadow 0.15s ease-out";
-    }
   };
 
   const handlePointerLeave = () => {
@@ -149,21 +117,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       if (!isMobile) {
         cardEl.style.filter = `brightness(${brightnessVal.toFixed(3)})${clampedBlur > 0.05 ? ` blur(${clampedBlur.toFixed(2)}px)` : ""}`;
       }
-    }
-
-    const shadowEl = shadowRef.current;
-    if (shadowEl) {
-      shadowEl.style.transition = "box-shadow 0.4s ease-out";
-      const dxLeave = pos.left - 85;
-      const dyLeave = pos.top - 15;
-      const distMultiplierLeave = 0.14;
-      const shadowXLeave = dxLeave * distMultiplierLeave;
-      const shadowYLeave = dyLeave * distMultiplierLeave + 5;
-
-      shadowEl.style.transform = "translate3d(0px, 0px, 0px)";
-      shadowEl.style.boxShadow = `${shadowXLeave}px ${shadowYLeave}px ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`;
-      shadowEl.style.filter = "none";
-      shadowEl.style.backgroundColor = "transparent";
     }
   };
 
@@ -210,21 +163,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           />
         </div>
 
-        {/* Dynamic Hardware-Accelerated Shadow (Separate DOM element) */}
-        {!isMobile && (
-          <div
-            ref={shadowRef}
-            className="absolute inset-0 pointer-events-none opacity-60 mix-blend-multiply"
-            style={{
-              backgroundColor: "transparent",
-              boxShadow: `${shadowX}px ${shadowY}px ${restShadowBlur}px ${restShadowSpread}px rgba(0, 0, 0, ${restOpacity})`,
-              transform: "translate3d(0px, 0px, 0px)",
-              borderRadius: item.id === "clock" ? "50%" : "4px",
-              transformOrigin: "top center",
-              zIndex: 0,
-            }}
-          />
-        )}
 
         {/* Visual SVG Content (Tilts and lifts under the pin) */}
         <div
@@ -499,72 +437,94 @@ export const DetectiveBoard: React.FC = () => {
   // Helper to render proper board items SVGs
   // Helper to render proper board items SVGs
   const renderItemSvg = (id: string, isHovered: boolean) => {
-    const shadowClass = isMobile
-      ? (id === "phone"
-          ? (isHovered ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]" : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]")
-          : id === "dossier"
-            ? (isHovered ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]" : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]")
-            : (isHovered ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]" : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"))
-      : "";
-
     switch (id) {
       case "dossier":
         return (
           <DossierSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_20px_35px_rgba(0,0,0,0.7)]"
+                : "drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]"
+            }`}
           />
         );
       case "suspect-1":
         return (
           <Suspect1Svg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
           />
         );
       case "suspect-2":
         return (
           <Suspect2Svg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
           />
         );
       case "map":
         return (
           <MapSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
           />
         );
       case "phone":
         return (
           <RotaryPhoneSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_22px_40px_rgba(0,0,0,0.8)]"
+                : "drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]"
+            }`}
           />
         );
       case "clock":
         return (
           <VintageClockSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
           />
         );
       case "evidence":
         return (
           <EvidenceBagSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
           />
         );
       case "newspaper":
         return (
           <NewspaperSvg
-            className={`w-full h-full transition-all duration-300 ease-out ${shadowClass}`}
+            className={`w-full h-full transition-all duration-300 ease-out ${
+              isHovered
+                ? "drop-shadow-[0_18px_30px_rgba(0,0,0,0.6)]"
+                : "drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+            }`}
           />
         );
       case "note":
         return (
           <div
             className={`w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[9px] sm:text-[10px] md:text-xs text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out ${
-              isMobile
-                ? (isHovered
-                    ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
-                    : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]")
-                : ""
+              isHovered
+                ? "shadow-[0_12px_24px_rgba(0,0,0,0.6)]"
+                : "shadow-[0_6px_12px_rgba(0,0,0,0.5)]"
             }`}
           >
             <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
