@@ -42,8 +42,13 @@ export const WindowScene: React.FC = () => {
     let animationFrameId: number;
 
     const resizeCanvas = () => {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
+      if (!canvas) return;
+      const w = canvas.parentElement?.clientWidth || canvas.clientWidth || 300;
+      const h = canvas.parentElement?.clientHeight || canvas.clientHeight || 400;
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
     };
     resizeCanvas();
     window.addEventListener("resize", resizeCanvas);
@@ -97,6 +102,13 @@ export const WindowScene: React.FC = () => {
       const dt = now - lastTime;
       lastTime = now;
 
+      // ponytail: ensure size is up to date dynamically
+      const parentW = canvas.parentElement?.clientWidth || canvas.clientWidth || 300;
+      const parentH = canvas.parentElement?.clientHeight || canvas.clientHeight || 400;
+      if (canvas.width !== parentW || canvas.height !== parentH) {
+        canvas.width = parentW;
+        canvas.height = parentH;
+      }
       const w = canvas.width;
       const h = canvas.height;
 
@@ -150,7 +162,7 @@ export const WindowScene: React.FC = () => {
         if (drop.x > w) drop.x = 0;
         else if (drop.x < 0) drop.x = w;
 
-        ctx.strokeStyle = `rgba(0, 255, 255, ${drop.opacity + 0.35})`;
+        ctx.strokeStyle = `rgba(255, 30, 30, ${drop.opacity + 0.45})`; // ponytail: bright red for debug
         ctx.beginPath();
         ctx.moveTo(drop.x, drop.y);
         ctx.lineTo(drop.x + windDrift, drop.y + drop.length);
@@ -191,7 +203,7 @@ export const WindowScene: React.FC = () => {
             const p1 = streak.trail[j - 1];
             const p2 = streak.trail[j];
             const trailOpacity = (j / streak.trail.length) * streak.opacity;
-            ctx.strokeStyle = `rgba(0, 255, 120, ${trailOpacity + 0.35})`;
+            ctx.strokeStyle = `rgba(255, 255, 0, ${trailOpacity + 0.45})`; // ponytail: bright yellow for debug
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -199,7 +211,7 @@ export const WindowScene: React.FC = () => {
           }
         }
 
-        ctx.fillStyle = `rgba(0, 255, 120, 1.0)`;
+        ctx.fillStyle = `rgba(255, 255, 0, 1.0)`; // ponytail: bright yellow for debug
         ctx.beginPath();
         ctx.arc(streak.x, streak.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
