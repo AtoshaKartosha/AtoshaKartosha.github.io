@@ -162,7 +162,7 @@ export const WindowScene: React.FC = () => {
         if (drop.x > w) drop.x = 0;
         else if (drop.x < 0) drop.x = w;
 
-        ctx.strokeStyle = `rgba(255, 30, 30, ${drop.opacity + 0.45})`; // ponytail: bright red for debug
+        ctx.strokeStyle = `rgba(180, 200, 220, ${drop.opacity})`;
         ctx.beginPath();
         ctx.moveTo(drop.x, drop.y);
         ctx.lineTo(drop.x + windDrift, drop.y + drop.length);
@@ -203,7 +203,7 @@ export const WindowScene: React.FC = () => {
             const p1 = streak.trail[j - 1];
             const p2 = streak.trail[j];
             const trailOpacity = (j / streak.trail.length) * streak.opacity;
-            ctx.strokeStyle = `rgba(255, 255, 0, ${trailOpacity + 0.45})`; // ponytail: bright yellow for debug
+            ctx.strokeStyle = `rgba(180, 200, 220, ${trailOpacity})`;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -211,7 +211,7 @@ export const WindowScene: React.FC = () => {
           }
         }
 
-        ctx.fillStyle = `rgba(255, 255, 0, 1.0)`; // ponytail: bright yellow for debug
+        ctx.fillStyle = `rgba(200, 220, 240, 0.6)`;
         ctx.beginPath();
         ctx.arc(streak.x, streak.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
@@ -304,14 +304,12 @@ export const WindowScene: React.FC = () => {
         className="absolute select-none pointer-events-none overflow-hidden"
         style={{
           boxSizing: "border-box",
-          left: "90.79%",
+          left: "89.5%",
           top: "4.77%",
-          width: "8.36%",
+          width: "9.5%",
           height: "70.22%",
           zIndex: 1,
-          // clipPath: "url(#window-panes-clip)",
-          outline: "4px solid #ff00ff",
-          background: "rgba(255, 0, 255, 0.25)",
+          clipPath: "url(#window-panes-clip)",
           boxShadow: "inset 0 0 16px rgba(0, 0, 0, 0.4)",
         }}
       >

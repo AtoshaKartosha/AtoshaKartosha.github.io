@@ -588,12 +588,14 @@ export const DetectiveBoard: React.FC = () => {
         className={`relative ${
           isMobile 
             ? "w-[170vw] h-[210vh]" 
-            : "w-[94%] h-[92%] max-w-[1800px] max-h-[1000px] rounded-sm absolute top-1/2 left-1/2"
+            : "w-[94%] h-auto max-w-[1800px] rounded-sm absolute top-1/2 left-1/2"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
           backgroundImage: "url(/background_detective_bg.svg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
+          aspectRatio: isMobile ? undefined : "1385.92 / 773.53",
+          maxHeight: isMobile ? undefined : "1005px",
           transform: isMobile
             ? `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoom}) translate(var(--rumble-x, 0px), var(--rumble-y, 0px))`
             : "translate3d(-50%, -50%, 0) translate(var(--rumble-x, 0px), var(--rumble-y, 0px))",
