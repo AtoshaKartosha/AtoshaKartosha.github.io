@@ -52,12 +52,15 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
     >
       {/* Red Pin Pierce-point */}
       <div
-        className={`absolute left-1/2 -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
+        className={`absolute -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
           isHovered
             ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
             : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
         }`}
-        style={{ top: item.id === "phone" ? (isMobile ? "10px" : "18px") : "-8px" }}
+        style={{
+          left: item.id === "phone" ? (isMobile ? "35%" : "30%") : "50%",
+          top: item.id === "phone" ? (isMobile ? "10px" : "18px") : "-8px",
+        }}
       >
         {/* Pinhead metal shine */}
         <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
