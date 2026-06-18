@@ -125,7 +125,7 @@ export const BoardPopup: React.FC = () => {
     >
       <div
         ref={contentRef}
-        className="relative bg-[#d4c9a8] text-[#1c160e] p-8 md:p-10 border-4 border-[#1c160e] shadow-[0_15px_30px_rgba(0,0,0,0.5)] rounded-sm overflow-y-auto max-h-[75vh] dossier-scrollbar"
+        className="relative bg-[#d4c9a8] text-[#1c160e] p-8 md:p-10 border-4 border-[#1c160e] shadow-[0_15px_30px_rgba(0,0,0,0.5)] rounded-sm overflow-hidden max-h-[75vh]"
         style={{
           backgroundImage: `
             radial-gradient(circle at 10% 20%, rgba(139, 119, 87, 0.15) 0%, transparent 80%),
@@ -171,7 +171,7 @@ export const BoardPopup: React.FC = () => {
               />
             </div>
           )}
-          <div className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text">
+          <div className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-auto max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar">
             {data.content.map((p, idx) => (
               <p key={idx} className="opacity-0 translate-y-2.5">
                 {p}

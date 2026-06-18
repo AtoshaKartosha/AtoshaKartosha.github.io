@@ -66,3 +66,28 @@ body {
   scrollbar-color: #1c160e #d4c9a8;
 }
 
+
+/* Red custom scrollbar for vintage dossier text */
+.red-dossier-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.red-dossier-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.red-dossier-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c41e1e;
+  border-radius: 3px;
+}
+
+.red-dossier-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #e53e3e;
+}
+
+/* Firefox support */
+.red-dossier-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #c41e1e transparent;
+}
+
