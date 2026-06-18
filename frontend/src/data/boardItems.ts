@@ -112,7 +112,7 @@ export const getItemShadow = (id: string, isHovered: boolean): string => {
       case "map":
         return "drop-shadow(0 18px 28px rgba(0,0,0,0.6))";
       case "dossier":
-        return "drop-shadow(0 22px 35px rgba(0,0,0,0.7))";
+        return "drop-shadow(0 30px 48px rgba(0,0,0,0.85))";
       case "clock":
         return "drop-shadow(0 14px 22px rgba(0,0,0,0.65))";
       case "suspect-1":
@@ -134,7 +134,7 @@ export const getItemShadow = (id: string, isHovered: boolean): string => {
       case "map":
         return "drop-shadow(0 10px 18px rgba(0,0,0,0.5))";
       case "dossier":
-        return "drop-shadow(0 12px 22px rgba(0,0,0,0.55))";
+        return "drop-shadow(0 18px 28px rgba(0,0,0,0.7))";
       case "clock":
         return "drop-shadow(0 7px 12px rgba(0,0,0,0.5))";
       case "suspect-1":
