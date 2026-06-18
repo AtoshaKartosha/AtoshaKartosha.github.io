@@ -32,28 +32,18 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
         }}
       />
       
-      {/* Векторный логотип на обложке (смещен выше и обрезан под силуэт) */}
-      <g transform="translate(95, 10)" data-logo-target="true">
-        <circle cx="55" cy="55" r="53" fill="none" />
-        <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
-          <svg
-            viewBox="0 0 180 237"
-            x="25"
-            y="5"
-            width="60"
-            height="79"
-            style={{ filter: "brightness(0) opacity(0.8)" }}
-          >
-            <image 
-              href="/logo_detective.svg" 
-              width="471.33" 
-              height="237.01" 
-            />
-          </svg>
-        </g>
-      </g>
+      {/* Полноцветный векторный логотип на обложке */}
+      <image 
+        href="/logo_detective.svg" 
+        x="70" 
+        y="25" 
+        width="160" 
+        height="80.4" 
+        className="transition-opacity duration-200 select-none" 
+        style={{ opacity: isLoading ? 0 : 1 }}
+      />
       
-      {/* Векторные тексты под завязкой (смещены ниже и стилизованы) */}
+      {/* Векторный текст номера дела */}
       <text 
         x="150" 
         y="188" 
@@ -67,28 +57,29 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
         ДEЛО № 1853
       </text>
       
-      <g transform="translate(150, 213) rotate(-4)">
+      {/* Большой диагональный штамп TOP SECRET по центру поверх всего */}
+      <g transform="translate(150, 120) rotate(-22)">
         <rect 
-          x="-48" 
-          y="-11" 
-          width="96" 
-          height="17" 
+          x="-95" 
+          y="-20" 
+          width="190" 
+          height="40" 
           fill="none" 
           stroke="#c41e1e" 
-          strokeWidth="1.75" 
-          rx="1.5" 
-          opacity="0.9"
+          strokeWidth="3.25" 
+          rx="3.5" 
+          opacity="0.85"
         />
         <text 
           x="0" 
-          y="1.5" 
+          y="7.5" 
           fill="#c41e1e" 
-          fontSize="9.5" 
-          fontWeight="bold" 
+          fontSize="19" 
+          fontWeight="900" 
           className="font-typewriter" 
           textAnchor="middle" 
-          letterSpacing="2"
-          opacity="0.9"
+          letterSpacing="3"
+          opacity="0.85"
         >
           TOP SECRET
         </text>
