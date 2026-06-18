@@ -34,22 +34,6 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
 }) => {
   const pos = isMobile ? item.mobile : item.desktop;
   const isHovered = hoveredItemId === item.id;
-  const [isZIndexRaised, setIsZIndexRaised] = useState(false);
-
-  useEffect(() => {
-    if (isHovered) {
-      const timer = setTimeout(() => {
-        setIsZIndexRaised(true);
-      }, 0);
-      return () => clearTimeout(timer);
-    } else {
-      const timer = setTimeout(() => {
-        setIsZIndexRaised(false);
-      }, 400);
-      return () => clearTimeout(timer);
-    }
-  }, [isHovered]);
-
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top;
   const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
@@ -63,7 +47,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         top: `${pos.top}%`,
         width: `${pos.width}%`,
         transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
-        zIndex: isZIndexRaised ? 30 : item.zIndex,
+        zIndex: isHovered ? (item.id === "map" ? 18 : 30) : item.zIndex,
       }}
     >
       {/* Red Pin Pierce-point */}

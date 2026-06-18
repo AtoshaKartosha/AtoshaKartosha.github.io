@@ -228,7 +228,7 @@ export const ThreadCanvas: React.FC = () => {
       const sag = Math.max(25, dist * 0.12);
 
       const key = `${conn.from}-${conn.to}`;
-      const isConnectionHovered = conn.from === hoveredItemId || conn.to === hoveredItemId;
+      const isConnectionHovered = conn.from === hoveredItemIdRef.current || conn.to === hoveredItemIdRef.current;
       
       if (hoverProgressesRef.current[key] === undefined) {
         hoverProgressesRef.current[key] = isConnectionHovered ? 1.0 : 0.0;
@@ -309,7 +309,7 @@ export const ThreadCanvas: React.FC = () => {
     });
     console.log("ThreadCanvas geometry built. Connections:", activeConnections.length, "Positions:", allPositions.length, "Indices:", allIndices.length);
     console.log("Positions sample:", allPositions.slice(0, 10));
-  }, [pinPositions, size, hoveredItemId]);
+  }, [pinPositions, size]);
 
   // Animation loop
   useEffect(() => {
