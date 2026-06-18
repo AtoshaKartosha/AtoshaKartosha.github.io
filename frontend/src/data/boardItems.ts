@@ -63,7 +63,7 @@ export const boardItems: BoardItem[] = [
     name: "Настольные игры",
     popupId: "games",
     zIndex: 21,
-    desktop: { left: 8, top: 68, width: 20, rotation: 4 },
+    desktop: { left: 8, top: 58, width: 20, rotation: 4 },
     mobile: { left: 45, top: 96, width: 45, rotation: 4 },
   },
   {
