@@ -19,6 +19,7 @@ import { BoardPopup } from "./BoardPopup";
 import { DustParticles } from "./DustParticles";
 import { FluidGlassCursor } from "./FluidGlassCursor";
 import { NoirPinboard } from "./NoirPinboard";
+import { WindowScene } from "./WindowScene";
 
 interface BoardItemProps {
   item: BoardItem;
@@ -594,8 +595,8 @@ export const DetectiveBoard: React.FC = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           transform: isMobile
-            ? `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoom})`
-            : "translate3d(-50%, -50%, 0)",
+            ? `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoom}) translate(var(--rumble-x, 0px), var(--rumble-y, 0px))`
+            : "translate3d(-50%, -50%, 0) translate(var(--rumble-x, 0px), var(--rumble-y, 0px))",
           transformOrigin: isMobile ? "top left" : "center center",
           cursor: isMobile ? (isDraggingState ? "grabbing" : "grab") : "default",
           transformStyle: "preserve-3d",
@@ -605,6 +606,9 @@ export const DetectiveBoard: React.FC = () => {
         <CorkboardTexture />
 
         {/* 2nd layer from bottom: Pinboard in noir and comic style */}
+        {/* Window atmosphere scene */}
+        <WindowScene />
+
         <NoirPinboard />
         {/* WebGL red thread canvas overlay */}
         <ThreadCanvas />
@@ -623,6 +627,34 @@ export const DetectiveBoard: React.FC = () => {
             {renderItemSvg(item.id)}
           </BoardItemComponent>
         ))}
+
+        {/* Ambient volumetric light shaft from window */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-[18] mix-blend-screen"
+          style={{
+            clipPath: "polygon(30% 60%, 88.15% 12.63%, 88.15% 75.31%, 40% 95%)",
+            background: "linear-gradient(to bottom left, rgba(130, 160, 210, 0.16) 0%, rgba(80, 110, 160, 0.05) 45%, transparent 75%)",
+            animation: "lightShaftPulse 8s ease-in-out infinite",
+          }}
+        />
+
+        {/* Volumetric lightning strike beam from window */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-[19] mix-blend-screen"
+          style={{
+            clipPath: "polygon(30% 60%, 88.15% 12.63%, 88.15% 75.31%, 40% 95%)",
+            background: "linear-gradient(to bottom left, rgba(200, 225, 255, 0.45) 0%, rgba(140, 180, 255, 0.15) 50%, transparent 80%)",
+            opacity: "var(--lightning-intensity, 0)",
+          }}
+        />
+
+        {/* Global cabinet lightning flash overlay */}
+        <div 
+          className="absolute inset-0 pointer-events-none z-[21] bg-[#b4c8e6] mix-blend-screen"
+          style={{
+            opacity: "calc(var(--lightning-intensity, 0) * 0.15)",
+          }}
+        />
 
         {/* Foreground elements (table, hat, jacket) overlay for depth of field */}
         <div 
