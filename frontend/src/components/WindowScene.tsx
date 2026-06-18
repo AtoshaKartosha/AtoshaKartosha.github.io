@@ -268,32 +268,62 @@ export const WindowScene: React.FC = () => {
   }, []);
 
   return (
-    <div 
-      className="absolute select-none pointer-events-none overflow-hidden"
-      style={{
-        boxSizing: "border-box",
-        left: "88.15%",
-        top: "0%",
-        width: "11.85%",
-        height: "80%",
-        zIndex: 1,
-        clipPath: "polygon(0% 15.8%, 100% 0%, 100% 98.4%, 0% 94.1%)",
-        boxShadow: "inset 0 0 16px rgba(0, 0, 0, 0.4)",
-      }}
-    >
-      {/* Faint glass sheen overlay */}
-      <div 
-        className="absolute inset-0 z-[2] shadow-[inset_0_0_30px_rgba(100,140,180,0.06)] opacity-60"
-      />
+    <>
+      {/* SVG ClipPath Definition for the window glass panes */}
+      <svg width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute', width: 0, height: 0 }} xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="window-panes-clip" clipPathUnits="objectBoundingBox">
+            {/* Left Column Panes */}
+            <path d="M0.35213,0.35646 c0.00000,0.00388,-0.00017,0.00756,-0.00434,0.00947 s-0.02030,0.00338,-0.04277,0.00395 v-0.19612 s0.52389,-0.06996,0.52389,-0.06996 c0.00969,0.00521,-0.00067,0.00967,-0.02581,0.01120 l-0.45038,0.06002,-0.00067,0.18145 Z" />
+            <path d="M0.35272,0.56550 c0.00000,0.00407,-0.00017,0.00753,-0.00752,0.00895,-0.00660,0.00129,-0.02164,0.00180,-0.03985,0.00194 l-0.00050,-0.18917,0.52515,-0.04650 c0.00576,0.00329,-0.00150,0.00621,-0.01796,0.00758 l-0.45990,0.03957,0.00050,0.17761 Z" />
+            <path d="M0.81612,0.57042 c0.00008,0.00110,-0.00017,0.00196,-0.00159,0.00206,-0.04520,0.00290,-0.10535,0.00580,-0.15088,0.00569 l-0.31136,0.01503 v0.18904 c-0.01604,0.00151,-0.03350,0.00163,-0.04670,0.00012 l-0.00050,-0.18943,0.50693,-0.02508 c0.00585,-0.00029,0.01278,-0.00132,0.01612,-0.00122 s0.00785,0.00144,0.00476,0.00261 c-0.00267,0.00099,-0.00994,0.00139,-0.01671,0.00118 Z" />
+            <path d="M0.35272,0.95630 l0.46433,0.01230 c0.00911,0.00024,0.01094,0.00050,0.01420,0.00165,0.00209,0.00074,-0.00710,0.00230,-0.05710,0.00230 l-0.51838,-0.01463,-0.00017,-0.15933 c0.01195,-0.00168,0.03266,-0.00189,0.04628,-0.00009 l0.00092,0.15780 Z" />
+            
+            {/* Right Column Panes */}
+            <path d="M0.94185,0.10839 l-0.00058,0.19730 c0.00000,0.00310,0.00000,0.00609,-0.00785,0.00779,-0.00576,0.00125,-0.01930,0.00273,-0.03400,0.00235 l-0.00100,-0.22161,0.36458,-0.04991 c0.00961,0.00197,0.00986,0.00727,-0.00276,0.00897 l-0.31554,0.04256 c-0.01454,0.00232,-0.00292,0.00804,-0.00292,0.01254 Z" />
+            <path d="M0.94169,0.53778 c0.00000,0.00317,-0.00092,0.00561,-0.00409,0.00647,-0.00418,0.00111,-0.01679,0.00190,-0.03709,0.00184 l-0.00092,-0.21120,0.36424,-0.03271 c0.00660,0.00022,0.00919,0.00576,0.00201,0.00640 l-0.32389,0.02871,-0.00025,0.20049 Z" />
+            <path d="M0.94169,0.77098 c0.00000,0.00345,-0.00092,0.00575,-0.00510,0.00655 s-0.01921,0.00111,-0.03609,0.00043 l-0.00100,-0.21415,0.36817,-0.01792,0.00100,0.00292,-0.32723,0.01616,0.00017,0.20602 Z" />
+            <path d="M0.94085,0.97048 c0.01621,0.00293,0.03609,0.00161,0.05079,0.00266 l0.00058,0.00249,-0.09215,-0.00163,0.00125,-0.17886 c0.01362,-0.00094,0.02590,-0.00087,0.03910,-0.00015 l0.00058,0.17799 Z" />
+          </clipPath>
+        </defs>
+      </svg>
 
-      {/* Rain and smoke canvas */}
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-[1] opacity-90" />
-
-      {/* Lightning overlay within window */}
       <div 
-        className="absolute inset-0 bg-[#b8cceb] pointer-events-none z-[3] mix-blend-screen"
-        style={{ opacity: "var(--lightning-intensity, 0)" }}
-      />
-    </div>
+        className="absolute select-none pointer-events-none overflow-hidden"
+        style={{
+          boxSizing: "border-box",
+          left: "88.16%",
+          top: "1.43%",
+          width: "8.64%",
+          height: "75.37%",
+          zIndex: 1,
+          clipPath: "url(#window-panes-clip)",
+          boxShadow: "inset 0 0 16px rgba(0, 0, 0, 0.4)",
+        }}
+      >
+        {/* Faint glass sheen overlay */}
+        <div 
+          className="absolute inset-0 z-[2] shadow-[inset_0_0_30px_rgba(100,140,180,0.06)] opacity-60"
+        />
+
+        {/* Rain and smoke canvas */}
+        <canvas 
+          ref={canvasRef} 
+          className="absolute inset-0 z-[1] opacity-90" 
+          style={{
+            width: "115%",
+            height: "100%",
+            transform: "perspective(800px) rotateY(-25deg)",
+            transformOrigin: "left center",
+          }}
+        />
+
+        {/* Lightning overlay within window */}
+        <div 
+          className="absolute inset-0 bg-[#b8cceb] pointer-events-none z-[3] mix-blend-screen"
+          style={{ opacity: "var(--lightning-intensity, 0)" }}
+        />
+      </div>
+    </>
   );
 };
