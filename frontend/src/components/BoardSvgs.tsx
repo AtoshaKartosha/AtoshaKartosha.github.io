@@ -19,63 +19,29 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
   
   return (
     <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      {/* Folder Back */}
-      <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#4a3e30" />
-      <path d="M10 30 L120 30 L140 10 L290 10 L290 230 L10 230 Z" fill="#bfae93" opacity="0.85" />
+      {/* Сгенерированное фоновое изображение папки */}
+      <image 
+        href="/images/board/dossier.webp" 
+        x="0" 
+        y="0" 
+        width="300" 
+        height="240" 
+        className="select-none" 
+      />
       
-      {/* Folder Inside / Papers */}
-      <rect x="20" y="25" width="260" height="195" rx="2" fill="#eae1cb" transform="rotate(-1 150 120)" />
-      <rect x="25" y="20" width="250" height="200" rx="2" fill="#f4edd9" transform="rotate(1.5 150 120)" />
-      
-      {/* File contents / Lines */}
-      <g transform="rotate(1.5 150 120)">
-        {/* Photo inside folder */}
-        <rect x="40" y="45" width="60" height="70" fill="#222" stroke="#fff" strokeWidth="3" />
-        <circle cx="70" cy="75" r="12" fill="#555" />
-        <path d="M50 110 C50 95 90 95 90 110 Z" fill="#444" />
-        
-        {/* Typed details */}
-        <rect x="115" y="50" width="120" height="8" rx="1" fill="#443a2d" opacity="0.8" />
-        <rect x="115" y="65" width="90" height="6" rx="1" fill="#443a2d" opacity="0.6" />
-        <rect x="115" y="78" width="105" height="6" rx="1" fill="#443a2d" opacity="0.6" />
-        <rect x="115" y="91" width="75" height="6" rx="1" fill="#443a2d" opacity="0.6" />
-        
-        {/* Big Stamp */}
-        <g transform="translate(140, 110) rotate(-15)">
-          <rect x="0" y="0" width="100" height="35" rx="3" fill="none" stroke="#c41e1e" strokeWidth="3" strokeDasharray="3 1" />
-          <text x="50" y="22" fill="#c41e1e" fontSize="11" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-            ДЕТЕКТИВ
-          </text>
-          <text x="50" y="31" fill="#c41e1e" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-            КЛУБ СПБ
-          </text>
-        </g>
-        
-        {/* Handwriting / Signature */}
-        <path d="M40 145 Q50 135 70 145 T100 135 T130 145" stroke="#1d2e54" strokeWidth="2" strokeLinecap="round" fill="none" opacity="0.7" />
-      </g>
-
-      {/* Folder Front Flap */}
-      <path d="M10 40 L130 40 L150 50 L290 50 L290 230 L10 230 Z" fill="#a49377" />
-      <path d="M10 40 L290 40 L290 230 L10 230 Z" fill="#8f7e63" opacity="0.3" />
-      
-      {/* Clasp / String tie */}
-      <circle cx="150" cy="140" r="10" fill="#2d2217" />
-      <circle cx="150" cy="140" r="4" fill="#c8a96e" />
-      
-      {/* Detective Logo on cover */}
-      <g transform="translate(100, 70)" data-logo-target="true">
+      {/* Векторный логотип на обложке (смещен выше) */}
+      <g transform="translate(100, 32)" data-logo-target="true">
         <circle cx="50" cy="50" r="48" fill="none" />
         <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
           <image href="/logo_detective.svg" width="100" height="100" />
         </g>
       </g>
       
-      {/* Text below logo */}
-      <text x="150" y="195" fill="#2d2217" fontSize="13" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="1.2">
+      {/* Векторные тексты под завязкой (смещены ниже) */}
+      <text x="150" y="190" fill="#2d2217" fontSize="13" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="1.2">
         ДEЛО № 1853
       </text>
-      <text x="150" y="210" fill="#5c1212" fontSize="9" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="0.8">
+      <text x="150" y="205" fill="#5c1212" fontSize="9" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="0.8">
         TOP SECRET
       </text>
     </svg>
