@@ -113,11 +113,15 @@ export const BoardPopup: React.FC = () => {
 
   if (!data) return null;
 
+  const isSuspect = activePopup === "suspect-1" || activePopup === "suspect-2";
+
   return (
     <dialog
       ref={dialogRef}
       onClick={handleBackdropClick}
-      className="bg-transparent border-0 outline-none p-4 max-w-lg w-full max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible m-auto"
+      className={`bg-transparent border-0 outline-none p-4 w-full max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible m-auto ${
+        isSuspect ? "max-w-2xl" : "max-w-lg"
+      }`}
     >
       <div
         ref={contentRef}
@@ -156,15 +160,25 @@ export const BoardPopup: React.FC = () => {
           )}
         </div>
 
-        {/* Body content (Typewriter style) */}
-        <div className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] select-text">
-          {data.content.map((p, idx) => (
-            <p key={idx} className="opacity-0 translate-y-2.5">
-              {p}
-            </p>
-          ))}
+        {/* Body content */}
+        <div className={`flex flex-col ${isSuspect ? "sm:flex-row" : ""} gap-6 sm:gap-8 items-center sm:items-start`}>
+          {isSuspect && (
+            <div className="w-40 sm:w-44 md:w-48 shrink-0 rotate-[-1.5deg] hover:rotate-[1deg] transition-transform duration-300">
+              <img
+                src={`/images/board/${activePopup}.png`}
+                alt={data.title}
+                className="w-full h-auto rounded-[2px] shadow-[0_6px_12px_rgba(0,0,0,0.3)] border border-[#1c160e]/10 select-none pointer-events-none"
+              />
+            </div>
+          )}
+          <div className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text">
+            {data.content.map((p, idx) => (
+              <p key={idx} className="opacity-0 translate-y-2.5">
+                {p}
+              </p>
+            ))}
+          </div>
         </div>
-
         {/* Action button */}
         {data.actionLabel && data.actionUrl && (
           <div className="mt-8 pt-6 border-t border-[#1c160e]/20 flex justify-end">
