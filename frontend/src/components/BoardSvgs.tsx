@@ -296,10 +296,10 @@ export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-
     </text>
     <line x1="15" y1="36" x2="165" y2="36" stroke="#1d1b18" strokeWidth="1.5" />
     
-    <text x="90" y="52" fill="#1d1b18" fontSize="13" fontWeight="900" fontFamily="Georgia, serif" textAnchor="middle">
+    <text x="90" y="52" fill="#1d1b18" fontSize="11" fontWeight="900" fontFamily="Georgia, serif" textAnchor="middle" textLength="150" lengthAdjust="spacingAndGlyphs">
       ТАИНСТВЕННЫЙ ВЕЧЕР
     </text>
-    <text x="90" y="66" fill="#1d1b18" fontSize="8" fontWeight="bold" fontFamily="Georgia, serif" textAnchor="middle" fontStyle="italic">
+    <text x="90" y="66" fill="#1d1b18" fontSize="7" fontWeight="bold" fontFamily="Georgia, serif" textAnchor="middle" fontStyle="italic" textLength="150" lengthAdjust="spacingAndGlyphs">
       Детективные игры на Вокзале 1853
     </text>
     
