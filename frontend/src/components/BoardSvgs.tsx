@@ -150,7 +150,7 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
 );
 
 export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]" }) => (
-  <div className="relative w-full h-full">
+  <div className="relative w-full h-full rounded-[2px] overflow-hidden">
     {/* Реалистичная тень позади коробок (падает влево-вниз от лампы) */}
     <div 
       className="absolute pointer-events-none z-0" 
@@ -165,7 +165,31 @@ export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-fu
       src="/images/board/games.webp" 
       alt="Настольные игры" 
       className={`${className} select-none relative z-10`}
+      style={{
+        filter: "saturate(0.55) contrast(1.15) sepia(0.3) brightness(0.9)",
+      }}
     />
+    {/* Эффект виньетки поверх картинки */}
+    <div 
+      className="absolute inset-0 z-20 pointer-events-none opacity-35" 
+      style={{
+        background: "radial-gradient(circle, transparent 40%, rgba(0, 0, 0, 0.8) 100%)",
+      }}
+    />
+    {/* Текстура царапин и пыли */}
+    <svg 
+      className="absolute inset-0 w-full h-full z-20 pointer-events-none opacity-20" 
+      viewBox="0 0 200 200" 
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <line x1="20" y1="10" x2="35" y2="180" stroke="#fff" strokeWidth="0.5" />
+      <line x1="180" y1="30" x2="160" y2="170" stroke="#fff" strokeWidth="0.5" />
+      <line x1="50" y1="150" x2="140" y2="160" stroke="#000" strokeWidth="0.5" />
+      <circle cx="40" cy="50" r="1" fill="#fff" />
+      <circle cx="150" cy="120" r="1.5" fill="#fff" />
+      <circle cx="80" cy="80" r="1.2" fill="#000" />
+      <circle cx="120" cy="40" r="1" fill="#fff" />
+    </svg>
   </div>
 );
 
