@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, threadConnections, BoardItem } from "../data/boardItems";
+import { boardItems, threadConnections, BoardItem, getItemShadow } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -77,17 +77,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         <div
           className="w-full h-full transition-all duration-300 ease-out"
           style={{
-            filter: `${isHovered
-              ? (item.id === "phone"
-                  ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
-                  : item.id === "dossier"
-                    ? "drop-shadow(0 20px 35px rgba(0,0,0,0.65))"
-                    : "drop-shadow(0 18px 30px rgba(0,0,0,0.55))")
-              : (item.id === "phone"
-                  ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
-                  : item.id === "dossier"
-                    ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
-                    : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")} brightness(${isHovered ? 1 : dimBrightness})`,
+            filter: `${getItemShadow(item.id, isHovered)} brightness(${isHovered ? 1 : dimBrightness})`,
           }}
         >
           {renderItemSvg(item.id)}

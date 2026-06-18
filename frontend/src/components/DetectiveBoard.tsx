@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, BoardItem } from "../data/boardItems";
+import { boardItems, BoardItem, getItemShadow } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -199,17 +199,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
             style={{
               filter: isMobile
                 ? "drop-shadow(2px 4px 6px rgba(0,0,0,0.5))"
-                : `${isHovered
-                    ? (item.id === "phone"
-                        ? "drop-shadow(0 22px 40px rgba(0,0,0,0.75))"
-                        : item.id === "dossier"
-                          ? "drop-shadow(0 20px 35px rgba(0,0,0,0.65))"
-                          : "drop-shadow(0 18px 30px rgba(0,0,0,0.55))")
-                    : (item.id === "phone"
-                        ? "drop-shadow(0 12px 24px rgba(0,0,0,0.6))"
-                        : item.id === "dossier"
-                          ? "drop-shadow(0 10px 20px rgba(0,0,0,0.5))"
-                          : "drop-shadow(0 8px 16px rgba(0,0,0,0.45))")} brightness(${isHovered ? 1 : dimBrightness})`,
+                : `${getItemShadow(item.id, isHovered)} brightness(${isHovered ? 1 : dimBrightness})`,
             }}
           >
             {children}

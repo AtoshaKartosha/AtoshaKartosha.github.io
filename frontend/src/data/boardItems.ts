@@ -101,3 +101,51 @@ export const threadConnections = [
   { from: "evidence", to: "clock" },
   { from: "map", to: "phone" },
 ];
+
+export const getItemShadow = (id: string, isHovered: boolean): string => {
+  if (isHovered) {
+    switch (id) {
+      case "note":
+        return "drop-shadow(0 16px 25px rgba(0,0,0,0.65))";
+      case "phone":
+        return "drop-shadow(0 26px 42px rgba(0,0,0,0.75))";
+      case "map":
+        return "drop-shadow(0 18px 28px rgba(0,0,0,0.6))";
+      case "dossier":
+        return "drop-shadow(0 22px 35px rgba(0,0,0,0.7))";
+      case "clock":
+        return "drop-shadow(0 14px 22px rgba(0,0,0,0.65))";
+      case "suspect-1":
+      case "suspect-2":
+        return "drop-shadow(0 12px 20px rgba(0,0,0,0.7))";
+      case "evidence":
+        return "drop-shadow(0 10px 16px rgba(0,0,0,0.7))";
+      case "newspaper":
+        return "drop-shadow(0 8px 12px rgba(0,0,0,0.75))";
+      default:
+        return "drop-shadow(0 15px 25px rgba(0,0,0,0.6))";
+    }
+  } else {
+    switch (id) {
+      case "note":
+        return "drop-shadow(0 8px 14px rgba(0,0,0,0.55))";
+      case "phone":
+        return "drop-shadow(0 16px 28px rgba(0,0,0,0.65))";
+      case "map":
+        return "drop-shadow(0 10px 18px rgba(0,0,0,0.5))";
+      case "dossier":
+        return "drop-shadow(0 12px 22px rgba(0,0,0,0.55))";
+      case "clock":
+        return "drop-shadow(0 7px 12px rgba(0,0,0,0.5))";
+      case "suspect-1":
+      case "suspect-2":
+        return "drop-shadow(0 5px 9px rgba(0,0,0,0.6))";
+      case "evidence":
+        return "drop-shadow(0 4px 7px rgba(0,0,0,0.6))";
+      case "newspaper":
+        return "drop-shadow(0 2px 4px rgba(0,0,0,0.65))";
+      default:
+        return "drop-shadow(0 6px 12px rgba(0,0,0,0.5))";
+    }
+  }
+};
