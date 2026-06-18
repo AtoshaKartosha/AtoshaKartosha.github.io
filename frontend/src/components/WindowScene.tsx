@@ -133,7 +133,7 @@ export const WindowScene: React.FC = () => {
       }
 
       // 2. Draw Rain Drops
-      ctx.lineWidth = 1;
+      ctx.lineWidth = 2.5;
       for (let i = 0; i < rainDrops.length; i++) {
         const drop = rainDrops[i];
         drop.y += drop.speed;
@@ -150,7 +150,7 @@ export const WindowScene: React.FC = () => {
         if (drop.x > w) drop.x = 0;
         else if (drop.x < 0) drop.x = w;
 
-        ctx.strokeStyle = `rgba(150, 180, 210, ${drop.opacity})`;
+        ctx.strokeStyle = `rgba(0, 255, 255, ${drop.opacity + 0.35})`;
         ctx.beginPath();
         ctx.moveTo(drop.x, drop.y);
         ctx.lineTo(drop.x + windDrift, drop.y + drop.length);
@@ -186,12 +186,12 @@ export const WindowScene: React.FC = () => {
         }
 
         if (streak.trail.length > 1) {
-          ctx.lineWidth = 1.5;
+          ctx.lineWidth = 3.5;
           for (let j = 1; j < streak.trail.length; j++) {
             const p1 = streak.trail[j - 1];
             const p2 = streak.trail[j];
             const trailOpacity = (j / streak.trail.length) * streak.opacity;
-            ctx.strokeStyle = `rgba(130, 160, 190, ${trailOpacity})`;
+            ctx.strokeStyle = `rgba(0, 255, 120, ${trailOpacity + 0.35})`;
             ctx.beginPath();
             ctx.moveTo(p1.x, p1.y);
             ctx.lineTo(p2.x, p2.y);
@@ -199,9 +199,9 @@ export const WindowScene: React.FC = () => {
           }
         }
 
-        ctx.fillStyle = `rgba(150, 180, 210, ${streak.opacity * 1.5})`;
+        ctx.fillStyle = `rgba(0, 255, 120, 1.0)`;
         ctx.beginPath();
-        ctx.arc(streak.x, streak.y, 1.2, 0, Math.PI * 2);
+        ctx.arc(streak.x, streak.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
       }
 
