@@ -84,85 +84,20 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
 
 // Polaroid Suspect 1 (The Femme Fatale / Agent)
 export const Suspect1Svg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Paper backing */}
-    <rect width="160" height="190" fill="#f1ece1" rx="2" />
-    <rect x="5" y="5" width="150" height="145" fill="#141414" />
-    
-    {/* Silhouette / Portrait */}
-    <g opacity="0.8">
-      {/* Background sepia/warm tone gradient */}
-      <rect x="5" y="5" width="150" height="145" fill="url(#sepia-grad)" />
-      
-      {/* Shadow Silhouette of a lady with a noir hat */}
-      <path d="M80 35 C60 35 48 45 42 62 C40 68 42 72 45 74 C50 76 58 72 65 65 C68 75 75 80 82 80 C92 80 98 70 98 60 C98 50 90 35 80 35 Z" fill="#181310" />
-      {/* Hat brim */}
-      <path d="M25 58 Q80 40 135 58 C135 58 100 48 80 48 Q60 48 25 58 Z" fill="#0d0a08" />
-      {/* Coat shoulders */}
-      <path d="M30 150 C30 110 50 100 65 105 C70 95 90 95 95 105 C110 100 130 110 130 150 Z" fill="#181310" />
-      
-      {/* Vintage Photo Scratches/Noise */}
-      <line x1="20" y1="20" x2="35" y2="130" stroke="#f1ece1" strokeWidth="0.5" opacity="0.15" />
-      <line x1="130" y1="15" x2="100" y2="120" stroke="#f1ece1" strokeWidth="0.5" opacity="0.1" />
-      <circle cx="50" cy="50" r="1" fill="#fff" opacity="0.3" />
-      <circle cx="110" cy="90" r="1.5" fill="#fff" opacity="0.2" />
-    </g>
-
-    {/* Handwritten label */}
-    <text x="80" y="172" fill="#3c3024" fontSize="12" fontWeight="bold" fontFamily="monospace" textAnchor="middle" transform="rotate(-2 80 172)">
-      «АГЕНТ»
-    </text>
-
-    {/* Gradients */}
-    <defs>
-      <linearGradient id="sepia-grad" x1="80" y1="5" x2="80" y2="150" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#4a3b2c" />
-        <stop offset="50%" stopColor="#2c2014" />
-        <stop offset="100%" stopColor="#140d07" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img 
+    src="/images/board/suspect-1.png" 
+    alt="Агент" 
+    className={`${className} rounded-[2px] select-none`}
+  />
 );
 
 // Polaroid Suspect 2 (The Mobster / Informant)
 export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <svg viewBox="0 0 160 190" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Paper backing */}
-    <rect width="160" height="190" fill="#eae3d5" rx="2" />
-    <rect x="5" y="5" width="150" height="145" fill="#141414" />
-    
-    {/* Silhouette / Portrait */}
-    <g opacity="0.8">
-      {/* Background sepia/warm tone gradient */}
-      <rect x="5" y="5" width="150" height="145" fill="url(#sepia-grad-2)" />
-      
-      {/* Shadow Silhouette of a man with fedora and collar up */}
-      <path d="M80 30 C68 30 58 38 58 48 C58 52 65 54 65 56 C52 56 32 68 38 90 Q80 75 122 90 C128 68 108 56 95 56 C95 54 102 52 102 48 C102 38 92 30 80 30 Z" fill="#15110e" />
-      {/* Fedora brim */}
-      <path d="M30 52 Q80 42 130 52 L120 47 Q80 38 40 47 Z" fill="#0c0907" />
-      {/* Shoulders / Coat */}
-      <path d="M20 150 L35 110 L60 115 L80 102 L100 115 L125 110 L140 150 Z" fill="#15110e" />
-      
-      {/* Vintage Photo Scratches/Noise */}
-      <line x1="40" y1="10" x2="45" y2="140" stroke="#f1ece1" strokeWidth="0.5" opacity="0.1" />
-      <circle cx="120" cy="40" r="1" fill="#fff" opacity="0.2" />
-      <circle cx="30" cy="100" r="1.5" fill="#fff" opacity="0.3" />
-    </g>
-
-    {/* Handwritten label */}
-    <text x="80" y="172" fill="#3c3024" fontSize="12" fontWeight="bold" fontFamily="monospace" textAnchor="middle" transform="rotate(1.5 80 172)">
-      «ИНФОРМАТОР»
-    </text>
-
-    {/* Gradients */}
-    <defs>
-      <linearGradient id="sepia-grad-2" x1="80" y1="5" x2="80" y2="150" gradientUnits="userSpaceOnUse">
-        <stop offset="0%" stopColor="#43372c" />
-        <stop offset="60%" stopColor="#241a12" />
-        <stop offset="100%" stopColor="#0d0805" />
-      </linearGradient>
-    </defs>
-  </svg>
+  <img 
+    src="/images/board/suspect-2.png" 
+    alt="Информатор" 
+    className={`${className} rounded-[2px] select-none`}
+  />
 );
 
 export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
