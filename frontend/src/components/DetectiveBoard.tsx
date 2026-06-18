@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, BoardItem, threadConnections } from "../data/boardItems";
+import { boardItems, BoardItem } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -14,7 +14,10 @@ import {
   EvidenceBagSvg,
   NewspaperSvg,
 } from "./BoardSvgs";
+import { ThreadCanvas } from "./ThreadCanvas";
 import { BoardPopup } from "./BoardPopup";
+import { DustParticles } from "./DustParticles";
+import { FluidGlassCursor } from "./FluidGlassCursor";
 import { NoirPinboard } from "./NoirPinboard";
 
 interface BoardItemProps {
@@ -36,6 +39,8 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   setHoveredItemId,
   children,
 }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+  const cardRectRef = useRef<DOMRect | null>(null);
 
   const pos = isMobile ? item.mobile : item.desktop;
   const isHovered = hoveredItemId === item.id;
@@ -67,12 +72,49 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
 
-  const handlePointerEnter = () => {
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (isMobile) return;
+    const cardEl = cardRef.current;
+    if (!cardEl) return;
+
+    let rect = cardRectRef.current;
+    if (!rect) {
+      rect = e.currentTarget.getBoundingClientRect();
+      cardRectRef.current = rect;
+    }
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    const maxTiltX = 10; // rotateY
+    const maxTiltY = 10; // rotateX
+
+    const tiltX = x * maxTiltX;
+    const tiltY = -y * maxTiltY;
+
+    // Direct DOM style updates for 3D rotation and scale
+    cardEl.style.transform = `rotateX(${tiltY}deg) rotateY(${tiltX}deg) translateZ(80px)`;
+
+    // No separate shadow div to update
+  };
+
+  const handlePointerEnter = (e: React.PointerEvent<HTMLDivElement>) => {
     setHoveredItemId(item.id);
+    cardRectRef.current = e.currentTarget.getBoundingClientRect();
+
+    const cardEl = cardRef.current;
+    if (cardEl) {
+      cardEl.style.transition = "transform 0.08s ease-out";
+    }
   };
 
   const handlePointerLeave = () => {
     setHoveredItemId(null);
+
+    const cardEl = cardRef.current;
+    if (cardEl) {
+      cardEl.style.transition = "transform 0.4s ease-out";
+      cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)";
+    }
   };
 
 
@@ -95,6 +137,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         }}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
+        onPointerMove={handlePointerMove}
         className="w-full focus:outline-none block relative touch-manipulation cursor-pointer"
         style={{
           transformStyle: "preserve-3d",
@@ -140,6 +183,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
         {/* Visual SVG Content (Tilts and lifts under the pin) */}
         <div
+          ref={cardRef}
           style={{
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
@@ -179,7 +223,6 @@ export const DetectiveBoard: React.FC = () => {
   const activePopup = useBoardStore((state) => state.activePopup);
   const setActivePopup = useBoardStore((state) => state.setActivePopup);
   const setPinPosition = useBoardStore((state) => state.setPinPosition);
-  const pinPositions = useBoardStore((state) => state.pinPositions);
   const panOffset = useBoardStore((state) => state.panOffset);
   const setPanOffset = useBoardStore((state) => state.setPanOffset);
   const isLoading = useBoardStore((state) => state.isLoading);
@@ -569,40 +612,8 @@ export const DetectiveBoard: React.FC = () => {
 
         {/* 2nd layer from bottom: Pinboard in noir and comic style */}
         <NoirPinboard />
-        {/* SVG thread connections overlay */}
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
-          {threadConnections.map((conn, idx) => {
-            const from = pinPositions[conn.from];
-            const to = pinPositions[conn.to];
-            if (!from || !to) return null;
-
-            const dx = to.x - from.x;
-            const dy = to.y - from.y;
-            const dist = Math.hypot(dx, dy);
-            const sag = Math.max(25, dist * 0.12);
-
-            const cx = (from.x + to.x) / 2;
-            const cy = (from.y + to.y) / 2 + sag;
-
-            const isConnHovered = hoveredItemId === conn.from || hoveredItemId === conn.to;
-
-            return (
-              <path
-                key={idx}
-                d={`M ${from.x} ${from.y} Q ${cx} ${cy} ${to.x} ${to.y}`}
-                fill="none"
-                strokeLinecap="round"
-                style={{
-                  stroke: isConnHovered ? "#ff4d4d" : "#c51f1f",
-                  strokeWidth: isConnHovered ? 4 : 2,
-                  strokeDasharray: dist,
-                  strokeDashoffset: isLoading ? dist : 0,
-                  transition: "stroke-dashoffset 0.6s ease-out, stroke 0.3s ease-out, stroke-width 0.3s ease-out",
-                }}
-              />
-            );
-          })}
-        </svg>
+        {/* WebGL red thread canvas overlay */}
+        <ThreadCanvas />
 
         {/* Board Items */}
         {boardItems.map((item) => (
@@ -630,6 +641,11 @@ export const DetectiveBoard: React.FC = () => {
         />
       </div>
 
+      {/* 2.5 DUST PARTICLES OVERLAY */}
+      <DustParticles />
+
+      {/* 2.7 WEBGL FLUID GLASS LENS OVERLAY */}
+      <FluidGlassCursor />
       {/* 3. POPUP MODAL DIALOG */}
       <BoardPopup />
 
