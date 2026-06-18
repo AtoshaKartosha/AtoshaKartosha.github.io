@@ -19,7 +19,7 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
   
   return (
     <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-      {/* Сгенерированное фоновое изображение папки */}
+      {/* Сгенерированное фоновое изображение папки с легким нуар-фильтром */}
       <image 
         href="/images/board/dossier.webp" 
         x="0" 
@@ -27,21 +27,47 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
         width="300" 
         height="240" 
         className="select-none" 
+        style={{
+          filter: "saturate(0.85) contrast(1.1) brightness(0.95)",
+        }}
       />
       
       {/* Векторный логотип на обложке (смещен выше) */}
-      <g transform="translate(100, 32)" data-logo-target="true">
-        <circle cx="50" cy="50" r="48" fill="none" />
+      <g transform="translate(95, 10)" data-logo-target="true">
+        <circle cx="55" cy="55" r="53" fill="none" />
         <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
-          <image href="/logo_detective.svg" width="100" height="100" />
+          <image 
+            href="/logo_detective.svg" 
+            width="110" 
+            height="110" 
+            style={{ filter: "brightness(0) opacity(0.8)" }}
+          />
         </g>
       </g>
       
       {/* Векторные тексты под завязкой (смещены ниже) */}
-      <text x="150" y="190" fill="#2d2217" fontSize="13" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="1.2">
+      <text 
+        x="150" 
+        y="192" 
+        fill="#1c160e" 
+        fontSize="12" 
+        fontWeight="bold" 
+        className="font-typewriter" 
+        textAnchor="middle" 
+        letterSpacing="1"
+      >
         ДEЛО № 1853
       </text>
-      <text x="150" y="205" fill="#5c1212" fontSize="9" fontWeight="900" fontFamily="monospace" textAnchor="middle" letterSpacing="0.8">
+      <text 
+        x="150" 
+        y="210" 
+        fill="#9c1c1c" 
+        fontSize="10" 
+        fontWeight="bold" 
+        className="font-typewriter" 
+        textAnchor="middle" 
+        letterSpacing="1.5"
+      >
         TOP SECRET
       </text>
     </svg>
