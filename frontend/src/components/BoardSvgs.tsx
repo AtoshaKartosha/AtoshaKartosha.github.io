@@ -35,10 +35,10 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
       {/* Полноцветный векторный логотип на обложке */}
       <image 
         href="/logo_detective.svg" 
-        x="70" 
-        y="25" 
-        width="160" 
-        height="80.4" 
+        x="90" 
+        y="30" 
+        width="120" 
+        height="60.3" 
         className="transition-opacity duration-200 select-none" 
         style={{ opacity: isLoading ? 0 : 1 }}
       />
@@ -57,28 +57,28 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
         ДEЛО № 1853
       </text>
       
-      {/* Большой диагональный штамп TOP SECRET по центру поверх всего */}
-      <g transform="translate(150, 120) rotate(-22)">
+      {/* Диагональный штамп TOP SECRET по центру, слегка касающийся логотипа */}
+      <g transform="translate(150, 112) rotate(-18)">
         <rect 
-          x="-95" 
-          y="-20" 
-          width="190" 
-          height="40" 
+          x="-70" 
+          y="-14" 
+          width="140" 
+          height="28" 
           fill="none" 
           stroke="#c41e1e" 
-          strokeWidth="3.25" 
-          rx="3.5" 
+          strokeWidth="2.5" 
+          rx="2.5" 
           opacity="0.85"
         />
         <text 
           x="0" 
-          y="7.5" 
+          y="5.5" 
           fill="#c41e1e" 
-          fontSize="19" 
+          fontSize="14" 
           fontWeight="900" 
           className="font-typewriter" 
           textAnchor="middle" 
-          letterSpacing="3"
+          letterSpacing="2.5"
           opacity="0.85"
         >
           TOP SECRET
