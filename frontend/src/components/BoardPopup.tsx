@@ -125,7 +125,7 @@ export const BoardPopup: React.FC = () => {
     >
       <div
         ref={contentRef}
-        className="relative bg-[#d4c9a8] text-[#1c160e] p-8 md:p-10 border-4 border-[#1c160e] shadow-[0_15px_30px_rgba(0,0,0,0.5)] rounded-sm overflow-y-auto max-h-[75vh]"
+        className="relative bg-[#d4c9a8] text-[#1c160e] p-8 md:p-10 border-4 border-[#1c160e] shadow-[0_15px_30px_rgba(0,0,0,0.5)] rounded-sm overflow-y-auto max-h-[75vh] dossier-scrollbar"
         style={{
           backgroundImage: `
             radial-gradient(circle at 10% 20%, rgba(139, 119, 87, 0.15) 0%, transparent 80%),
