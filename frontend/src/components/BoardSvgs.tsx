@@ -150,11 +150,23 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
 );
 
 export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]" }) => (
-  <img 
-    src="/images/board/games.webp" 
-    alt="Настольные игры" 
-    className={`${className} select-none`}
-  />
+  <div className="relative w-full h-full">
+    {/* Реалистичная тень позади коробок (падает влево-вниз от лампы) */}
+    <div 
+      className="absolute pointer-events-none z-0" 
+      style={{
+        inset: "-20%",
+        transform: "translate(-10px, 15px)",
+        background: "radial-gradient(circle, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.25) 50%, transparent 75%)",
+        filter: "blur(10px)",
+      }}
+    />
+    <img 
+      src="/images/board/games.webp" 
+      alt="Настольные игры" 
+      className={`${className} select-none relative z-10`}
+    />
+  </div>
 );
 
 export const VintageClockSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
