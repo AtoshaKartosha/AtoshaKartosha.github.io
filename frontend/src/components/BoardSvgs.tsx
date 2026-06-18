@@ -28,29 +28,37 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
         height="240" 
         className="select-none" 
         style={{
-          filter: "saturate(0.85) contrast(1.1) brightness(0.95)",
+          filter: "saturate(0) contrast(1.15) brightness(0.95)",
         }}
       />
       
-      {/* Векторный логотип на обложке (смещен выше) */}
+      {/* Векторный логотип на обложке (смещен выше и обрезан под силуэт) */}
       <g transform="translate(95, 10)" data-logo-target="true">
         <circle cx="55" cy="55" r="53" fill="none" />
         <g className="transition-opacity duration-200" style={{ opacity: isLoading ? 0 : 1 }}>
-          <image 
-            href="/logo_detective.svg" 
-            width="110" 
-            height="110" 
+          <svg
+            viewBox="0 0 180 237"
+            x="25"
+            y="5"
+            width="60"
+            height="79"
             style={{ filter: "brightness(0) opacity(0.8)" }}
-          />
+          >
+            <image 
+              href="/logo_detective.svg" 
+              width="471.33" 
+              height="237.01" 
+            />
+          </svg>
         </g>
       </g>
       
-      {/* Векторные тексты под завязкой (смещены ниже) */}
+      {/* Векторные тексты под завязкой (смещены ниже и стилизованы) */}
       <text 
         x="150" 
-        y="192" 
+        y="188" 
         fill="#1c160e" 
-        fontSize="12" 
+        fontSize="12.5" 
         fontWeight="bold" 
         className="font-typewriter" 
         textAnchor="middle" 
@@ -58,18 +66,33 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
       >
         ДEЛО № 1853
       </text>
-      <text 
-        x="150" 
-        y="210" 
-        fill="#9c1c1c" 
-        fontSize="10" 
-        fontWeight="bold" 
-        className="font-typewriter" 
-        textAnchor="middle" 
-        letterSpacing="1.5"
-      >
-        TOP SECRET
-      </text>
+      
+      <g transform="translate(150, 213) rotate(-4)">
+        <rect 
+          x="-48" 
+          y="-11" 
+          width="96" 
+          height="17" 
+          fill="none" 
+          stroke="#c41e1e" 
+          strokeWidth="1.75" 
+          rx="1.5" 
+          opacity="0.9"
+        />
+        <text 
+          x="0" 
+          y="1.5" 
+          fill="#c41e1e" 
+          fontSize="9.5" 
+          fontWeight="bold" 
+          className="font-typewriter" 
+          textAnchor="middle" 
+          letterSpacing="2"
+          opacity="0.9"
+        >
+          TOP SECRET
+        </text>
+      </g>
     </svg>
   );
 };
