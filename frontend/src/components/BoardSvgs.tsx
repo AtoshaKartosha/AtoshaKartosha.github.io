@@ -149,49 +149,12 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
   </svg>
 );
 
-export const RotaryPhoneSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]" }) => (
-  <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Base of phone */}
-    <path d="M40 140 C40 100 60 70 100 70 C140 70 160 100 160 140 C160 160 150 170 100 170 C50 170 40 160 40 140 Z" fill="#1c1b18" />
-    <path d="M45 138 C45 105 62 76 100 76 C138 76 155 105 155 138 Z" fill="#2d2b27" opacity="0.5" />
-    
-    {/* Rotary Dial */}
-    <circle cx="100" cy="125" r="35" fill="#141413" stroke="#c8a96e" strokeWidth="2" />
-    <circle cx="100" cy="125" r="28" fill="#eae2d2" />
-    
-    {/* Finger holes */}
-    <g fill="#141413">
-      <circle cx="100" cy="102" r="5" />
-      <circle cx="116" cy="107" r="5" />
-      <circle cx="125" cy="120" r="5" />
-      <circle cx="122" cy="136" r="5" />
-      <circle cx="110" cy="146" r="5" />
-      <circle cx="94" cy="146" r="5" />
-      <circle cx="82" cy="138" r="5" />
-      <circle cx="76" cy="122" r="5" />
-      <circle cx="82" cy="107" r="5" />
-    </g>
-    
-    {/* Center dial cap */}
-    <circle cx="100" cy="125" r="12" fill="#141413" stroke="#c8a96e" strokeWidth="1" />
-    <circle cx="100" cy="125" r="8" fill="#c41e1e" />
-
-    {/* Cradle forks */}
-    <path d="M75 60 L75 72 L85 72 L85 60 Z" fill="#1c1b18" />
-    <path d="M115 60 L115 72 L125 72 L125 60 Z" fill="#1c1b18" />
-    <path d="M65 55 L95 58 L95 53 Z" fill="#111" />
-    <path d="M135 55 L105 58 L105 53 Z" fill="#111" />
-
-    {/* Handset */}
-    <path d="M45 50 C45 35 60 25 100 25 C140 25 155 35 155 50 L165 52 C170 42 150 20 100 20 C50 20 30 42 35 52 Z" fill="#141413" />
-    {/* Left Earpiece */}
-    <rect x="30" y="45" width="22" height="15" rx="3" fill="#1c1b18" transform="rotate(-15 30 45)" />
-    {/* Right Mouthpiece */}
-    <rect x="148" y="45" width="22" height="15" rx="3" fill="#1c1b18" transform="rotate(15 148 45)" />
-
-    {/* Fabric cord representation */}
-    <path d="M50 145 Q20 160 30 180 T70 170" stroke="#2c2b27" strokeWidth="4" strokeLinecap="round" fill="none" strokeDasharray="3 1" />
-  </svg>
+export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]" }) => (
+  <img 
+    src="/images/board/games.webp" 
+    alt="Настольные игры" 
+    className={`${className} select-none`}
+  />
 );
 
 export const VintageClockSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (

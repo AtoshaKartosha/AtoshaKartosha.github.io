@@ -9,7 +9,7 @@ import {
   Suspect1Svg,
   Suspect2Svg,
   MapSvg,
-  RotaryPhoneSvg,
+  GamesImage,
   VintageClockSvg,
   EvidenceBagSvg,
   NewspaperSvg,
@@ -495,7 +495,7 @@ export const DetectiveBoard: React.FC = () => {
         );
       case "phone":
         return (
-          <RotaryPhoneSvg
+          <GamesImage
             className="w-full h-full transition-all duration-300 ease-out"
           />
         );

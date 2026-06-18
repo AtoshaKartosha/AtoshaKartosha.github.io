@@ -60,8 +60,8 @@ export const boardItems: BoardItem[] = [
   },
   {
     id: "phone",
-    name: "Телефон регистрации",
-    popupId: "registration",
+    name: "Настольные игры",
+    popupId: "games",
     zIndex: 13,
     desktop: { left: 11, top: 74, width: 11, rotation: 6 },
     mobile: { left: 54, top: 102, width: 28, rotation: 6 },
@@ -76,8 +76,8 @@ export const boardItems: BoardItem[] = [
   },
   {
     id: "evidence",
-    name: "Пакет с уликами",
-    popupId: "games",
+    name: "Регистрация сыщиков",
+    popupId: "registration",
     zIndex: 10,
     desktop: { left: 32, top: 64, width: 10, rotation: 12 },
     mobile: { left: 64, top: 92, width: 24, rotation: 12 },
