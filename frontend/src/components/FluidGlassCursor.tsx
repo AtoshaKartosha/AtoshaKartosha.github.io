@@ -557,11 +557,11 @@ export const FluidGlassCursor: React.FC = () => {
                 <div 
                   className="absolute select-none pointer-events-none"
                   style={{
-                    left: "70%",
-                    top: "58%",
+                    left: "64.5%",
+                    top: "70.3%",
                     width: "16%",
                     height: "28%",
-                    transform: "rotate(-14deg)",
+                    transform: "translate(-50%, -50%) rotate(-14deg)",
                     mixBlendMode: "multiply",
                     opacity: 0.85,
                   }}
