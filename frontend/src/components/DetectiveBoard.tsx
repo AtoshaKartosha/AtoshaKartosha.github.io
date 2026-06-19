@@ -292,6 +292,72 @@ export const DetectiveBoard: React.FC = () => {
   const [isDraggingState, setIsDraggingState] = useState(false);
   const [zoom, setZoom] = useState(1.0);
 
+  const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
+
+  // Update boardSize on mount and resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (boardRef.current) {
+        setBoardSize({
+          width: boardRef.current.clientWidth,
+          height: boardRef.current.clientHeight,
+        });
+      }
+    };
+    handleResize();
+    const timer = setTimeout(handleResize, 350);
+    window.addEventListener("resize", handleResize);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [isLoading]);
+
+  // Helper to calculate pixel coordinates on backgroundSize: cover
+  const getCoverCoords = (x: number, y: number, w: number, h: number) => {
+    if (boardSize.width === 0 || boardSize.height === 0) {
+      return {
+        left: `${(x / 1385.92) * 100}%`,
+        top: `${(y / 773.53) * 100}%`,
+        width: `${(w / 1385.92) * 100}%`,
+        height: `${(h / 773.53) * 100}%`,
+      };
+    }
+    const W_i = 1385.92;
+    const H_i = 773.53;
+    const R_i = W_i / H_i;
+    const R_c = boardSize.width / boardSize.height;
+
+    let W_scaled = 0;
+    let H_scaled = 0;
+    let offset_x = 0;
+    let offset_y = 0;
+
+    if (R_c > R_i) {
+      W_scaled = boardSize.width;
+      H_scaled = boardSize.width / R_i;
+      offset_x = 0;
+      offset_y = (boardSize.height - H_scaled) / 2;
+    } else {
+      H_scaled = boardSize.height;
+      W_scaled = boardSize.height * R_i;
+      offset_x = (boardSize.width - W_scaled) / 2;
+      offset_y = 0;
+    }
+
+    const left = offset_x + (x / W_i) * W_scaled;
+    const top = offset_y + (y / H_i) * H_scaled;
+    const width = (w / W_i) * W_scaled;
+    const height = (h / H_i) * H_scaled;
+
+    return {
+      left: `${left}px`,
+      top: `${top}px`,
+      width: `${width}px`,
+      height: `${height}px`,
+    };
+  };
+
 
   // Drag interaction state
   const isDragging = useRef(false);
@@ -526,7 +592,7 @@ export const DetectiveBoard: React.FC = () => {
   };
 
   // Helper to render proper board items SVGs
-  const renderItemSvg = (id: string) => {
+  const renderItemSvg = (id: string, isHovered?: boolean) => {
     switch (id) {
       case "dossier":
         return (
@@ -555,6 +621,7 @@ export const DetectiveBoard: React.FC = () => {
       case "phone":
         return (
           <GamesImage
+            isHovered={isHovered}
             className="w-full h-full transition-all duration-300 ease-out"
           />
         );
@@ -690,7 +757,7 @@ export const DetectiveBoard: React.FC = () => {
             hoveredItemId={hoveredItemId}
             setHoveredItemId={setHoveredItemId}
           >
-            {renderItemSvg(item.id)}
+            {renderItemSvg(item.id, hoveredItemId === item.id)}
           </BoardItemComponent>
         ))}
 
@@ -753,6 +820,29 @@ export const DetectiveBoard: React.FC = () => {
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
+        />
+
+        {/* Table telephone overlay */}
+        <div
+          onPointerEnter={() => setHoveredItemId("table-phone")}
+          onPointerLeave={() => setHoveredItemId(null)}
+          onFocus={() => setHoveredItemId("table-phone")}
+          onBlur={() => setHoveredItemId(null)}
+          className="absolute cursor-pointer transition-all duration-300 ease-out focus:outline-none"
+          style={{
+            ...getCoverCoords(764.22, 659.19, 32.78, 26.72),
+            zIndex: 22,
+            backgroundImage: "url(/images/board/phone.png)",
+            backgroundSize: "contain",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            transform: `scale(${hoveredItemId === "table-phone" ? 1.08 : 1.0})`,
+            filter: hoveredItemId === "table-phone"
+              ? "drop-shadow(0 0 20px rgba(255, 219, 140, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
+              : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
+          }}
+          tabIndex={0}
+          aria-label="Телефон"
         />
       </div>
 

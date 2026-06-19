@@ -303,8 +303,13 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
   </svg>
 );
 
-export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]" }) => (
-  <div className="relative w-full h-full">
+export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> = ({
+  className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]",
+  isHovered = false,
+}) => {
+  // ponytail: simple css keyframe-based particle emitter, avoids stateful hooks or canvas overhead
+  return (
+    <div className="relative w-full h-full">
     {/* Реалистичная тень позади коробок (мягко размывается на доске без обрезки) */}
     <div 
       className="absolute pointer-events-none z-0" 
@@ -315,6 +320,57 @@ export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-fu
         filter: "blur(12px)",
       }}
     />
+    
+    {/* Glow particles (only shown when hovered) */}
+    {isHovered && (
+      <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
+        <style>{`
+          @keyframes gameParticle1 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translate(-25px, -50px) scale(1.3); opacity: 0; }
+          }
+          @keyframes gameParticle2 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.9; }
+            100% { transform: translate(30px, -40px) scale(1.2); opacity: 0; }
+          }
+          @keyframes gameParticle3 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translate(-15px, -60px) scale(1.4); opacity: 0; }
+          }
+          @keyframes gameParticle4 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.7; }
+            100% { transform: translate(20px, -45px) scale(1.1); opacity: 0; }
+          }
+          @keyframes gameParticle5 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.95; }
+            100% { transform: translate(-20px, -35px) scale(1.3); opacity: 0; }
+          }
+          @keyframes gameParticle6 {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            20% { opacity: 0.85; }
+            100% { transform: translate(25px, -55px) scale(1.2); opacity: 0; }
+          }
+          .animate-game-particle-1 { animation: gameParticle1 2.2s infinite ease-out; }
+          .animate-game-particle-2 { animation: gameParticle2 1.8s infinite ease-out 0.3s; }
+          .animate-game-particle-3 { animation: gameParticle3 2.5s infinite ease-out 0.6s; }
+          .animate-game-particle-4 { animation: gameParticle4 2.0s infinite ease-out 0.9s; }
+          .animate-game-particle-5 { animation: gameParticle5 1.7s infinite ease-out 1.2s; }
+          .animate-game-particle-6 { animation: gameParticle6 2.3s infinite ease-out 1.5s; }
+        `}</style>
+        <span className="absolute rounded-full bg-amber-400 opacity-0 blur-[1px] animate-game-particle-1" style={{ width: '6px', height: '6px', left: '20%', top: '80%' }} />
+        <span className="absolute rounded-full bg-red-400 opacity-0 blur-[1px] animate-game-particle-2" style={{ width: '4px', height: '4px', left: '70%', top: '70%' }} />
+        <span className="absolute rounded-full bg-orange-400 opacity-0 blur-[1.5px] animate-game-particle-3" style={{ width: '8px', height: '8px', left: '40%', top: '50%' }} />
+        <span className="absolute rounded-full bg-amber-300 opacity-0 blur-[1px] animate-game-particle-4" style={{ width: '5px', height: '5px', left: '10%', top: '30%' }} />
+        <span className="absolute rounded-full bg-red-300 opacity-0 blur-[1px] animate-game-particle-5" style={{ width: '6px', height: '6px', left: '85%', top: '40%' }} />
+        <span className="absolute rounded-full bg-orange-300 opacity-0 blur-[1.5px] animate-game-particle-6" style={{ width: '5px', height: '5px', left: '50%', top: '15%' }} />
+      </div>
+    )}
+    
     {/* Картинка с играми с фильтром сепии и контраста без квадратных наложений */}
     <img 
       src="/images/board/games.webp" 
@@ -324,8 +380,9 @@ export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-fu
         filter: "saturate(0.55) contrast(1.15) sepia(0.3) brightness(0.9)",
       }}
     />
-  </div>
-);
+    </div>
+  );
+};
 
 export const VintageClockSvg: React.FC<{ className?: string }> = ({
   className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"

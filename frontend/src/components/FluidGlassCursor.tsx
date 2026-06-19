@@ -26,7 +26,7 @@ interface ClonedBoardItemProps {
   item: BoardItem;
   hoveredItemId: string | null;
   isMobile: boolean;
-  renderItemSvg: (id: string) => React.ReactNode;
+  renderItemSvg: (id: string, isHovered?: boolean) => React.ReactNode;
 }
 
 const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
@@ -84,7 +84,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
             filter: `${getItemShadow(item.id, isHovered)} brightness(${isHovered ? 1 : dimBrightness})`,
           }}
         >
-          {renderItemSvg(item.id)}
+          {renderItemSvg(item.id, isHovered)}
         </div>
       </div>
     </div>
@@ -347,7 +347,7 @@ export const FluidGlassCursor: React.FC = () => {
   }, []);
 
   // Render SVG based on ID
-  const renderItemSvg = (id: string) => {
+  const renderItemSvg = (id: string, isHovered?: boolean) => {
     switch (id) {
       case "dossier":
         return (
@@ -377,6 +377,7 @@ export const FluidGlassCursor: React.FC = () => {
       case "phone":
         return (
           <GamesImage
+            isHovered={isHovered}
             className="w-full h-full transition-all duration-300 ease-out"
           />
         );
@@ -531,6 +532,25 @@ export const FluidGlassCursor: React.FC = () => {
                   backgroundImage: "url(/background_detective_fg.svg)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
+                }}
+              />
+
+              {/* Table telephone overlay mirrored from the main foreground board */}
+              <div
+                className="absolute pointer-events-none z-[22] transition-all duration-300 ease-out"
+                style={{
+                  left: `${(764.22 / 1385.92) * 100}%`,
+                  top: `${(659.19 / 773.53) * 100}%`,
+                  width: `${(32.78 / 1385.92) * 100}%`,
+                  height: `${(26.72 / 773.53) * 100}%`,
+                  backgroundImage: "url(/images/board/phone.png)",
+                  backgroundSize: "contain",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                  transform: `scale(${hoveredItemId === "table-phone" ? 1.1 : 1})`,
+                  filter: hoveredItemId === "table-phone"
+                    ? "drop-shadow(0 0 20px rgba(255, 219, 140, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
+                    : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
                 }}
               />
 
