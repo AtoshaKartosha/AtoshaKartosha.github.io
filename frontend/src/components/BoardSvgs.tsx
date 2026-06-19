@@ -108,17 +108,6 @@ export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-f
 
 export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
   <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    <defs>
-      <linearGradient id="pinRedGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#e63946" />
-        <stop offset="50%" stopColor="#ac1c37" />
-        <stop offset="100%" stopColor="#580716" />
-      </linearGradient>
-      <linearGradient id="vGoldGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#fcfcfc" />
-        <stop offset="100%" stopColor="#decfa8" />
-      </linearGradient>
-    </defs>
     {/* Map Paper */}
     <rect width="200" height="200" rx="4" fill="#decfa8" />
     <rect x="4" y="4" width="192" height="192" rx="2" fill="#e8dcba" stroke="#b4a377" strokeWidth="2" />
@@ -192,12 +181,12 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     {/* Tilted Pin (body and letter) */}
     <g transform="rotate(10, 100, 120)">
       {/* Pin body (inverted-drop/teardrop) */}
-      <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="url(#pinRedGrad)" stroke="#3a040e" strokeWidth="0.8" />
+      <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#e8dcc8" stroke="#801029" strokeWidth="1.5" />
 
-      {/* V letter from logo inside pin with ivory/gold gradient */}
-      <g transform="translate(-40.13, 60.11) scale(0.34)" fill="url(#vGoldGrad)">
-        <path d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z" />
-        <path d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z" />
+      {/* V letter from logo inside pin using exact logo colors */}
+      <g transform="translate(-40.13, 60.11) scale(0.34)">
+        <path d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z" fill="#ac1c37" />
+        <path d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z" fill="#801029" />
       </g>
     </g>
 
