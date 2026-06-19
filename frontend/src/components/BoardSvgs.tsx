@@ -113,45 +113,80 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     <rect x="4" y="4" width="192" height="192" rx="2" fill="#e8dcba" stroke="#b4a377" strokeWidth="2" />
     
     {/* Grid / Faint Lines */}
-    <g opacity="0.2" stroke="#6b5b3d" strokeWidth="1">
-      <line x1="40" y1="4" x2="40" y2="196" />
-      <line x1="80" y1="4" x2="80" y2="196" />
-      <line x1="120" y1="4" x2="120" y2="196" />
-      <line x1="160" y1="4" x2="160" y2="196" />
-      <line x1="4" y1="40" x2="196" y2="40" />
-      <line x1="4" y1="80" x2="196" y2="80" />
-      <line x1="4" y1="120" x2="196" y2="120" />
-      <line x1="4" y1="160" x2="196" y2="160" />
+    <g opacity="0.15" stroke="#6b5b3d" strokeWidth="1">
+      <line x1="50" y1="4" x2="50" y2="196" />
+      <line x1="100" y1="4" x2="100" y2="196" />
+      <line x1="150" y1="4" x2="150" y2="196" />
+      <line x1="4" y1="50" x2="196" y2="50" />
+      <line x1="4" y1="100" x2="196" y2="100" />
+      <line x1="4" y1="150" x2="196" y2="150" />
     </g>
 
-    {/* River / Canals (St Petersburg style) */}
-    <path d="M4 110 Q40 115 80 90 T140 100 T196 80 L196 110 T140 130 T80 120 T4 135 Z" fill="#9ea5a5" opacity="0.6" />
-    <path d="M4 110 Q40 115 80 90 T140 100 T196 80" stroke="#7e8888" strokeWidth="3" opacity="0.8" />
-    
-    {/* Streets / Blocks */}
-    <g stroke="#8f7e59" strokeWidth="2" strokeLinecap="round" opacity="0.7">
-      {/* Horizontal & Diagonal Streets */}
-      <line x1="20" y1="20" x2="180" y2="20" />
-      <line x1="10" y1="60" x2="190" y2="60" />
-      <line x1="15" y1="150" x2="185" y2="150" />
+    {/* Textured Building Blocks */}
+    <g fill="#d5c89a" stroke="#b4a377" strokeWidth="0.8" opacity="0.5">
+      {/* Top Left Blocks */}
+      <rect x="10" y="10" width="24" height="34" rx="1" />
+      <rect x="10" y="50" width="24" height="34" rx="1" />
+      <rect x="10" y="90" width="24" height="24" rx="1" />
       
-      <line x1="40" y1="20" x2="70" y2="190" />
-      <line x1="100" y1="10" x2="100" y2="190" />
-      <line x1="150" y1="20" x2="130" y2="190" />
-      
-      {/* Circular Ring/Bypass */}
-      <path d="M 50 100 A 50 50 0 1 0 150 100 A 50 50 0 1 0 50 100" stroke="#8f7e59" strokeWidth="3" fill="none" strokeDasharray="6 3" />
+      {/* Top Right Blocks */}
+      <rect x="166" y="10" width="24" height="34" rx="1" />
+      <rect x="166" y="50" width="24" height="34" rx="1" />
+      <rect x="166" y="90" width="24" height="24" rx="1" />
+
+      {/* Station Area Block */}
+      <rect x="85" y="75" width="30" height="40" rx="1" />
+
+      {/* Bottom Blocks (below canal Naberezhnaya) */}
+      <rect x="10" y="150" width="24" height="38" rx="1" />
+      <rect x="50" y="155" width="40" height="33" rx="1" />
+      <rect x="100" y="160" width="50" height="28" rx="1" />
+      <rect x="166" y="165" width="24" height="23" rx="1" />
     </g>
 
-    {/* Big Red Circle Marking Vokzal 1853 */}
-    <circle cx="100" cy="100" r="14" fill="#c41e1e" fillOpacity="0.2" stroke="#c41e1e" strokeWidth="2" strokeDasharray="3 2" />
-    <circle cx="100" cy="100" r="4" fill="#c41e1e" />
-    
+    {/* Railway tracks (dashed lines entering the station block) */}
+    <g stroke="#6b5b3d" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.6">
+      <line x1="95" y1="20" x2="95" y2="75" />
+      <line x1="100" y1="20" x2="100" y2="75" />
+      <line x1="105" y1="20" x2="105" y2="75" />
+    </g>
+
+    {/* Streets / Roads */}
+    <g stroke="#8f7e59" strokeLinecap="round" opacity="0.8">
+      {/* Izmaylovsky pr. (left vertical street) */}
+      <line x1="40" y1="4" x2="40" y2="196" strokeWidth="2" />
+      
+      {/* Moskovsky pr. (right vertical street) */}
+      <line x1="160" y1="4" x2="160" y2="196" strokeWidth="2" />
+
+      {/* Horizontal streets */}
+      <line x1="4" y1="48" x2="196" y2="48" strokeWidth="1.5" />
+      <line x1="4" y1="88" x2="196" y2="88" strokeWidth="1.5" />
+
+      {/* Obvodny Canal Naberezhnaya (embankments) */}
+      <path d="M4 116 Q100 126 196 146" strokeWidth="1.5" fill="none" />
+      <path d="M4 134 Q100 144 196 164" strokeWidth="1.5" fill="none" />
+    </g>
+
+    {/* Obvodny Canal (waterway) */}
+    <path d="M4 125 Q100 135 196 155" stroke="#7e8888" strokeWidth="11" fill="none" strokeLinecap="square" opacity="0.8" />
+    <path d="M4 125 Q100 135 196 155" stroke="#9ea5a5" strokeWidth="8" fill="none" strokeLinecap="square" opacity="0.9" />
+
+    {/* Station terminal building footprint */}
+    <rect x="90" y="70" width="20" height="25" rx="1" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
+
+    {/* Pin shadow */}
+    <ellipse cx="100" cy="122" rx="6" ry="2" fill="#000" opacity="0.25" />
+
+    {/* Pin body (inverted-drop/teardrop) */}
+    <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#c41e1e" />
+
+    {/* V letter from logo inside pin */}
+    <path d="M93 85 L100 103 L107 85" stroke="#e8dcc8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+
     {/* Label */}
-    <rect x="75" y="120" width="70" height="18" rx="2" fill="#141414" opacity="0.85" />
-    <text x="110" y="132" fill="#e8dcc8" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-      ВОКЗАЛЪ 1853
-    </text>
+    <rect x="72" y="125" width="56" height="16" rx="2" fill="#141414" opacity="0.85" />
+    <text x="100" y="136" fill="#e8dcc8" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
   </svg>
 );
 
