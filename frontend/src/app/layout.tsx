@@ -4,18 +4,18 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const outfit = Outfit({
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   variable: "--font-outfit",
 });
 
 const specialElite = Special_Elite({
   weight: "400",
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   variable: "--font-special-elite",
 });
 
 const playfairDisplay = Playfair_Display({
-  subsets: ["latin"],
+  subsets: ["latin", "cyrillic"],
   variable: "--font-playfair",
 });
 
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     images: [{ url: "/images/og-image.png", width: 1200, height: 630 }],
   },
   twitter: { card: "summary_large_image" },
-  robots: "index, follow",
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
@@ -49,7 +49,7 @@ export default function RootLayout({
       lang="ru"
       className={`${outfit.variable} ${specialElite.variable} ${playfairDisplay.variable} ${hsLunaObscura.variable} h-full antialiased`}
     >
-      <head>
+      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#e8dcc8] overflow-hidden">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -82,8 +82,6 @@ export default function RootLayout({
             })
           }}
         />
-      </head>
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#e8dcc8] overflow-hidden select-none">
         {children}
       </body>
     </html>

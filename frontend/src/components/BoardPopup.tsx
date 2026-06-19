@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useBoardStore } from "../stores/useBoardStore";
+import Image from "next/image";
 import { popupContentMap } from "../data/popupContent";
 
 export const BoardPopup: React.FC = () => {
@@ -164,9 +165,11 @@ export const BoardPopup: React.FC = () => {
         <div className={`flex flex-col ${isSuspect ? "sm:flex-row" : ""} gap-6 sm:gap-8 items-center sm:items-start`}>
           {isSuspect && (
             <div className="w-40 sm:w-44 md:w-48 shrink-0 rotate-[-1.5deg] hover:rotate-[1deg] transition-transform duration-300">
-              <img
+              <Image
                 src={`/images/board/${activePopup}.png`}
                 alt={data.title}
+                width={600}
+                height={400}
                 className="w-full h-auto rounded-[2px] shadow-[0_6px_12px_rgba(0,0,0,0.3)] border border-[#1c160e]/10 select-none pointer-events-none"
               />
             </div>

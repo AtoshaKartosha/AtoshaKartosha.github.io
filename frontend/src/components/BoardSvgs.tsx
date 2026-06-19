@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
+import Image from "next/image";
 
 // Corkboard SVG Pattern overlay for background texture
 export const CorkboardTexture: React.FC = () => (
@@ -390,9 +391,10 @@ export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> =
     )}
     
     {/* Картинка с играми с фильтром сепии и контраста без квадратных наложений */}
-    <img 
+    <Image 
       src="/images/board/games.webp" 
       alt="Настольные игры" 
+      fill
       className={`${className} select-none relative z-10`}
       style={{
         filter: "saturate(0.55) contrast(1.15) sepia(0.3) brightness(0.9)",
@@ -491,11 +493,14 @@ export const VintageClockSvg: React.FC<{ className?: string }> = ({
 };
 
 export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <img
-    src="/images/board/evidence.webp"
-    alt="Пакет для улик"
-    className={`${className} rounded-[2px] select-none`}
-  />
+  <div className={`relative ${className}`}>
+    <Image
+      src="/images/board/evidence.webp"
+      alt="Пакет для улик"
+      fill
+      className="rounded-[2px] select-none"
+    />
+  </div>
 );
 
 export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
