@@ -15,6 +15,7 @@ import {
   NewspaperSvg,
 } from "./BoardSvgs";
 import { NoirPinboard } from "./NoirPinboard";
+import { WindowScene } from "./WindowScene";
 
 const LENS_RADIUS = 120; // Radius in pixels
 const ZOOM_FACTOR = 1.35; // Magnification factor
@@ -440,6 +441,9 @@ export const FluidGlassCursor: React.FC = () => {
               {/* Repeating cork board texture in background */}
               <CorkboardTexture />
 
+              {/* Window atmosphere scene */}
+              <WindowScene />
+
               {/* 2nd layer from bottom: Pinboard in noir and comic style */}
               <NoirPinboard />
 
@@ -490,6 +494,16 @@ export const FluidGlassCursor: React.FC = () => {
                   renderItemSvg={renderItemSvg}
                 />
               ))}
+
+              {/* Foreground elements (table, hat, jacket) overlay for depth of field */}
+              <div 
+                className="absolute inset-0 pointer-events-none z-20"
+                style={{
+                  backgroundImage: "url(/background_detective_fg.svg)",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                }}
+              />
 
             </div>
           </div>
