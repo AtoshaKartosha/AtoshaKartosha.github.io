@@ -697,8 +697,8 @@ export const DetectiveBoard: React.FC = () => {
         <div 
           className="absolute inset-0 pointer-events-none z-[18] mix-blend-screen"
           style={{
-            clipPath: "polygon(30% 60%, 88.15% 12.63%, 88.15% 75.31%, 40% 95%)",
-            background: "linear-gradient(to bottom left, rgba(130, 160, 210, 0.16) 0%, rgba(80, 110, 160, 0.05) 45%, transparent 75%)",
+            clipPath: "polygon(0% 85%, 88.15% 12.63%, 88.15% 75.31%, 0% 120%)",
+            background: "linear-gradient(to bottom left, rgba(130, 160, 210, 0.16) 0%, rgba(80, 110, 160, 0.07) 60%, transparent 100%)",
             animation: "lightShaftPulse 8s ease-in-out infinite",
           }}
         />
@@ -707,8 +707,8 @@ export const DetectiveBoard: React.FC = () => {
         <div 
           className="absolute inset-0 pointer-events-none z-[19] mix-blend-screen"
           style={{
-            clipPath: "polygon(30% 60%, 88.15% 12.63%, 88.15% 75.31%, 40% 95%)",
-            background: "linear-gradient(to bottom left, rgba(200, 225, 255, 0.45) 0%, rgba(140, 180, 255, 0.15) 50%, transparent 80%)",
+            clipPath: "polygon(0% 85%, 88.15% 12.63%, 88.15% 75.31%, 0% 120%)",
+            background: "linear-gradient(to bottom left, rgba(200, 225, 255, 0.45) 0%, rgba(140, 180, 255, 0.18) 60%, transparent 100%)",
             opacity: "var(--lightning-intensity, 0)",
           }}
         />
