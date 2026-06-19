@@ -36,7 +36,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
   renderItemSvg,
 }) => {
   const pos = isMobile ? item.mobile : item.desktop;
-  const isHovered = hoveredItemId === item.id;
+  const isHovered = hoveredItemId === item.id || (item.id === "phone" && hoveredItemId === "table-phone");
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top;
   const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
@@ -353,7 +353,7 @@ export const FluidGlassCursor: React.FC = () => {
         return (
           <DossierSvg
             forceLogo={true}
-            useTelegramLogo={true}
+            useTelegramLogo={false}
             className="w-full h-full transition-all duration-300 ease-out"
           />
         );
@@ -378,6 +378,7 @@ export const FluidGlassCursor: React.FC = () => {
       case "phone":
         return (
           <GamesImage
+            useTelegramLogo={true}
             isHovered={isHovered}
             className="w-full h-full transition-all duration-300 ease-out"
           />
@@ -548,8 +549,8 @@ export const FluidGlassCursor: React.FC = () => {
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  transform: `scale(${hoveredItemId === "table-phone" ? 1.1 : 1})`,
-                  filter: hoveredItemId === "table-phone"
+                  transform: `scale(${hoveredItemId === "table-phone" || hoveredItemId === "phone" ? 1.1 : 1})`,
+                  filter: (hoveredItemId === "table-phone" || hoveredItemId === "phone")
                     ? "drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
                     : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
                 }}

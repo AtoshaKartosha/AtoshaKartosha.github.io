@@ -321,7 +321,8 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
   </svg>
 );
 
-export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> = ({
+export const GamesImage: React.FC<{ useTelegramLogo?: boolean; className?: string; isHovered?: boolean }> = ({
+  useTelegramLogo = false,
   className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]",
   isHovered = false,
 }) => {
@@ -398,6 +399,28 @@ export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> =
         filter: "saturate(0.55) contrast(1.15) sepia(0.3) brightness(0.9)",
       }}
     />
+    
+    {useTelegramLogo && (
+      <div 
+        className="absolute select-none pointer-events-none z-20"
+        style={{
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%) rotate(4deg)",
+          width: "35%",
+          height: "35%",
+        }}
+      >
+        <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_2px_5px_rgba(0,0,0,0.5)]">
+          <circle cx="50" cy="50" r="40" fill="#24a1de" stroke="#1c160e" strokeWidth="3" />
+          <path 
+            fill="#f4ecd8" 
+            d="M15,46.7L81,17.5c2.9-1.1,5.4,0.6,4.5,4.7L73.9,74.5c-0.8,3.6-2.9,4.5-5.9,2.8L57,69.5l-5.3,5.1c-0.6,0.6-1.1,1.1-2.2,1.1l0.8-11.2l20.4-18.4c0.9-0.8-0.2-1.2-1.4-0.4L24.1,62.3l-10.9-3.4C10.8,58,10.7,55.9,15,46.7z"
+            transform="translate(10, 10) scale(0.8)"
+          />
+        </svg>
+      </div>
+    )}
     </div>
   );
 };
