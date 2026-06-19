@@ -13,7 +13,11 @@ export const CorkboardTexture: React.FC = () => (
 );
 
 // Dossier / Main case folder
-export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> = ({ forceLogo = false, className = "w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]" }) => {
+export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boolean; className?: string }> = ({
+  forceLogo = false,
+  useTelegramLogo = false,
+  className = "w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]",
+}) => {
   const storeIsLoading = useBoardStore((state) => state.isLoading);
   const isLoading = forceLogo ? false : storeIsLoading;
   
@@ -33,15 +37,29 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; className?: string }> =
       />
       
       {/* Полноцветный векторный логотип на обложке */}
-      <image 
-        href="/logo_detective.svg" 
-        x="90" 
-        y="30" 
-        width="120" 
-        height="60.3" 
-        className="transition-opacity duration-200 select-none" 
-        style={{ opacity: isLoading ? 0 : 1 }}
-      />
+      {useTelegramLogo ? (
+        <g 
+          className="transition-opacity duration-200 select-none" 
+          style={{ opacity: isLoading ? 0 : 0.95 }}
+        >
+          <circle cx="150" cy="75" r="28" fill="#24a1de" stroke="#1c160e" strokeWidth="2.5" />
+          <path 
+            fill="#f4ecd8" 
+            d="M15,46.7L81,17.5c2.9-1.1,5.4,0.6,4.5,4.7L73.9,74.5c-0.8,3.6-2.9,4.5-5.9,2.8L57,69.5l-5.3,5.1c-0.6,0.6-1.1,1.1-2.2,1.1l0.8-11.2l20.4-18.4c0.9-0.8-0.2-1.2-1.4-0.4L24.1,62.3l-10.9-3.4C10.8,58,10.7,55.9,15,46.7z"
+            transform="translate(122, 47) scale(0.56)"
+          />
+        </g>
+      ) : (
+        <image 
+          href="/logo_detective.svg" 
+          x="90" 
+          y="30" 
+          width="120" 
+          height="60.3" 
+          className="transition-opacity duration-200 select-none" 
+          style={{ opacity: isLoading ? 0 : 1 }}
+        />
+      )}
       
       {/* Векторный текст номера дела */}
       <text 

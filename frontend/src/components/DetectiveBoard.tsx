@@ -838,7 +838,7 @@ export const DetectiveBoard: React.FC = () => {
             backgroundRepeat: "no-repeat",
             transform: `scale(${hoveredItemId === "table-phone" ? 1.08 : 1.0})`,
             filter: hoveredItemId === "table-phone"
-              ? "drop-shadow(0 0 20px rgba(255, 219, 140, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
+              ? "drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
               : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
           }}
           tabIndex={0}
