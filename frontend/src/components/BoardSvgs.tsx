@@ -185,8 +185,10 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     <use href="/logo_detective.svg#logo-v" transform="translate(-35.27, 59.52) scale(0.34)" />
 
     {/* Label */}
-    <rect x="72" y="125" width="56" height="16" rx="2" fill="#141414" opacity="0.85" />
-    <text x="100" y="136" fill="#e8dcc8" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
+    <g transform="rotate(10, 100, 133)">
+      <rect x="72" y="125" width="56" height="16" rx="2" fill="#141414" opacity="0.85" />
+      <text x="100" y="136" fill="#e8dcc8" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
+    </g>
   </svg>
 );
 
