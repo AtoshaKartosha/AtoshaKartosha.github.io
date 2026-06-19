@@ -438,17 +438,49 @@ export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-
       <rect x="95" y="132" width="60" height="4" rx="0.5" />
     </g>
 
-    {/* Illustration in paper */}
-    <image
-      href="/images/board/newspaper_story.webp"
-      x="15"
-      y="145"
-      width="150"
-      height="85"
-      preserveAspectRatio="xMidYMid slice"
-      style={{ filter: "saturate(0.65) contrast(1.1) brightness(0.95)" }}
-    />
+    {/* Minimalist Vector Illustration in paper */}
+    <g>
+      {/* Background */}
+      <rect x="15" y="145" width="150" height="85" fill="#1b1a17" rx="1.5" />
+      
+      {/* Background window frame (minimalist) */}
+      <line x1="125" y1="145" x2="125" y2="230" stroke="#ecdcb9" strokeWidth="0.8" opacity="0.15" />
+      <line x1="15" y1="170" x2="165" y2="170" stroke="#ecdcb9" strokeWidth="0.8" opacity="0.15" />
 
+      {/* Light cone */}
+      <polygon points="90,145 35,230 145,230" fill="#ecdcb9" opacity="0.12" />
+
+      {/* Hanging lamp */}
+      <line x1="90" y1="145" x2="90" y2="172" stroke="#dfd6c0" strokeWidth="1" opacity="0.7" />
+      <circle cx="90" cy="172" r="4" fill="#ecdcb9" />
+      <circle cx="90" cy="172" r="7" fill="none" stroke="#ecdcb9" strokeWidth="0.5" opacity="0.5" />
+
+      {/* Table */}
+      <ellipse cx="90" cy="216" rx="42" ry="10" fill="#25221d" stroke="#dfd6c0" strokeWidth="1" strokeOpacity="0.4" />
+      
+      {/* Game board on table */}
+      <polygon points="74,213 106,213 101,221 69,221" fill="#dfd6c0" fillOpacity="0.3" stroke="#dfd6c0" strokeWidth="0.5" strokeOpacity="0.5" />
+      <circle cx="85" cy="217" r="1.2" fill="#1b1a17" />
+      <circle cx="95" cy="216" r="1.2" fill="#1b1a17" />
+
+      {/* Left Detective Silhouette */}
+      <path d="M 22 230 C 22 215 32 203 38 198 C 36 197 32 192 31 187" fill="#12110f" />
+      {/* Left Detective Hat */}
+      <path d="M 27 187 C 33 186 38 185 41 185" stroke="#dfd6c0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.8" />
+      <path d="M 30 185 L 32 178 C 34 176 38 176 39 178 L 38 185 Z" fill="#12110f" stroke="#dfd6c0" strokeWidth="0.8" strokeOpacity="0.8" />
+
+      {/* Right Detective Silhouette */}
+      <path d="M 158 230 C 158 215 148 203 142 198 C 144 197 148 192 149 187" fill="#12110f" />
+      {/* Right Detective Hat */}
+      <path d="M 153 187 C 147 186 142 185 139 185" stroke="#dfd6c0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.8" />
+      <path d="M 150 185 L 148 178 C 146 176 142 176 141 178 L 142 185 Z" fill="#12110f" stroke="#dfd6c0" strokeWidth="0.8" strokeOpacity="0.8" />
+
+      {/* Center Detective Silhouette */}
+      <path d="M 72 230 C 72 208 77 198 90 198 C 103 198 108 208 108 230 Z" fill="#12110f" />
+      {/* Center Detective Hat */}
+      <path d="M 79 191 C 86 190 94 190 101 191" stroke="#dfd6c0" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.8" />
+      <path d="M 83 190 L 84 182 C 86 180 94 180 96 182 L 97 190 Z" fill="#12110f" stroke="#dfd6c0" strokeWidth="0.8" strokeOpacity="0.8" />
+    </g>
     {/* Paper aging stains */}
     <circle cx="30" cy="60" r="15" fill="#a48c68" opacity="0.15" filter="blur(4px)" />
     <circle cx="150" cy="210" r="20" fill="#a48c68" opacity="0.2" filter="blur(6px)" />
