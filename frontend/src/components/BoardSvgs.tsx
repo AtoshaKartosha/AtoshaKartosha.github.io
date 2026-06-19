@@ -182,8 +182,10 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#c41e1e" />
 
     {/* V letter from logo inside pin */}
-    <path d="M93 85 L100 103 L107 85" stroke="#e8dcc8" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-
+    <g transform="translate(-40.13, 60.11) scale(0.34)" fill="#e8dcc8">
+      <path d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z" />
+      <path d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z" />
+    </g>
     {/* Label */}
     <rect x="72" y="125" width="56" height="16" rx="2" fill="#141414" opacity="0.85" />
     <text x="100" y="136" fill="#e8dcc8" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
