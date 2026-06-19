@@ -323,12 +323,13 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
 );
 
 export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> = ({
-  className = "w-full h-full drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]",
+  className = "w-full h-auto drop-shadow-[0_12px_24px_rgba(0,0,0,0.7)]",
   isHovered = false,
 }) => {
   // ponytail: simple css keyframe-based particle emitter, avoids stateful hooks or canvas overhead
+  const cleanedClassName = className.replace("h-full", "h-auto");
   return (
-    <div className="relative w-full h-full">
+    <div className={`relative ${cleanedClassName}`}>
     {/* Реалистичная тень позади коробок (мягко размывается на доске без обрезки) */}
     <div 
       className="absolute pointer-events-none z-0" 
@@ -394,8 +395,9 @@ export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> =
     <Image 
       src="/images/board/games.webp" 
       alt="Настольные игры" 
-      fill
-      className={`${className} select-none relative z-10`}
+      width={1365}
+      height={1365}
+      className="w-full h-auto select-none relative z-10"
       style={{
         filter: "saturate(0.55) contrast(1.15) sepia(0.3) brightness(0.9)",
       }}
@@ -492,16 +494,20 @@ export const VintageClockSvg: React.FC<{ className?: string }> = ({
   );
 };
 
-export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <div className={`relative ${className}`}>
-    <Image
-      src="/images/board/evidence.webp"
-      alt="Пакет для улик"
-      fill
-      className="rounded-[2px] select-none"
-    />
-  </div>
-);
+export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "w-full h-auto drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => {
+  const cleanedClassName = className.replace("h-full", "h-auto");
+  return (
+    <div className={`relative ${cleanedClassName}`}>
+      <Image
+        src="/images/board/evidence.webp"
+        alt="Пакет для улик"
+        width={507}
+        height={676}
+        className="w-full h-auto rounded-[2px] select-none"
+      />
+    </div>
+  );
+};
 
 export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
   <svg viewBox="0 0 180 255" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
