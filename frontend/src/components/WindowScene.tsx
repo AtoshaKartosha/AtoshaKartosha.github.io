@@ -17,6 +17,11 @@ interface Streak {
   speed: number;
   opacity: number;
   trail: { x: number; y: number }[];
+  paneIndex: number;
+  paneTop: number;
+  paneBottom: number;
+  paneLeft: number;
+  paneRight: number;
 }
 
 interface SmokeParticle {
@@ -69,6 +74,17 @@ export const WindowScene: React.FC = () => {
     // Streaks
     const streaks: Streak[] = [];
     let streakSpawnTimer = 0;
+    // Window pane bounding boxes in objectBoundingBox [0,1] space (from clipPath paths)
+    const paneBounds = [
+      { u0: 0.288590, v0: 0.114951, u1: 0.650769, v1: 0.362947 },
+      { u0: 0.288590, v0: 0.346375, u1: 0.650769, v1: 0.569881 },
+      { u0: 0.288590, v0: 0.567761, u1: 0.650769, v1: 0.774544 },
+      { u0: 0.288590, v0: 0.787461, u1: 0.650769, v1: 0.956714 },
+      { u0: 0.741538, v0: 0.058059, u1: 0.985385, v1: 0.309661 },
+      { u0: 0.741538, v0: 0.310681, u1: 0.985385, v1: 0.539361 },
+      { u0: 0.741538, v0: 0.547676, u1: 0.985385, v1: 0.771358 },
+      { u0: 0.741538, v0: 0.785693, u1: 0.985385, v1: 0.960283 },
+    ];
 
     // Smoke
     const smokeParticles: SmokeParticle[] = [];
@@ -169,30 +185,53 @@ export const WindowScene: React.FC = () => {
         ctx.stroke();
       }
 
-      // 3. Draw Water Streaks
+      // 3. Draw Water Streaks — each confined to its own pane
       streakSpawnTimer++;
-      if (streakSpawnTimer >= 30 && streaks.length < 5) {
+      if (streakSpawnTimer >= 30) {
         streakSpawnTimer = 0;
-        streaks.push({
-          x: Math.random() * w,
-          y: 0,
-          speed: Math.random() * 0.5 + 0.8,
-          opacity: 0.5,
-          trail: [],
-        });
+        // Spawn in a random pane that has < 2 streaks
+        const counts = new Array(paneBounds.length).fill(0);
+        for (const s of streaks) counts[s.paneIndex]++;
+        const available: number[] = [];
+        for (let p = 0; p < paneBounds.length; p++) {
+          if (counts[p] < 2) available.push(p);
+        }
+        if (available.length > 0) {
+          const pIdx = available[Math.floor(Math.random() * available.length)];
+          const pb = paneBounds[pIdx];
+          const px0 = pb.u0 * w, px1 = pb.u1 * w;
+          const py0 = pb.v0 * h, py1 = pb.v1 * h;
+          streaks.push({
+            x: px0 + Math.random() * (px1 - px0),
+            y: py0,
+            speed: Math.random() * 0.5 + 0.8,
+            opacity: 0.5,
+            trail: [],
+            paneIndex: pIdx,
+            paneTop: py0,
+            paneBottom: py1,
+            paneLeft: px0,
+            paneRight: px1,
+          });
+        }
       }
 
       for (let i = streaks.length - 1; i >= 0; i--) {
         const streak = streaks[i];
         streak.y += streak.speed;
         streak.x += (Math.random() - 0.5) * 0.2 + windDrift * 0.05;
+        // Clamp x within pane to prevent drift into mullions
+        if (streak.x < streak.paneLeft) streak.x = streak.paneLeft;
+        else if (streak.x > streak.paneRight) streak.x = streak.paneRight;
+
         streak.trail.push({ x: streak.x, y: streak.y });
 
         if (streak.trail.length > 20) {
           streak.trail.shift();
         }
 
-        if (streak.y > h) {
+        // Remove streak when it reaches the bottom of its pane
+        if (streak.y > streak.paneBottom) {
           streaks.splice(i, 1);
           continue;
         }
