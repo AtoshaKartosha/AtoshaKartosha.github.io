@@ -695,7 +695,7 @@ export const DetectiveBoard: React.FC = () => {
 
         {/* Ambient volumetric light shaft from window */}
         <svg 
-          className="absolute inset-0 w-full h-full pointer-events-none z-[18] mix-blend-screen"
+          className="absolute inset-0 w-full h-full pointer-events-none z-[18] mix-blend-overlay"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
         >
