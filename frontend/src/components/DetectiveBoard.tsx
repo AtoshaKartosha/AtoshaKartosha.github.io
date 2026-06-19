@@ -705,20 +705,15 @@ export const DetectiveBoard: React.FC = () => {
               <stop offset="60%" stopColor="#506ea0" stopOpacity={0.14} />
               <stop offset="100%" stopColor="#000000" stopOpacity={0} />
             </linearGradient>
-            <filter id="softGlow">
-              <feGaussianBlur stdDeviation="2.5" />
-            </filter>
           </defs>
           <polygon
             points="0,85 88.15,12.63 88.15,75.31 0,120"
             fill="url(#ambientLightGrad)"
-            filter="url(#softGlow)"
             style={{
               animation: "lightShaftPulse 8s ease-in-out infinite",
             }}
           />
         </svg>
-
         {/* Volumetric lightning strike beam from window */}
         <svg 
           className="absolute inset-0 w-full h-full pointer-events-none z-[19] mix-blend-screen"
@@ -738,7 +733,6 @@ export const DetectiveBoard: React.FC = () => {
           <polygon
             points="0,85 88.15,12.63 88.15,75.31 0,120"
             fill="url(#lightningLightGrad)"
-            filter="url(#softGlow)"
           />
         </svg>
 
