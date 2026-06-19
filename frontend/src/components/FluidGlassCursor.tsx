@@ -568,10 +568,6 @@ export const FluidGlassCursor: React.FC = () => {
                   }}
                 >
                   <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-                    {/* Outer textured stamp ring */}
-                    <circle cx="50" cy="50" r="44" stroke="#00ffff" strokeWidth="2.5" strokeDasharray="3 1 2 1" />
-                    <circle cx="50" cy="50" r="39" stroke="#00ffff" strokeWidth="1" strokeDasharray="1 1" opacity="0.6" />
-                    
                     {/* Retro-styled paper airplane stamp path */}
                     <path 
                       fill="#00ffff" 
