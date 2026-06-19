@@ -431,6 +431,7 @@ export const FluidGlassCursor: React.FC = () => {
     >
       <div
         ref={magnifierRef}
+        aria-hidden="true"
         className="absolute pointer-events-none transition-opacity duration-500"
         style={{
           width: LENS_RADIUS * 2,

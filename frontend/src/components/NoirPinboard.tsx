@@ -3,6 +3,7 @@ import React from "react";
 export const NoirPinboard: React.FC = () => {
   return (
     <div
+      aria-hidden="true"
       className="absolute z-[2] select-none pointer-events-none overflow-hidden shadow-[inset_0_0_40px_rgba(0,0,0,0.9)]"
       style={{
         boxSizing: "border-box",

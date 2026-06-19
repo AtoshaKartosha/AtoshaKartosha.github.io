@@ -30,6 +30,7 @@ export const LoadingScreen: React.FC = () => {
 
     // 2. Typewriter effect
     let charIdx = 0;
+    let timeoutId: any;
     const typingInterval = setInterval(() => {
       if (charIdx < fullText.length) {
         setText(fullText.substring(0, charIdx + 1));
@@ -38,7 +39,7 @@ export const LoadingScreen: React.FC = () => {
         clearInterval(typingInterval);
         
         // Wait, then trigger transition
-        setTimeout(() => {
+        timeoutId = setTimeout(() => {
           const container = containerRef.current;
           const textContainer = textContainerRef.current;
 
@@ -80,6 +81,10 @@ export const LoadingScreen: React.FC = () => {
 
     return () => {
       clearInterval(typingInterval);
+      if (timeoutId) clearTimeout(timeoutId);
+      if (cursorRef.current) gsap.killTweensOf(cursorRef.current);
+      if (containerRef.current) gsap.killTweensOf(containerRef.current);
+      if (textContainerRef.current) gsap.killTweensOf(textContainerRef.current);
     };
   }, [setIsLoading]);
 
