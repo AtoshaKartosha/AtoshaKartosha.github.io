@@ -59,7 +59,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         }`}
         style={{
           left: item.id === "phone" ? (isMobile ? "35%" : "30%") : "50%",
-          top: item.id === "phone" ? (isMobile ? "10px" : "18px") : "-8px",
+          top: item.id === "dossier" ? (isMobile ? "8px" : "14px") : item.id === "phone" ? (isMobile ? "10px" : "18px") : "-8px",
         }}
       >
         {/* Pinhead metal shine */}
