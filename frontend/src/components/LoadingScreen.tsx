@@ -15,6 +15,9 @@ export const LoadingScreen: React.FC = () => {
   const [text, setText] = useState("");
   useEffect(() => {
     const logo = logoRef.current;
+    const cursor = cursorRef.current;
+    const container = containerRef.current;
+    const textContainer = textContainerRef.current;
     const fullText = "ДЕЛО № 1853: ДЕТЕКТИВНЫЙ ВЕЧЕР...";
     
     // 1. Vintage lamp flicker turn-on animation for the logo
@@ -30,7 +33,7 @@ export const LoadingScreen: React.FC = () => {
 
     // 2. Typewriter effect
     let charIdx = 0;
-    let timeoutId: any;
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
     const typingInterval = setInterval(() => {
       if (charIdx < fullText.length) {
         setText(fullText.substring(0, charIdx + 1));
@@ -40,8 +43,6 @@ export const LoadingScreen: React.FC = () => {
         
         // Wait, then trigger transition
         timeoutId = setTimeout(() => {
-          const container = containerRef.current;
-          const textContainer = textContainerRef.current;
 
           if (container) {
             // Fade out typewriter text
@@ -69,8 +70,8 @@ export const LoadingScreen: React.FC = () => {
     }, 50);
 
     // Blinking cursor
-    if (cursorRef.current) {
-      gsap.to(cursorRef.current, {
+    if (cursor) {
+      gsap.to(cursor, {
         opacity: 0,
         repeat: -1,
         yoyo: true,
@@ -82,9 +83,9 @@ export const LoadingScreen: React.FC = () => {
     return () => {
       clearInterval(typingInterval);
       if (timeoutId) clearTimeout(timeoutId);
-      if (cursorRef.current) gsap.killTweensOf(cursorRef.current);
-      if (containerRef.current) gsap.killTweensOf(containerRef.current);
-      if (textContainerRef.current) gsap.killTweensOf(textContainerRef.current);
+      if (cursor) gsap.killTweensOf(cursor);
+      if (container) gsap.killTweensOf(container);
+      if (textContainer) gsap.killTweensOf(textContainer);
     };
   }, [setIsLoading]);
 
