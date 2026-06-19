@@ -48,7 +48,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         top: `${pos.top}%`,
         width: `${pos.width}%`,
         transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
-        zIndex: isHovered ? (item.id === "map" ? 18 : 30) : item.zIndex,
+        zIndex: isHovered ? 30 : item.zIndex,
       }}
     >
       {/* Red Pin Pierce-point */}
