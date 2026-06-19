@@ -172,7 +172,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           }`}
           style={{
             left: item.id === "phone" ? (isMobile ? "35%" : "30%") : "50%",
-            top: item.id === "dossier" ? (isMobile ? "8px" : "14px") : item.id === "phone" ? (isMobile ? "10px" : "18px") : "-8px",
+            top: item.id === "dossier" ? (isMobile ? "8px" : "14px") : item.id === "phone" ? (isMobile ? "10px" : "18px") : item.id === "evidence" ? (isMobile ? "4px" : "8px") : "-8px",
           }}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />

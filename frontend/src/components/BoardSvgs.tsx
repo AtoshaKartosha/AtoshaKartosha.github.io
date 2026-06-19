@@ -345,52 +345,11 @@ export const VintageClockSvg: React.FC<{ className?: string }> = ({
 };
 
 export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <svg viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Plastic Bag Back */}
-    <rect width="160" height="200" rx="6" fill="#fff" fillOpacity="0.08" />
-    <rect x="2" y="2" width="156" height="196" rx="4" fill="none" stroke="#fff" strokeWidth="2" strokeOpacity="0.15" />
-    
-    {/* Zipper top */}
-    <rect x="2" y="25" width="156" height="10" fill="#2d6bb3" fillOpacity="0.8" />
-    <line x1="2" y1="30" x2="158" y2="30" stroke="#fff" strokeWidth="1" strokeOpacity="0.5" />
-    
-    {/* Evidence tag stapled to the top */}
-    <g transform="rotate(-3 80 70)">
-      <rect x="20" y="45" width="120" height="60" fill="#fcfbf7" rx="1" stroke="#d5d1c5" strokeWidth="1" />
-      {/* Tag Lines & Writing */}
-      <text x="80" y="58" fill="#141414" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-        EVIDENCE BAG
-      </text>
-      <line x1="25" y1="65" x2="135" y2="65" stroke="#908a78" strokeWidth="0.5" />
-      <text x="30" y="75" fill="#444" fontSize="5" fontFamily="monospace">CASE: D-1853</text>
-      <text x="30" y="85" fill="#444" fontSize="5" fontFamily="monospace">DATE: 11/06/26</text>
-      <text x="30" y="95" fill="#c41e1e" fontSize="6" fontWeight="bold" fontFamily="monospace">ITEM: #08 DICE</text>
-      
-      {/* Staple representation */}
-      <line x1="75" y1="42" x2="85" y2="42" stroke="#888" strokeWidth="2" />
-    </g>
-
-    {/* Dice inside the bag (rendered behind front plastic) */}
-    <g transform="translate(40, 120) rotate(12)">
-      {/* 3D Dice 1 (Red d6) */}
-      <rect x="0" y="0" width="35" height="35" rx="4" fill="#c41e1e" stroke="#8d1111" strokeWidth="1" />
-      {/* Pip spots */}
-      <circle cx="10" cy="10" r="3" fill="#fff" />
-      <circle cx="25" cy="25" r="3" fill="#fff" />
-      <circle cx="17.5" cy="17.5" r="3" fill="#fff" />
-    </g>
-    
-    <g transform="translate(85, 130) rotate(-20)">
-      {/* 3D Dice 2 (Black d6) */}
-      <rect x="0" y="0" width="35" height="35" rx="4" fill="#1c1b18" stroke="#111" strokeWidth="1" />
-      {/* Pip spots */}
-      <circle cx="17.5" cy="17.5" r="3.5" fill="#c8a96e" />
-    </g>
-
-    {/* Plastic highlights on front */}
-    <path d="M10 50 L40 180" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeOpacity="0.1" />
-    <path d="M140 60 L120 170" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeOpacity="0.08" />
-  </svg>
+  <img
+    src="/images/board/evidence.webp"
+    alt="Пакет для улик"
+    className={`${className} rounded-[2px] select-none`}
+  />
 );
 
 export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
