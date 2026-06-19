@@ -562,18 +562,19 @@ export const FluidGlassCursor: React.FC = () => {
                     width: "16%",
                     height: "28%",
                     transform: "translate(-50%, -50%) rotate(-14deg)",
-                    mixBlendMode: "multiply",
-                    opacity: 0.85,
+                    mixBlendMode: "screen",
+                    opacity: 0.9,
+                    filter: "drop-shadow(0 0 3px rgba(0, 255, 255, 0.85)) drop-shadow(0 0 7px rgba(0, 255, 255, 0.4))",
                   }}
                 >
                   <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
                     {/* Outer textured stamp ring */}
-                    <circle cx="50" cy="50" r="44" stroke="#1d3557" strokeWidth="2.5" strokeDasharray="3 1 2 1" />
-                    <circle cx="50" cy="50" r="39" stroke="#1d3557" strokeWidth="1" strokeDasharray="1 1" opacity="0.6" />
+                    <circle cx="50" cy="50" r="44" stroke="#00ffff" strokeWidth="2.5" strokeDasharray="3 1 2 1" />
+                    <circle cx="50" cy="50" r="39" stroke="#00ffff" strokeWidth="1" strokeDasharray="1 1" opacity="0.6" />
                     
                     {/* Retro-styled paper airplane stamp path */}
                     <path 
-                      fill="#1d3557" 
+                      fill="#00ffff" 
                       d="M15,46.7L81,17.5c2.9-1.1,5.4,0.6,4.5,4.7L73.9,74.5c-0.8,3.6-2.9,4.5-5.9,2.8L57,69.5l-5.3,5.1c-0.6,0.6-1.1,1.1-2.2,1.1l0.8-11.2l20.4-18.4c0.9-0.8-0.2-1.2-1.4-0.4L24.1,62.3l-10.9-3.4C10.8,58,10.7,55.9,15,46.7z"
                       transform="translate(10, 10) scale(0.8)"
                     />
