@@ -99,11 +99,21 @@ export const Suspect1Svg: React.FC<{ className?: string }> = ({ className = "w-f
 
 // Polaroid Suspect 2 (The Mobster / Informant)
 export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <img 
-    src="/images/board/suspect-2.png" 
-    alt="Информатор" 
-    className={`${className} rounded-[2px] select-none`}
-  />
+  <div className={`${className} bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
+    <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        poster="/images/board/suspect-2-video-poster.jpg"
+        className="w-full h-full object-cover"
+      >
+        <source src="/images/board/suspect-2.webm" type="video/webm" />
+        <source src="/images/board/suspect-2.mp4" type="video/mp4" />
+      </video>
+    </div>
+  </div>
 );
 
 export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
