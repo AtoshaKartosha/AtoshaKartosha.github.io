@@ -394,9 +394,9 @@ export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "
 );
 
 export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <svg viewBox="0 0 180 220" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+  <svg viewBox="0 0 180 255" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Torn Paper base */}
-    <path d="M 5 10 L 175 5 L 178 210 L 160 215 L 140 208 L 120 215 L 90 205 L 60 218 L 30 210 L 5 215 Z" fill="#dfd6c0" />
+    <path d="M 5 10 L 175 5 L 178 245 L 160 250 L 140 243 L 120 250 L 90 240 L 60 253 L 30 245 L 5 250 Z" fill="#dfd6c0" />
     
     {/* Main Headline */}
     <text x="90" y="30" fill="#1d1b18" fontSize="11" fontWeight="bold" fontFamily="Georgia, serif" textAnchor="middle" letterSpacing="0.5">
@@ -444,14 +444,14 @@ export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-
       x="15"
       y="145"
       width="150"
-      height="50"
+      height="85"
       preserveAspectRatio="xMidYMid slice"
       style={{ filter: "saturate(0.65) contrast(1.1) brightness(0.95)" }}
     />
 
     {/* Paper aging stains */}
     <circle cx="30" cy="60" r="15" fill="#a48c68" opacity="0.15" filter="blur(4px)" />
-    <circle cx="150" cy="180" r="20" fill="#a48c68" opacity="0.2" filter="blur(6px)" />
+    <circle cx="150" cy="210" r="20" fill="#a48c68" opacity="0.2" filter="blur(6px)" />
   </svg>
 );
 
