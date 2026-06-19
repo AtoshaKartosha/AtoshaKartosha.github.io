@@ -128,6 +128,18 @@ export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-f
 
 export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
   <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <defs>
+      {/* Black outline filter around the V letter */}
+      <filter id="black-outline">
+        <feMorphology in="SourceAlpha" result="dilated" operator="dilate" radius="4" />
+        <feFlood flood-color="#141413" result="black" />
+        <feComposite in="black" in2="dilated" operator="in" result="outline" />
+        <feMerge>
+          <feMergeNode in="outline" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
     {/* Map Paper */}
     <rect width="200" height="200" rx="4" fill="#decfa8" />
     <rect x="4" y="4" width="192" height="192" rx="2" fill="#e8dcba" stroke="#b4a377" strokeWidth="2" />
@@ -241,15 +253,11 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     {/* Station terminal building footprint */}
     <rect x="83" y="65" width="34" height="32" rx="1.5" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
-    {/* Pin shadow */}
-    <ellipse cx="100" cy="122" rx="7" ry="2" fill="#000" opacity="0.3" />
+    {/* Outline/container shape around the V marker (rectangle with a bottom triangular tail) */}
+    <path d="M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z" fill="#e8dcc8" stroke="#141413" strokeWidth="1.5" />
 
-    {/* Tilted Pin body */}
-    <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#e8dcc8" stroke="#801029" strokeWidth="1.5" transform="rotate(10, 100, 120)" />
-
-    {/* Unrotated V letter (referenced directly from the logo SVG to preserve slant and styling) */}
-    <use href="/logo_detective.svg#logo-v" transform="translate(-35.27, 59.52) scale(0.34)" />
-
+    {/* Unrotated V letter with a thick black outline, replacing the pin bubble */}
+    <use href="/logo_detective.svg#logo-v" transform="translate(-35.27, 59.52) scale(0.34)" filter="url(#black-outline)" />
     {/* Slanted speech bubble label (placed next to the pin to avoid board lamp and tape overlays) */}
     <g transform="rotate(-6, 152.5, 86)">
       <path d="M119 76 H186 A3 3 0 0 1 189 79 V93 A3 3 0 0 1 186 96 H118 L108 92 L116 84 V79 A3 3 0 0 1 119 76 Z" fill="#141414" stroke="#e8dcc8" strokeWidth="1" opacity="0.9" />
