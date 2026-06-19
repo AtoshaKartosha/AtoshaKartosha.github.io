@@ -376,13 +376,13 @@ export const FluidGlassCursor: React.FC = () => {
             <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[10px] sm:text-[11px] md:text-[13px]">
               РАСПИСАНИЕ
             </div>
-            <div className="space-y-0.5 select-none leading-tight">
-              <div>16:00 — Сбор гостей</div>
-              <div>16:30 — Инструктаж</div>
-              <div>17:00 — Первая сессия</div>
-              <div>19:00 — Кофе-брейк</div>
-              <div>19:30 — Вторая сессия</div>
-              <div>21:30 — Итоги</div>
+            <div className="grid grid-cols-[auto_auto_1fr] gap-x-1 sm:gap-x-1.5 select-none leading-tight">
+              <div>16:00</div><div>—</div><div>Сбор гостей</div>
+              <div>16:30</div><div>—</div><div>Инструктаж</div>
+              <div>17:00</div><div>—</div><div>Первая сессия</div>
+              <div>19:00</div><div>—</div><div>Кофе-брейк</div>
+              <div>19:30</div><div>—</div><div>Вторая сессия</div>
+              <div>21:30</div><div>—</div><div>Итоги</div>
             </div>
           </div>
         );
