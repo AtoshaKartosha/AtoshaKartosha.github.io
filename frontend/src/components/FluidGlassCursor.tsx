@@ -491,15 +491,6 @@ export const FluidGlassCursor: React.FC = () => {
                 />
               ))}
 
-              {/* Foreground elements (table, hat, jacket) overlay inside magnifier */}
-              <div 
-                className="absolute inset-0 pointer-events-none z-20"
-                style={{
-                  backgroundImage: "url(/background_detective_fg.svg)",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              />
             </div>
           </div>
 
