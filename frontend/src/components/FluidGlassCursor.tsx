@@ -561,7 +561,7 @@ export const FluidGlassCursor: React.FC = () => {
                     top: "70.3%",
                     width: "12%",
                     height: "21%",
-                    transform: "translate(-50%, -50%) rotate(-14deg)",
+                    transform: "translate(-50%, -50%)",
                     mixBlendMode: "screen",
                     opacity: 0.9,
                     filter: "drop-shadow(0 0 3px rgba(0, 255, 255, 0.85)) drop-shadow(0 0 7px rgba(0, 255, 255, 0.4))",
