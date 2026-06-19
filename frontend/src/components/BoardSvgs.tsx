@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
 
 // Corkboard SVG Pattern overlay for background texture
@@ -262,47 +262,87 @@ export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-fu
   </div>
 );
 
-export const VintageClockSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
-    {/* Pocketwatch loop at the top */}
-    <circle cx="80" cy="15" r="12" fill="none" stroke="#c8a96e" strokeWidth="4" />
-    <rect x="76" y="22" width="8" height="10" fill="#c8a96e" />
+export const VintageClockSvg: React.FC<{ className?: string }> = ({
+  className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
+}) => {
+  const [now, setNow] = useState(() => new Date());
 
-    {/* Watch Outer Case */}
-    <circle cx="80" cy="90" r="60" fill="#2d251a" stroke="#c8a96e" strokeWidth="5" />
-    {/* Bezel inner highlight */}
-    <circle cx="80" cy="90" r="55" fill="none" stroke="#e8dcc8" strokeWidth="1" opacity="0.3" />
-    {/* Dial Face */}
-    <circle cx="80" cy="90" r="52" fill="#ecdcb9" />
-    
-    {/* Dial markings / Roman Numerals */}
-    <g fill="#2d251a" fontFamily="Georgia, serif" fontSize="8" fontWeight="bold" textAnchor="middle">
-      <text x="80" y="52">XII</text>
-      <text x="118" y="93" textAnchor="middle">III</text>
-      <text x="80" y="133">VI</text>
-      <text x="42" y="93" textAnchor="middle">IX</text>
+  // ponytail: standard setInterval clock, adequate for standard UI ticking
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes();
+  const hours = now.getHours();
+
+  const secondsDeg = seconds * 6;
+  const minutesDeg = minutes * 6 + seconds * 0.1;
+  const hoursDeg = (hours % 12) * 30 + minutes * 0.5;
+
+  return (
+    <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      {/* Pocketwatch loop at the top */}
+      <circle cx="80" cy="15" r="12" fill="none" stroke="#c8a96e" strokeWidth="4" />
+      <rect x="76" y="22" width="8" height="10" fill="#c8a96e" />
+
+      {/* Watch Outer Case */}
+      <circle cx="80" cy="90" r="60" fill="#2d251a" stroke="#c8a96e" strokeWidth="5" />
+      {/* Bezel inner highlight */}
+      <circle cx="80" cy="90" r="55" fill="none" stroke="#e8dcc8" strokeWidth="1" opacity="0.3" />
+      {/* Dial Face */}
+      <circle cx="80" cy="90" r="52" fill="#ecdcb9" />
       
-      {/* Tiny ticks */}
-      <circle cx="80" cy="42" r="1.5" />
-      <circle cx="128" cy="90" r="1.5" />
-      <circle cx="80" cy="138" r="1.5" />
-      <circle cx="32" cy="90" r="1.5" />
-    </g>
+      {/* Dial markings / Roman Numerals */}
+      <g fill="#2d251a" fontFamily="Georgia, serif" fontSize="8" fontWeight="bold" textAnchor="middle">
+        <text x="80" y="52">XII</text>
+        <text x="118" y="93" textAnchor="middle">III</text>
+        <text x="80" y="133">VI</text>
+        <text x="42" y="93" textAnchor="middle">IX</text>
+        
+        {/* Tiny ticks */}
+        <circle cx="80" cy="42" r="1.5" />
+        <circle cx="128" cy="90" r="1.5" />
+        <circle cx="80" cy="138" r="1.5" />
+        <circle cx="32" cy="90" r="1.5" />
+      </g>
 
-    {/* Hour and Minute Hands (set to 16:00) */}
-    {/* Minute Hand (pointing to 12 / XII) */}
-    <path d="M80 90 L80 50" stroke="#1c160e" strokeWidth="3.5" strokeLinecap="round" />
-    {/* Hour Hand (pointing to 4 / IIII, approx 120 degrees) */}
-    <path d="M80 90 L108 106" stroke="#1c160e" strokeWidth="4.5" strokeLinecap="round" />
-    
-    {/* Center Pin */}
-    <circle cx="80" cy="90" r="5" fill="#c8a96e" stroke="#1c160e" strokeWidth="1" />
-    <circle cx="80" cy="90" r="2" fill="#1c160e" />
+      {/* Hour Hand */}
+      <path
+        d="M80 90 L80 62"
+        stroke="#1c160e"
+        strokeWidth="4.5"
+        strokeLinecap="round"
+        transform={`rotate(${hoursDeg}, 80, 90)`}
+      />
+      {/* Minute Hand */}
+      <path
+        d="M80 90 L80 50"
+        stroke="#1c160e"
+        strokeWidth="3.5"
+        strokeLinecap="round"
+        transform={`rotate(${minutesDeg}, 80, 90)`}
+      />
+      {/* Second Hand */}
+      <path
+        d="M80 90 L80 46"
+        stroke="#c41e1e"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        transform={`rotate(${secondsDeg}, 80, 90)`}
+        style={{ transition: "transform 0.15s cubic-bezier(0.4, 0, 0.2, 1)" }}
+      />
+      
+      {/* Center Pin */}
+      <circle cx="80" cy="90" r="5" fill="#c8a96e" stroke="#1c160e" strokeWidth="1" />
+      <circle cx="80" cy="90" r="2" fill="#1c160e" />
 
-    {/* Vintage Glass Shadow Overlay */}
-    <path d="M35 60 C55 45 105 45 125 60" stroke="#fff" strokeWidth="3" opacity="0.25" strokeLinecap="round" fill="none" />
-  </svg>
-);
+      {/* Vintage Glass Shadow Overlay */}
+      <path d="M35 60 C55 45 105 45 125 60" stroke="#fff" strokeWidth="3" opacity="0.25" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+};
 
 export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
   <svg viewBox="0 0 160 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
