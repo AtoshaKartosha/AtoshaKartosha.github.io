@@ -21,6 +21,60 @@ import { FluidGlassCursor } from "./FluidGlassCursor";
 import { NoirPinboard } from "./NoirPinboard";
 import { WindowScene } from "./WindowScene";
 
+// ponytail: inline hook for wind sway animation, avoids introducing external animation library
+function useWindSway(
+  ref: React.RefObject<HTMLDivElement | null>,
+  itemWidth: number,
+  seed: number,
+  enabled: boolean
+): void {
+  useEffect(() => {
+    const el = ref.current;
+    if (!enabled || !el) {
+      if (el) {
+        el.style.transform = "";
+      }
+      return;
+    }
+
+    // Respect prefers-reduced-motion
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      return;
+    }
+
+    const amp = Math.min(1.2 * (10 / itemWidth), 2.5);
+    const f1 = 0.0008;
+    const f2 = 0.0013;
+    const f3 = 0.0021;
+    const p1 = seed * 1.3;
+    const p2 = seed * 2.7;
+    const p3 = seed * 4.1;
+
+    let rAFId: number;
+
+    const tick = () => {
+      const t = performance.now();
+      const rot = amp * (Math.sin(t * f1 + p1) * 0.6 + Math.sin(t * f2 + p2) * 0.3 + Math.sin(t * f3 + p3) * 0.1);
+      const ty = 0.3 * amp * Math.sin(t * f1 + p1);
+
+      if (el) {
+        el.style.transform = `rotate(${rot}deg) translateY(${ty}px)`;
+      }
+      rAFId = requestAnimationFrame(tick);
+    };
+
+    rAFId = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(rAFId);
+      if (el) {
+        el.style.transform = "";
+      }
+    };
+  }, [ref, itemWidth, seed, enabled]);
+}
+
 interface BoardItemProps {
   item: BoardItem;
   isMobile: boolean;
@@ -41,6 +95,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   children,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const swayRef = useRef<HTMLDivElement>(null);
   const cardRectRef = useRef<DOMRect | null>(null);
 
   const pos = isMobile ? item.mobile : item.desktop;
@@ -54,10 +109,14 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       }, 0);
       return () => clearTimeout(timer);
     } else {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setIsZIndexRaised(false);
     }
   }, [isHovered]);
 
+  const swayEnabled = item.id !== "phone" && item.id !== "clock" && !isHovered;
+  const swaySeed = item.id.charCodeAt(0) + item.id.charCodeAt(item.id.length - 1);
+  useWindSway(swayRef, item.id === "note" ? pos.width * 0.4 : pos.width, swaySeed, swayEnabled);
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top; // approximate vertical center
 
@@ -185,7 +244,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
         {/* Visual SVG Content (Tilts and lifts under the pin) */}
         <div
-          ref={cardRef}
+          ref={swayRef}
           style={{
             transformOrigin: "top center",
             transformStyle: "preserve-3d",
@@ -193,14 +252,21 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           }}
         >
           <div
-            className={`w-full h-full ${isHovered ? "transition-all duration-300 ease-out" : "transition-none"}`}
+            ref={cardRef}
             style={{
-              filter: isMobile
-                ? "drop-shadow(2px 4px 6px rgba(0,0,0,0.5))"
-                : `${getItemShadow(item.id, isHovered)} brightness(${isHovered ? 1 : dimBrightness})`,
+              transformStyle: "preserve-3d",
             }}
           >
-            {children}
+            <div
+              className={`w-full h-full ${isHovered ? "transition-all duration-300 ease-out" : "transition-none"}`}
+              style={{
+                filter: isMobile
+                  ? "drop-shadow(2px 4px 6px rgba(0,0,0,0.5))"
+                  : `${getItemShadow(item.id, isHovered)} brightness(${isHovered ? 1 : dimBrightness})`,
+              }}
+            >
+              {children}
+            </div>
           </div>
         </div>
 
