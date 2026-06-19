@@ -112,6 +112,30 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     <rect width="200" height="200" rx="4" fill="#decfa8" />
     <rect x="4" y="4" width="192" height="192" rx="2" fill="#e8dcba" stroke="#b4a377" strokeWidth="2" />
     
+    {/* Map Grid Labels */}
+    <g fill="#6b5b3d" fontSize="5" opacity="0.6" fontFamily="serif" textAnchor="middle">
+      <text x="25" y="10">А</text>
+      <text x="75" y="10">Б</text>
+      <text x="125" y="10">В</text>
+      <text x="175" y="10">Г</text>
+      <text x="10" y="27">1</text>
+      <text x="10" y="77">2</text>
+      <text x="10" y="127">3</text>
+      <text x="10" y="177">4</text>
+    </g>
+
+    {/* Vintage Compass Rose (North Arrow) */}
+    <g opacity="0.65" transform="translate(18, 18)">
+      <line x1="0" y1="-10" x2="0" y2="10" stroke="#6b5b3d" strokeWidth="0.8" />
+      <line x1="-10" y1="0" x2="10" y2="0" stroke="#6b5b3d" strokeWidth="0.8" />
+      <line x1="-7" y1="-7" x2="7" y2="7" stroke="#6b5b3d" strokeWidth="0.5" strokeDasharray="1 1" />
+      <line x1="-7" y1="7" x2="7" y2="-7" stroke="#6b5b3d" strokeWidth="0.5" strokeDasharray="1 1" />
+      <polygon points="0,-10 3,0 0,2 -3,0" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.5" />
+      <polygon points="0,10 3,0 0,-2 -3,0" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.5" />
+      <polygon points="10,0 0,3 -2,0 0,-3" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.5" />
+      <polygon points="-10,0 0,3 2,0 0,-3" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.5" />
+      <text x="0" y="-12" fill="#6b5b3d" fontSize="5" fontWeight="bold" textAnchor="middle" fontFamily="serif">С</text>
+    </g>
     {/* Grid / Faint Lines */}
     <g opacity="0.15" stroke="#6b5b3d" strokeWidth="1">
       <line x1="50" y1="4" x2="50" y2="196" />
@@ -143,6 +167,8 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       <rect x="100" y="160" width="50" height="28" rx="1" />
       <rect x="166" y="165" width="24" height="23" rx="1" />
     </g>
+      {/* Park/Garden next to station */}
+      <rect x="52" y="72" width="22" height="28" fill="#9ea5a5" opacity="0.25" stroke="#8f7e59" strokeWidth="0.8" strokeDasharray="2 2" rx="1" />
 
     {/* Railway tracks (dashed lines entering the station block) */}
     <g stroke="#6b5b3d" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.6">
@@ -167,10 +193,22 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       <path d="M4 116 Q100 126 196 146" strokeWidth="1.5" fill="none" />
       <path d="M4 134 Q100 144 196 164" strokeWidth="1.5" fill="none" />
     </g>
+      {/* Minor streets & alleys */}
+      <line x1="65" y1="48" x2="65" y2="88" stroke="#8f7e59" strokeWidth="0.8" opacity="0.5" strokeDasharray="3 1.5" />
+      <line x1="160" y1="30" x2="196" y2="30" stroke="#8f7e59" strokeWidth="0.8" opacity="0.5" strokeDasharray="3 1.5" />
+      <line x1="80" y1="70" x2="80" y2="116" stroke="#8f7e59" strokeWidth="0.8" opacity="0.6" />
+      <line x1="120" y1="4" x2="120" y2="48" stroke="#8f7e59" strokeWidth="0.8" opacity="0.6" />
 
     {/* Obvodny Canal (waterway) */}
     <path d="M4 125 Q100 135 196 155" stroke="#7e8888" strokeWidth="11" fill="none" strokeLinecap="square" opacity="0.8" />
     <path d="M4 125 Q100 135 196 155" stroke="#9ea5a5" strokeWidth="8" fill="none" strokeLinecap="square" opacity="0.9" />
+    {/* Canal water ripples */}
+    <path d="M25 129 Q50 132 75 133" stroke="#7e8888" strokeWidth="0.8" fill="none" opacity="0.6" strokeDasharray="5 5" />
+    <path d="M110 138 Q140 143 170 148" stroke="#7e8888" strokeWidth="0.8" fill="none" opacity="0.6" strokeDasharray="5 5" />
+
+    {/* Bridges crossing Obvodny Canal */}
+    <rect x="36" y="122" width="8" height="11" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.8" rx="0.5" />
+    <rect x="156" y="142" width="8" height="11" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.8" rx="0.5" transform="rotate(10, 160, 148)" />
 
     {/* Station terminal building footprint */}
     <rect x="90" y="70" width="20" height="25" rx="1" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
