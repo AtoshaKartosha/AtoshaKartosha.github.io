@@ -153,7 +153,7 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       {/* Black outline filter around the V letter */}
       <filter id="black-outline">
         <feMorphology in="SourceAlpha" result="dilated" operator="dilate" radius="4" />
-        <feFlood flood-color="#141413" result="black" />
+        <feFlood floodColor="#141413" result="black" />
         <feComposite in="black" in2="dilated" operator="in" result="outline" />
         <feMerge>
           <feMergeNode in="outline" />
@@ -162,12 +162,12 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       </filter>
       {/* Metallic linear gradient for the marker border */}
       <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stop-color="#fdfdfd" />
-        <stop offset="20%" stop-color="#b8b8b8" />
-        <stop offset="40%" stop-color="#ffffff" />
-        <stop offset="60%" stop-color="#7a7a7a" />
-        <stop offset="80%" stop-color="#f0f0f0" />
-        <stop offset="100%" stop-color="#555555" />
+        <stop offset="0%" stopColor="#fdfdfd" />
+        <stop offset="20%" stopColor="#b8b8b8" />
+        <stop offset="40%" stopColor="#ffffff" />
+        <stop offset="60%" stopColor="#7a7a7a" />
+        <stop offset="80%" stopColor="#f0f0f0" />
+        <stop offset="100%" stopColor="#555555" />
       </linearGradient>
     </defs>
     {/* Map Paper */}
@@ -330,17 +330,22 @@ export const GamesImage: React.FC<{ className?: string }> = ({ className = "w-fu
 export const VintageClockSvg: React.FC<{ className?: string }> = ({
   className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]"
 }) => {
+  const [mounted, setMounted] = useState(false);
   const [now, setNow] = useState(() => new Date());
 
   // ponytail: standard setInterval clock, adequate for standard UI ticking
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
     const timer = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(timer);
   }, []);
 
-  const seconds = now.getSeconds();
-  const minutes = now.getMinutes();
-  const hours = now.getHours();
+  const displayTime = mounted ? now : new Date(2026, 0, 1, 12, 0, 0);
+
+  const seconds = displayTime.getSeconds();
+  const minutes = displayTime.getMinutes();
+  const hours = displayTime.getHours();
 
   const secondsDeg = seconds * 6;
   const minutesDeg = minutes * 6 + seconds * 0.1;
