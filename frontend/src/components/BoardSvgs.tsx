@@ -159,7 +159,7 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       <rect x="166" y="90" width="24" height="24" rx="1" />
 
       {/* Station Area Block */}
-      <rect x="78" y="60" width="44" height="50" rx="2" />
+      <rect x="78" y="15" width="44" height="95" rx="2" />
 
       {/* Bottom Blocks (below canal Naberezhnaya) */}
       <rect x="10" y="150" width="24" height="38" rx="1" />
@@ -170,11 +170,19 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       {/* Park/Garden next to station */}
       <rect x="52" y="72" width="22" height="28" fill="#9ea5a5" opacity="0.25" stroke="#8f7e59" strokeWidth="0.8" strokeDasharray="2 2" rx="1" />
 
-    {/* Railway tracks (dashed lines entering the station block) */}
-    <g stroke="#6b5b3d" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.6">
-      <line x1="95" y1="20" x2="95" y2="75" />
-      <line x1="100" y1="20" x2="100" y2="75" />
-      <line x1="105" y1="20" x2="105" y2="75" />
+    {/* Station Train Shed (historical glass-and-iron hall housing the tracks) */}
+    <g opacity="0.85">
+      <rect x="88" y="20" width="24" height="46" rx="1.5" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.2" />
+      {/* Glazing bars / roof support ribs */}
+      <g stroke="#6b5b3d" strokeWidth="0.8" opacity="0.5">
+        <line x1="94" y1="20" x2="94" y2="65" />
+        <line x1="100" y1="20" x2="100" y2="65" />
+        <line x1="106" y1="20" x2="106" y2="65" />
+        <line x1="88" y1="29" x2="112" y2="29" />
+        <line x1="88" y1="38" x2="112" y2="38" />
+        <line x1="88" y1="47" x2="112" y2="47" />
+        <line x1="88" y1="56" x2="112" y2="56" />
+      </g>
     </g>
 
     {/* Streets / Roads */}
