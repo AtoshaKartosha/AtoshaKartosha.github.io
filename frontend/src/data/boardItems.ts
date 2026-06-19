@@ -108,7 +108,7 @@ export const getItemShadow = (id: string, isHovered: boolean): string => {
       case "note":
         return "drop-shadow(0 16px 25px rgba(0,0,0,0.65))";
       case "phone":
-        return "drop-shadow(0 0 18px rgba(0, 191, 255, 0.95)) drop-shadow(0 28px 44px rgba(0,0,0,0.78))";
+        return "drop-shadow(0 0 18px rgba(245, 90, 20, 0.95)) drop-shadow(0 28px 44px rgba(0,0,0,0.78))";
       case "map":
         return "drop-shadow(0 18px 28px rgba(0,0,0,0.6))";
       case "dossier":

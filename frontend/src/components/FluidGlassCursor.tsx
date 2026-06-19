@@ -36,7 +36,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
   renderItemSvg,
 }) => {
   const pos = isMobile ? item.mobile : item.desktop;
-  const isHovered = hoveredItemId === item.id || (item.id === "phone" && hoveredItemId === "table-phone");
+  const isHovered = hoveredItemId === item.id;
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top;
   const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
@@ -378,7 +378,6 @@ export const FluidGlassCursor: React.FC = () => {
       case "phone":
         return (
           <GamesImage
-            useTelegramLogo={true}
             isHovered={isHovered}
             className="w-full h-full transition-all duration-300 ease-out"
           />
@@ -549,12 +548,31 @@ export const FluidGlassCursor: React.FC = () => {
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
-                  transform: `scale(${hoveredItemId === "table-phone" || hoveredItemId === "phone" ? 1.1 : 1})`,
-                  filter: (hoveredItemId === "table-phone" || hoveredItemId === "phone")
+                  transform: `scale(${hoveredItemId === "table-phone" ? 1.1 : 1})`,
+                  filter: hoveredItemId === "table-phone"
                     ? "drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
                     : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
                 }}
-              />
+              >
+                <div 
+                  className="absolute select-none pointer-events-none"
+                  style={{
+                    left: "70%",
+                    top: "58%",
+                    width: "16%",
+                    height: "28%",
+                  }}
+                >
+                  <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-[0_2px_4px_rgba(0,0,0,0.4)]">
+                    <circle cx="50" cy="50" r="40" fill="#24a1de" stroke="#1c160e" strokeWidth="3" />
+                    <path 
+                      fill="#f4ecd8" 
+                      d="M15,46.7L81,17.5c2.9-1.1,5.4,0.6,4.5,4.7L73.9,74.5c-0.8,3.6-2.9,4.5-5.9,2.8L57,69.5l-5.3,5.1c-0.6,0.6-1.1,1.1-2.2,1.1l0.8-11.2l20.4-18.4c0.9-0.8-0.2-1.2-1.4-0.4L24.1,62.3l-10.9-3.4C10.8,58,10.7,55.9,15,46.7z"
+                      transform="translate(10, 10) scale(0.8)"
+                    />
+                  </svg>
+                </div>
+              </div>
 
             </div>
           </div>
