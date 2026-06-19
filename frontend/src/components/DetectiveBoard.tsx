@@ -722,7 +722,7 @@ export const DetectiveBoard: React.FC = () => {
             : "w-[94%] h-auto max-w-[1800px] rounded-sm absolute top-1/2 left-1/2"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
-          backgroundImage: "url(/background_detective_bg.svg)",
+          backgroundImage: "url(/background_detective_bg_v2.svg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
           aspectRatio: isMobile ? undefined : "1385.92 / 773.53",
@@ -816,7 +816,7 @@ export const DetectiveBoard: React.FC = () => {
         <div 
           className="absolute inset-0 pointer-events-none z-20"
           style={{
-            backgroundImage: "url(/background_detective_fg.svg)",
+            backgroundImage: "url(/background_detective_fg_v2.svg)",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}
@@ -832,7 +832,7 @@ export const DetectiveBoard: React.FC = () => {
           style={{
             ...getCoverCoords(690, 640, 185, 105),
             zIndex: 22,
-            backgroundImage: "url(/images/board/table-phone.svg)",
+            backgroundImage: "url(/images/board/table-phone_v2.svg)",
             backgroundSize: "contain",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

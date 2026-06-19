@@ -459,7 +459,7 @@ export const FluidGlassCursor: React.FC = () => {
               ref={clonedBoardRef}
               className="absolute origin-top-left rounded-sm"
               style={{
-                backgroundImage: "url(/background_detective_bg.svg)",
+                backgroundImage: "url(/background_detective_bg_v2.svg)",
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 pointerEvents: "none",
@@ -529,7 +529,7 @@ export const FluidGlassCursor: React.FC = () => {
               <div 
                 className="absolute inset-0 pointer-events-none z-20"
                 style={{
-                  backgroundImage: "url(/background_detective_fg.svg)",
+                  backgroundImage: "url(/background_detective_fg_v2.svg)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }}
@@ -543,7 +543,7 @@ export const FluidGlassCursor: React.FC = () => {
                   top: `${(640 / 773.53) * 100}%`,
                   width: `${(185 / 1385.92) * 100}%`,
                   height: `${(105 / 773.53) * 100}%`,
-                  backgroundImage: "url(/images/board/table-phone.svg)",
+                  backgroundImage: "url(/images/board/table-phone_v2.svg)",
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
