@@ -701,8 +701,8 @@ export const DetectiveBoard: React.FC = () => {
         >
           <defs>
             <linearGradient id="ambientLightGrad" x1="0.88" y1="0.44" x2="0" y2="1">
-              <stop offset="0%" stopColor="#82a0d2" stopOpacity={0.16} />
-              <stop offset="60%" stopColor="#506ea0" stopOpacity={0.07} />
+              <stop offset="0%" stopColor="#82a0d2" stopOpacity={0.28} />
+              <stop offset="60%" stopColor="#506ea0" stopOpacity={0.14} />
               <stop offset="100%" stopColor="#000000" stopOpacity={0} />
             </linearGradient>
             <filter id="softGlow">
@@ -730,8 +730,8 @@ export const DetectiveBoard: React.FC = () => {
         >
           <defs>
             <linearGradient id="lightningLightGrad" x1="0.88" y1="0.44" x2="0" y2="1">
-              <stop offset="0%" stopColor="#c8e1ff" stopOpacity={0.45} />
-              <stop offset="60%" stopColor="#8cb4ff" stopOpacity={0.18} />
+              <stop offset="0%" stopColor="#c8e1ff" stopOpacity={0.65} />
+              <stop offset="60%" stopColor="#8cb4ff" stopOpacity={0.30} />
               <stop offset="100%" stopColor="#000000" stopOpacity={0} />
             </linearGradient>
           </defs>
