@@ -281,7 +281,7 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     <rect x="156" y="142" width="8" height="11" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.8" rx="0.5" transform="rotate(10, 160, 148)" />
 
     {/* Station terminal building footprint */}
-    <rect x="83" y="65" width="34" height="32" rx="1.5" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
+    <rect x="80" y="65" width="44" height="56" rx="2" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
     {/* Concentric pulsating waves behind the marker tip */}
     <circle cx="104.5" cy="113" r="25" className="marker-wave-circle" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
