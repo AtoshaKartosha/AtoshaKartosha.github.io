@@ -159,7 +159,7 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       <rect x="166" y="90" width="24" height="24" rx="1" />
 
       {/* Station Area Block */}
-      <rect x="85" y="75" width="30" height="40" rx="1" />
+      <rect x="78" y="60" width="44" height="50" rx="2" />
 
       {/* Bottom Blocks (below canal Naberezhnaya) */}
       <rect x="10" y="150" width="24" height="38" rx="1" />
@@ -211,7 +211,7 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     <rect x="156" y="142" width="8" height="11" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="0.8" rx="0.5" transform="rotate(10, 160, 148)" />
 
     {/* Station terminal building footprint */}
-    <rect x="90" y="70" width="20" height="25" rx="1" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
+    <rect x="83" y="65" width="34" height="32" rx="1.5" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
     {/* Pin shadow */}
     <ellipse cx="100" cy="122" rx="7" ry="2" fill="#000" opacity="0.3" />
