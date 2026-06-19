@@ -36,6 +36,7 @@ interface SmokeParticle {
 
 export const WindowScene: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -44,30 +45,61 @@ export const WindowScene: React.FC = () => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Set containerRef.current to the board container (parent of the parent wrapper)
+    const parentContainer = canvas.parentElement?.parentElement;
+    if (parentContainer) {
+      containerRef.current = parentContainer;
+    }
+
     let animationFrameId: number;
 
-    const resizeCanvas = () => {
-      if (!canvas) return;
-      const w = canvas.parentElement?.clientWidth || canvas.clientWidth || 300;
-      const h = canvas.parentElement?.clientHeight || canvas.clientHeight || 400;
-      if (canvas.width !== w || canvas.height !== h) {
-        canvas.width = w;
-        canvas.height = h;
+    const initialW = canvas.parentElement?.clientWidth || canvas.clientWidth || 300;
+    const initialH = canvas.parentElement?.clientHeight || canvas.clientHeight || 400;
+    let canvasWidth = initialW;
+    let canvasHeight = initialH;
+
+    const resizeCanvas = (w: number, h: number) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const targetBackingW = Math.floor(w * dpr);
+      const targetBackingH = Math.floor(h * dpr);
+      
+      if (canvas.width !== targetBackingW || canvas.height !== targetBackingH) {
+        canvas.width = targetBackingW;
+        canvas.height = targetBackingH;
+        canvas.style.width = `${w}px`;
+        canvas.style.height = `${h}px`;
+        ctx.scale(dpr, dpr);
       }
+      
+      canvasWidth = w;
+      canvasHeight = h;
     };
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
+
+    resizeCanvas(initialW, initialH);
+
+    const resizeObserver = new ResizeObserver(() => {
+      const parent = canvas.parentElement;
+      if (parent) {
+        const w = parent.clientWidth;
+        const h = parent.clientHeight;
+        resizeCanvas(w, h);
+      }
+    });
+
+    if (canvas.parentElement) {
+      resizeObserver.observe(canvas.parentElement);
+    }
 
     // Rain drops
     const rainDrops: RainDrop[] = [];
     const maxRain = 80;
     for (let i = 0; i < maxRain; i++) {
       rainDrops.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
+        x: Math.random() * initialW,
+        y: Math.random() * initialH,
         speed: Math.random() * 4 + 4,
         length: Math.random() * 10 + 8,
-        opacity: Math.random() * 0.4 + 0.3,
+        opacity: Math.round((Math.random() * 0.4 + 0.3) * 10) / 10,
       });
     }
 
@@ -91,8 +123,8 @@ export const WindowScene: React.FC = () => {
     const maxSmoke = 25;
     for (let i = 0; i < maxSmoke; i++) {
       smokeParticles.push({
-        x: canvas.width * 0.3 + (Math.random() - 0.5) * 10,
-        y: canvas.height * (0.5 + Math.random() * 0.45),
+        x: initialW * 0.3 + (Math.random() - 0.5) * 10,
+        y: initialH * (0.5 + Math.random() * 0.45),
         vx: 0,
         vy: -(Math.random() * 0.5 + 0.3),
         radius: Math.random() * 4 + 2,
@@ -118,19 +150,11 @@ export const WindowScene: React.FC = () => {
       const dt = now - lastTime;
       lastTime = now;
 
-      // ponytail: ensure size is up to date dynamically
-      const parentW = canvas.parentElement?.clientWidth || canvas.clientWidth || 300;
-      const parentH = canvas.parentElement?.clientHeight || canvas.clientHeight || 400;
-      if (canvas.width !== parentW || canvas.height !== parentH) {
-        canvas.width = parentW;
-        canvas.height = parentH;
-      }
-      const w = canvas.width;
-      const h = canvas.height;
+      const w = canvasWidth;
+      const h = canvasHeight;
 
       // Clear Canvas
       ctx.clearRect(0, 0, w, h);
-
       // Wind updates
       windPhase += 0.002;
       const windDrift = Math.sin(windPhase) * 1.5;
@@ -162,6 +186,8 @@ export const WindowScene: React.FC = () => {
 
       // 2. Draw Rain Drops
       ctx.lineWidth = 2.5;
+      const rainGroups = new Map<string, { x: number; y: number; length: number }[]>();
+      
       for (let i = 0; i < rainDrops.length; i++) {
         const drop = rainDrops[i];
         drop.y += drop.speed;
@@ -172,16 +198,29 @@ export const WindowScene: React.FC = () => {
           drop.x = Math.random() * w;
           drop.speed = Math.random() * 4 + 4;
           drop.length = Math.random() * 10 + 8;
-          drop.opacity = Math.random() * 0.4 + 0.3;
+          drop.opacity = Math.round((Math.random() * 0.4 + 0.3) * 10) / 10;
         }
 
         if (drop.x > w) drop.x = 0;
         else if (drop.x < 0) drop.x = w;
 
-        ctx.strokeStyle = `rgba(180, 200, 220, ${drop.opacity})`;
+        const opacityKey = drop.opacity.toFixed(1);
+        let group = rainGroups.get(opacityKey);
+        if (!group) {
+          group = [];
+          rainGroups.set(opacityKey, group);
+        }
+        group.push({ x: drop.x, y: drop.y, length: drop.length });
+      }
+
+      for (const [opacityStr, drops] of rainGroups.entries()) {
+        ctx.strokeStyle = `rgba(180, 200, 220, ${opacityStr})`;
         ctx.beginPath();
-        ctx.moveTo(drop.x, drop.y);
-        ctx.lineTo(drop.x + windDrift, drop.y + drop.length);
+        for (let i = 0; i < drops.length; i++) {
+          const d = drops[i];
+          ctx.moveTo(d.x, d.y);
+          ctx.lineTo(d.x + windDrift, d.y + d.length);
+        }
         ctx.stroke();
       }
 
@@ -285,23 +324,26 @@ export const WindowScene: React.FC = () => {
         }
       }
 
-      // Update global CSS variables for overlays and shake
-      if (intensity !== prevIntensity) {
-        document.documentElement.style.setProperty("--lightning-intensity", intensity.toFixed(3));
-        prevIntensity = intensity;
-      }
+      // Update CSS variables on local container ref
+      const containerEl = containerRef.current;
+      if (containerEl) {
+        if (intensity !== prevIntensity) {
+          containerEl.style.setProperty("--lightning-intensity", intensity.toFixed(3));
+          prevIntensity = intensity;
+        }
 
-      let rx = "0px";
-      let ry = "0px";
-      if (intensity > 0.5) {
-        rx = `${(Math.random() - 0.5) * 1.5}px`;
-        ry = `${(Math.random() - 0.5) * 1.5}px`;
-      }
-      if (rx !== prevRx || ry !== prevRy) {
-        document.documentElement.style.setProperty("--rumble-x", rx);
-        document.documentElement.style.setProperty("--rumble-y", ry);
-        prevRx = rx;
-        prevRy = ry;
+        let rx = "0px";
+        let ry = "0px";
+        if (intensity > 0.5) {
+          rx = `${(Math.random() - 0.5) * 1.5}px`;
+          ry = `${(Math.random() - 0.5) * 1.5}px`;
+        }
+        if (rx !== prevRx || ry !== prevRy) {
+          containerEl.style.setProperty("--rumble-x", rx);
+          containerEl.style.setProperty("--rumble-y", ry);
+          prevRx = rx;
+          prevRy = ry;
+        }
       }
 
       animationFrameId = requestAnimationFrame(animate);
@@ -311,19 +353,21 @@ export const WindowScene: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", resizeCanvas);
-      document.documentElement.style.removeProperty("--lightning-intensity");
-      document.documentElement.style.removeProperty("--rumble-x");
-      document.documentElement.style.removeProperty("--rumble-y");
+      resizeObserver.disconnect();
+      const containerEl = containerRef.current;
+      if (containerEl) {
+        containerEl.style.removeProperty("--lightning-intensity");
+        containerEl.style.removeProperty("--rumble-x");
+        containerEl.style.removeProperty("--rumble-y");
+      }
     };
   }, []);
-
   return (
     <>
       {/* SVG ClipPath — exact window glass shapes from background_detective_debug_2.svg
           (user-provided mask, viewBox 1386×774, converted to objectBoundingBox [0,1]
            relative to container div at SVG x=[1220,1376] y=[10,600]) */}
-      <svg width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute', width: 0, height: 0 }} xmlns="http://www.w3.org/2000/svg">
+      <svg aria-hidden="true" width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute', width: 0, height: 0 }} xmlns="http://www.w3.org/2000/svg">
         <defs>
           <clipPath id="window-panes-clip" clipPathUnits="objectBoundingBox">
             <path d="M0.288590 0.174088 L0.650769 0.114951 V0.321627 L0.288590 0.362947 Z" />
@@ -339,6 +383,7 @@ export const WindowScene: React.FC = () => {
       </svg>
 
       <div 
+        aria-hidden="true"
         className="absolute select-none pointer-events-none overflow-hidden"
         style={{
           boxSizing: "border-box",
@@ -353,17 +398,20 @@ export const WindowScene: React.FC = () => {
       >
         {/* Faint glass sheen overlay */}
         <div 
+          aria-hidden="true"
           className="absolute inset-0 z-[2] shadow-[inset_0_0_30px_rgba(100,140,180,0.06)] opacity-60"
         />
 
         {/* Rain and smoke canvas */}
         <canvas 
           ref={canvasRef} 
+          aria-hidden="true"
           className="absolute inset-0 w-full h-full z-[1] opacity-90" 
         />
 
         {/* Lightning overlay within window */}
         <div 
+          aria-hidden="true"
           className="absolute inset-0 bg-[#b8cceb] pointer-events-none z-[3] mix-blend-screen"
           style={{ opacity: "var(--lightning-intensity, 0)" }}
         />

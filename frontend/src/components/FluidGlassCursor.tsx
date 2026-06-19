@@ -93,6 +93,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
 export const FluidGlassCursor: React.FC = () => {
   const magnifierRef = useRef<HTMLDivElement>(null);
   const clonedBoardRef = useRef<HTMLDivElement>(null);
+  const boardElRef = useRef<HTMLElement | null>(null);
   const velocity = useRef({ x: 0, y: 0 });
   const swingAngle = useRef(0);
   const swingVelocity = useRef(0);
@@ -208,7 +209,10 @@ export const FluidGlassCursor: React.FC = () => {
     if (isMobile) return;
 
     const updateBoardRect = () => {
-      const boardEl = document.querySelector('[data-board="true"]');
+      if (!boardElRef.current) {
+        boardElRef.current = document.querySelector<HTMLElement>('[data-board="true"]');
+      }
+      const boardEl = boardElRef.current;
       if (boardEl && clonedBoardRef.current) {
         const rect = boardEl.getBoundingClientRect();
         boardRectRef.current = {
@@ -253,7 +257,10 @@ export const FluidGlassCursor: React.FC = () => {
 
   useEffect(() => {
     if (isMobile || isLoading) return;
-    const boardEl = document.querySelector<HTMLElement>('[data-board="true"]');
+    if (!boardElRef.current) {
+      boardElRef.current = document.querySelector<HTMLElement>('[data-board="true"]');
+    }
+    const boardEl = boardElRef.current;
     if (!boardEl) return;
 
     const handleWheel = (e: WheelEvent) => {
@@ -302,7 +309,10 @@ export const FluidGlassCursor: React.FC = () => {
       // Cap the swing angle to keep it looking clean and realistic
       swingAngle.current = Math.min(Math.max(swingAngle.current, -20), 20);
 
-      const boardEl = document.querySelector('[data-board="true"]');
+      if (!boardElRef.current) {
+        boardElRef.current = document.querySelector<HTMLElement>('[data-board="true"]');
+      }
+      const boardEl = boardElRef.current;
       let boardRect = boardRectRef.current;
       if (!boardRect && boardEl && clonedBoardRef.current) {
         const rect = boardEl.getBoundingClientRect();

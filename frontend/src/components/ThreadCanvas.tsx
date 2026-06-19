@@ -178,8 +178,17 @@ export const ThreadCanvas: React.FC = () => {
         cancelAnimationFrame(animationFrameId.current);
       }
       // Clean WebGL resources
+      const gl = glRef.current;
+      const program = programRef.current;
       if (meshRef.current) {
         meshRef.current.geometry.remove();
+      }
+      if (program && gl) {
+        program.remove();
+      }
+      if (gl) {
+        const ext = gl.getExtension('WEBGL_lose_context');
+        if (ext) ext.loseContext();
       }
     };
   }, []);
@@ -457,6 +466,7 @@ export const ThreadCanvas: React.FC = () => {
     <canvas
       ref={canvasRef}
       className="absolute top-0 left-0 w-full h-full pointer-events-none z-10"
+      aria-hidden="true"
     />
   );
 };

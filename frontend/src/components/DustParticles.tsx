@@ -24,9 +24,21 @@ export const DustParticles: React.FC = () => {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
+    const resizeCanvas = (w: number, h: number) => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      canvas.style.width = `${w}px`;
+      canvas.style.height = `${h}px`;
+      ctx.scale(dpr, dpr);
+      width = w;
+      height = h;
+    };
+
+    resizeCanvas(width, height);
     const particles: Particle[] = [];
     const maxParticles = 25;
 
@@ -56,17 +68,12 @@ export const DustParticles: React.FC = () => {
     window.addEventListener("mousemove", handleMouseMove);
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      resizeCanvas(window.innerWidth, window.innerHeight);
     };
     window.addEventListener("resize", handleResize);
 
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
-
-      // Warm dust color matching the lamp light (yellowish golden tone)
-      ctx.fillStyle = "rgba(224, 204, 168, 1)";
-
       particles.forEach((p, idx) => {
         // Physical mouse disturbance (push away from magnifying glass cursor)
         const mdx = p.x - mouse.x;
@@ -103,9 +110,9 @@ export const DustParticles: React.FC = () => {
         if (p.y < -10 || p.x < -10 || p.x > width + 10 || (p.y < 100 && p.alpha <= 0)) {
           particles[idx] = createParticle(false);
         } else {
+          ctx.fillStyle = `rgba(224, 204, 168, ${p.alpha})`;
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.globalAlpha = p.alpha;
           ctx.fill();
         }
       });
