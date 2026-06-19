@@ -832,7 +832,7 @@ export const DetectiveBoard: React.FC = () => {
           style={{
             ...getCoverCoords(764.22, 659.19, 32.78, 26.72),
             zIndex: 22,
-            backgroundImage: "url(/images/board/phone.png)",
+            backgroundImage: "url(/images/board/table-phone.svg)",
             backgroundSize: "contain",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

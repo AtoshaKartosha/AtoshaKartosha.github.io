@@ -543,7 +543,7 @@ export const FluidGlassCursor: React.FC = () => {
                   top: `${(659.19 / 773.53) * 100}%`,
                   width: `${(32.78 / 1385.92) * 100}%`,
                   height: `${(26.72 / 773.53) * 100}%`,
-                  backgroundImage: "url(/images/board/phone.png)",
+                  backgroundImage: "url(/images/board/table-phone.svg)",
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
