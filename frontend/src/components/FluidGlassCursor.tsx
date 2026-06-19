@@ -17,7 +17,7 @@ import {
 import { NoirPinboard } from "./NoirPinboard";
 import { WindowScene } from "./WindowScene";
 
-const LENS_RADIUS = 105; // Radius in pixels
+const LENS_RADIUS = 95; // Radius in pixels
 const DEFAULT_ZOOM = 1.35; // Magnification factor
 const MIN_ZOOM = 1.15;
 const MAX_ZOOM = 1.7;

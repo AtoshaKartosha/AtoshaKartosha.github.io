@@ -86,7 +86,7 @@ export const LoadingScreen: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 w-full h-full bg-[#080808] z-50 flex flex-col items-center justify-center select-none overflow-hidden"
+      className="fixed inset-0 w-full h-full bg-[#080808] z-50 flex flex-col items-center justify-center select-none overflow-hidden cursor-none"
       style={{
         backgroundImage: `
           radial-gradient(circle at 50% 40%, rgba(200, 169, 110, 0.08) 0%, transparent 60%),
