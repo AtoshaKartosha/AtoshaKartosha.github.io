@@ -125,10 +125,31 @@ export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-f
     </div>
   </div>
 );
+const markerPath = "M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z";
 
 export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
   <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <defs>
+      <style>{`
+        @keyframes ping-circle {
+          0% {
+            transform: scale(0.1);
+            opacity: 0.9;
+          }
+          100% {
+            transform: scale(1);
+            opacity: 0;
+          }
+        }
+        .marker-wave-circle {
+          animation: ping-circle 3s cubic-bezier(0.215, 0.610, 0.355, 1) infinite;
+          transform-origin: 104.5px 113px;
+          transform-box: view-box;
+        }
+        .wave-circle-2 {
+          animation-delay: 1.5s;
+        }
+      `}</style>
       {/* Black outline filter around the V letter */}
       <filter id="black-outline">
         <feMorphology in="SourceAlpha" result="dilated" operator="dilate" radius="4" />
@@ -262,8 +283,12 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     {/* Station terminal building footprint */}
     <rect x="83" y="65" width="34" height="32" rx="1.5" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
+    {/* Concentric pulsating waves behind the marker tip */}
+    <circle cx="104.5" cy="113" r="25" className="marker-wave-circle" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
+    <circle cx="104.5" cy="113" r="25" className="marker-wave-circle wave-circle-2" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
+
     {/* Outline/container shape around the V marker (black background, metallic 3px border, bottom triangular tail) */}
-    <path d="M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z" fill="#141413" stroke="url(#metal-grad)" strokeWidth="3" />
+    <path d={markerPath} fill="#141413" stroke="url(#metal-grad)" strokeWidth="3" />
 
     {/* Unrotated V letter with a thick black outline, inline paths with brighter red colors */}
     <g transform="translate(-35.27, 59.52) scale(0.34)" filter="url(#black-outline)">
