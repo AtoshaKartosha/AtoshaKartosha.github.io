@@ -110,7 +110,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const cardEl = cardRef.current;
     if (cardEl) {
-      cardEl.style.transition = "transform 0.3s ease-out";
+      cardEl.style.transition = "none";
       cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)";
     }
   };
@@ -118,7 +118,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   return (
     <div
-      className="absolute group transition-all duration-300 ease-out"
+      className={`absolute group ${isHovered ? "transition-all duration-300 ease-out" : "transition-none"}`}
       style={{
         left: `${pos.left}%`,
         top: `${pos.top}%`,
@@ -193,7 +193,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           }}
         >
           <div
-            className="w-full h-full transition-all duration-300 ease-out"
+            className={`w-full h-full ${isHovered ? "transition-all duration-300 ease-out" : "transition-none"}`}
             style={{
               filter: isMobile
                 ? "drop-shadow(2px 4px 6px rgba(0,0,0,0.5))"
