@@ -830,7 +830,7 @@ export const DetectiveBoard: React.FC = () => {
           onBlur={() => setHoveredItemId(null)}
           className="absolute cursor-pointer transition-all duration-300 ease-out focus:outline-none"
           style={{
-            ...getCoverCoords(764.22, 659.19, 32.78, 26.72),
+            ...getCoverCoords(690, 640, 185, 105),
             zIndex: 22,
             backgroundImage: "url(/images/board/table-phone.svg)",
             backgroundSize: "contain",

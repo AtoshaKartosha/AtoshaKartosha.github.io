@@ -539,10 +539,10 @@ export const FluidGlassCursor: React.FC = () => {
               <div
                 className="absolute pointer-events-none z-[22] transition-all duration-300 ease-out"
                 style={{
-                  left: `${(764.22 / 1385.92) * 100}%`,
-                  top: `${(659.19 / 773.53) * 100}%`,
-                  width: `${(32.78 / 1385.92) * 100}%`,
-                  height: `${(26.72 / 773.53) * 100}%`,
+                  left: `${(690 / 1385.92) * 100}%`,
+                  top: `${(640 / 773.53) * 100}%`,
+                  width: `${(185 / 1385.92) * 100}%`,
+                  height: `${(105 / 773.53) * 100}%`,
                   backgroundImage: "url(/images/board/table-phone.svg)",
                   backgroundSize: "contain",
                   backgroundPosition: "center",
