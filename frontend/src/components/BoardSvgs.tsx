@@ -184,10 +184,10 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     {/* Unrotated V letter (referenced directly from the logo SVG to preserve slant and styling) */}
     <use href="/logo_detective.svg#logo-v" transform="translate(-35.27, 59.52) scale(0.34)" />
 
-    {/* Label */}
-    <g transform="rotate(10, 100, 133)">
-      <rect x="72" y="125" width="56" height="16" rx="2" fill="#141414" opacity="0.85" />
-      <text x="100" y="136" fill="#e8dcc8" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
+    {/* Slanted speech bubble label (placed next to the pin to avoid board lamp and tape overlays) */}
+    <g transform="rotate(-6, 152.5, 86)">
+      <path d="M119 76 H186 A3 3 0 0 1 189 79 V93 A3 3 0 0 1 186 96 H118 L108 92 L116 84 V79 A3 3 0 0 1 119 76 Z" fill="#141414" stroke="#e8dcc8" strokeWidth="1" opacity="0.9" />
+      <text x="152.5" y="89" fill="#e8dcc8" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
     </g>
   </svg>
 );
