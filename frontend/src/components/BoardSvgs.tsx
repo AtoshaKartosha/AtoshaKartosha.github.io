@@ -139,6 +139,15 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
           <feMergeNode in="SourceGraphic" />
         </feMerge>
       </filter>
+      {/* Metallic linear gradient for the marker border */}
+      <linearGradient id="metal-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fdfdfd" />
+        <stop offset="20%" stop-color="#b8b8b8" />
+        <stop offset="40%" stop-color="#ffffff" />
+        <stop offset="60%" stop-color="#7a7a7a" />
+        <stop offset="80%" stop-color="#f0f0f0" />
+        <stop offset="100%" stop-color="#555555" />
+      </linearGradient>
     </defs>
     {/* Map Paper */}
     <rect width="200" height="200" rx="4" fill="#decfa8" />
@@ -253,8 +262,8 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     {/* Station terminal building footprint */}
     <rect x="83" y="65" width="34" height="32" rx="1.5" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
-    {/* Outline/container shape around the V marker (rectangle with a bottom triangular tail) */}
-    <path d="M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z" fill="#e8dcc8" stroke="#141413" strokeWidth="1.5" />
+    {/* Outline/container shape around the V marker (black background, metallic 3px border, bottom triangular tail) */}
+    <path d="M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z" fill="#141413" stroke="url(#metal-grad)" strokeWidth="3" />
 
     {/* Unrotated V letter with a thick black outline, replacing the pin bubble */}
     <use href="/logo_detective.svg#logo-v" transform="translate(-35.27, 59.52) scale(0.34)" filter="url(#black-outline)" />
