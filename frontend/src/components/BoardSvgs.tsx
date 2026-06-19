@@ -175,23 +175,29 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
     {/* Station terminal building footprint */}
     <rect x="90" y="70" width="20" height="25" rx="1" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
-    {/* Pin shadow */}
-    <ellipse cx="100" cy="122" rx="6" ry="2" fill="#000" opacity="0.25" />
+    {/* Pop-art Pin solid offset shadow */}
+    <g transform="translate(3, 3) rotate(10, 100, 120)" opacity="0.95">
+      <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#141414" />
+    </g>
 
-    {/* Tilted Pin (body and letter) */}
+    {/* Pop-art Tilted Pin (body and letter) */}
     <g transform="rotate(10, 100, 120)">
-      {/* Pin body (inverted-drop/teardrop) */}
-      <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#e8dcc8" stroke="#801029" strokeWidth="1.5" />
+      {/* Pin body (inverted-drop/teardrop) in vibrant pop-art yellow with thick black outline */}
+      <path d="M100 120 C100 120 85 100 85 92 A15 15 0 1 1 115 92 C115 100 100 120 100 120 Z" fill="#ffe600" stroke="#141414" strokeWidth="2.5" />
 
-      {/* V letter from logo inside pin */}
+      {/* V letter from logo inside pin with black outlines */}
       <g transform="translate(-40.13, 60.11) scale(0.34)">
-        <path d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z" fill="#ac1c37" />
-        <path d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z" fill="#801029" />
+        <path d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z" fill="#ac1c37" stroke="#141414" strokeWidth="2.5" strokeLinejoin="round" />
+        <path d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z" fill="#801029" stroke="#141414" strokeWidth="2.5" strokeLinejoin="round" />
       </g>
     </g>
+
+    {/* Label pop-art solid offset shadow */}
+    <rect x="75" y="128" width="56" height="16" fill="#141414" />
+
     {/* Label */}
-    <rect x="72" y="125" width="56" height="16" rx="2" fill="#141414" opacity="0.85" />
-    <text x="100" y="136" fill="#e8dcc8" fontSize="7" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
+    <rect x="72" y="125" width="56" height="16" fill="#ffe600" stroke="#141414" strokeWidth="2.5" />
+    <text x="100" y="137" fill="#141414" fontSize="7" fontWeight="900" fontFamily="'Arial Black', Impact, sans-serif" textAnchor="middle">ВОКЗАЛЪ 1853</text>
   </svg>
 );
 
