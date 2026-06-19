@@ -396,7 +396,7 @@ export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "
 export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
   <svg viewBox="0 0 180 255" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     {/* Torn Paper base */}
-    <path d="M 5 10 L 175 5 L 178 245 L 160 250 L 140 243 L 120 250 L 90 240 L 60 253 L 30 245 L 5 250 Z" fill="#dfd6c0" />
+    <path d="M 5 10 L 175 5 L 178 245 L 160 250 L 140 243 L 120 250 L 90 240 L 60 253 L 30 245 L 5 250 Z" fill="#F1E2C6" />
     
     {/* Main Headline */}
     <text x="90" y="30" fill="#1d1b18" fontSize="11" fontWeight="bold" fontFamily="Georgia, serif" textAnchor="middle" letterSpacing="0.5">
