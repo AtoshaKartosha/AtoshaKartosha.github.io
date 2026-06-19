@@ -18,6 +18,7 @@ export const BoardPopup: React.FC = () => {
 
   useEffect(() => {
     const dialog = dialogRef.current;
+    const content = contentRef.current;
     if (!dialog) return;
 
     const handleCancel = (e: Event) => {
@@ -28,6 +29,11 @@ export const BoardPopup: React.FC = () => {
     dialog.addEventListener("cancel", handleCancel);
     return () => {
       dialog.removeEventListener("cancel", handleCancel);
+      if (content) {
+        gsap.killTweensOf(content);
+        const paragraphs = content.querySelectorAll('.font-typewriter p');
+        gsap.killTweensOf(paragraphs);
+      }
     };
   }, [setActivePopup]);
 
@@ -115,11 +121,13 @@ export const BoardPopup: React.FC = () => {
   if (!data) return null;
 
   const isSuspect = activePopup === "suspect-1" || activePopup === "suspect-2";
+  const isExternal = data.actionUrl?.startsWith("http");
 
   return (
     <dialog
       ref={dialogRef}
       onClick={handleBackdropClick}
+      aria-labelledby="dialog-title"
       className={`bg-transparent border-0 outline-none p-4 w-full max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible m-auto ${
         isSuspect ? "max-w-2xl" : "max-w-lg"
       }`}
@@ -138,7 +146,7 @@ export const BoardPopup: React.FC = () => {
         <button
           onClick={() => setActivePopup(null)}
           aria-label="Закрыть"
-          className="absolute top-0 right-0 w-16 h-16 overflow-hidden cursor-pointer group focus:outline-none z-30 select-none"
+          className="absolute top-0 right-0 w-16 h-16 overflow-hidden cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e1e] z-30 select-none"
         >
           {/* Visual diagonal ribbon background */}
           <div className="absolute top-[-10px] right-[-25px] w-[80px] h-[30px] bg-[#c41e1e] border-y border-[#1c160e] rotate-[45deg] shadow-[0_2px_4px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out group-hover:bg-[#e53e3e] group-hover:shadow-[0_4px_8px_rgba(0,0,0,0.4)] group-active:scale-95" />
@@ -151,7 +159,7 @@ export const BoardPopup: React.FC = () => {
 
         {/* Vintage header */}
         <div className="border-b-2 border-[#1c160e] pb-4 mb-6">
-          <h2 className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-[#1c160e] leading-tight select-text">
+          <h2 id="dialog-title" className="font-display text-2xl md:text-3xl font-extrabold tracking-tight text-[#1c160e] leading-tight select-text">
             {data.title}
           </h2>
           {data.subtitle && (
@@ -174,7 +182,11 @@ export const BoardPopup: React.FC = () => {
               />
             </div>
           )}
-          <div className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-auto max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar">
+          <div
+            tabIndex={0}
+            aria-label="Описание"
+            className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-auto max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar focus:outline-none focus-visible:ring-1 focus-visible:ring-[#1c160e]/40"
+          >
             {data.content.map((p, idx) => (
               <p key={idx} className="opacity-0 translate-y-2.5">
                 {p}
@@ -187,6 +199,9 @@ export const BoardPopup: React.FC = () => {
           <div className="mt-8 pt-6 border-t border-[#1c160e]/20 flex justify-end">
             <a
               href={data.actionUrl}
+              target={isExternal ? "_blank" : undefined}
+              rel={isExternal ? "noopener noreferrer" : undefined}
+              aria-label={isExternal ? `${data.actionLabel} (откроется в новом окне)` : data.actionLabel}
               onClick={(e) => {
                 if (data.actionUrl?.startsWith("#")) {
                   e.preventDefault();

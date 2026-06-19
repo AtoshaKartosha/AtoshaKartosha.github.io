@@ -4,7 +4,7 @@ import Image from "next/image";
 
 // Corkboard SVG Pattern overlay for background texture
 export const CorkboardTexture: React.FC = () => (
-  <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+  <svg aria-hidden="true" className="absolute inset-0 w-full h-full opacity-20 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
     <filter id="cork-noise">
       <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="4" stitchTiles="stitch" />
       <feColorMatrix type="matrix" values="0.3333 0.3333 0.3333 0 0  0.3333 0.3333 0.3333 0 0  0.3333 0.3333 0.3333 0 0  0 0 0 0.15 0" />
@@ -112,6 +112,7 @@ export const Suspect1Svg: React.FC<{ className?: string }> = ({ className = "w-f
   <div className={`${className} bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
     <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
       <video
+        aria-hidden="true"
         autoPlay
         loop
         muted
@@ -131,6 +132,7 @@ export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-f
   <div className={`${className} bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
     <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
       <video
+        aria-hidden="true"
         autoPlay
         loop
         muted

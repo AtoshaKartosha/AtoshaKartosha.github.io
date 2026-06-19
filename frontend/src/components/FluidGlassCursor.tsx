@@ -426,6 +426,7 @@ export const FluidGlassCursor: React.FC = () => {
   if (isMobile) return null;
   return (
     <div 
+      aria-hidden="true"
       className="absolute inset-0 w-full h-full pointer-events-none z-40 overflow-hidden"
       style={{ perspective: 1000 }}
     >

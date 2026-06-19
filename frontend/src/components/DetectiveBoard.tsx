@@ -83,6 +83,7 @@ interface BoardItemProps {
   hoveredItemId: string | null;
   setHoveredItemId: (id: string | null) => void;
   children: React.ReactNode;
+  isLoading: boolean;
 }
 
 const BoardItemComponent: React.FC<BoardItemProps> = ({
@@ -93,6 +94,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   hoveredItemId,
   setHoveredItemId,
   children,
+  isLoading,
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const swayRef = useRef<HTMLDivElement>(null);
@@ -196,12 +198,14 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
         onPointerMove={handlePointerMove}
-        className="w-full focus:outline-none block relative touch-manipulation cursor-pointer"
+        className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e1e] focus-visible:ring-offset-2 rounded-sm block relative touch-manipulation cursor-pointer"
         style={{
           transformStyle: "preserve-3d",
         }}
         role="button"
-        tabIndex={0}
+        tabIndex={isLoading ? -1 : 0}
+        onFocus={() => setHoveredItemId(item.id)}
+        onBlur={() => setHoveredItemId(null)}
         aria-haspopup="dialog"
         aria-label={item.name}
         onKeyDown={(e) => {
@@ -756,6 +760,7 @@ export const DetectiveBoard: React.FC = () => {
             setActivePopup={setActivePopup}
             hoveredItemId={hoveredItemId}
             setHoveredItemId={setHoveredItemId}
+            isLoading={isLoading}
           >
             {renderItemSvg(item.id, hoveredItemId === item.id)}
           </BoardItemComponent>
@@ -841,7 +846,8 @@ export const DetectiveBoard: React.FC = () => {
               ? "drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
               : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
           }}
-          tabIndex={0}
+          tabIndex={-1}
+          aria-hidden="true"
           aria-label="Телефон"
         />
       </div>
