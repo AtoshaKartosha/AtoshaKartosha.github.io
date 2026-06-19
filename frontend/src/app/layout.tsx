@@ -4,13 +4,13 @@ import localFont from "next/font/local";
 import "./globals.css";
 
 const outfit = Outfit({
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   variable: "--font-outfit",
 });
 
 const specialElite = Special_Elite({
   weight: "400",
-  subsets: ["latin", "cyrillic"],
+  subsets: ["latin"],
   variable: "--font-special-elite",
 });
 
