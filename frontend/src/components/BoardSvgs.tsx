@@ -439,10 +439,15 @@ export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-
     </g>
 
     {/* Illustration in paper */}
-    <rect x="15" y="145" width="150" height="50" fill="#2d2a24" />
-    {/* Sketch in illustration */}
-    <path d="M40 185 Q90 150 140 185" stroke="#dfd6c0" strokeWidth="1" fill="none" opacity="0.4" />
-    <circle cx="90" cy="165" r="8" fill="none" stroke="#dfd6c0" strokeWidth="1" opacity="0.4" />
+    <image
+      href="/images/board/newspaper_story.webp"
+      x="15"
+      y="145"
+      width="150"
+      height="50"
+      preserveAspectRatio="xMidYMid slice"
+      style={{ filter: "saturate(0.65) contrast(1.1) brightness(0.95)" }}
+    />
 
     {/* Paper aging stains */}
     <circle cx="30" cy="60" r="15" fill="#a48c68" opacity="0.15" filter="blur(4px)" />
