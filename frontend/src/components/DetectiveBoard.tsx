@@ -694,24 +694,53 @@ export const DetectiveBoard: React.FC = () => {
         ))}
 
         {/* Ambient volumetric light shaft from window */}
-        <div 
-          className="absolute inset-0 pointer-events-none z-[18] mix-blend-screen"
-          style={{
-            clipPath: "polygon(0% 85%, 88.15% 12.63%, 88.15% 75.31%, 0% 120%)",
-            background: "linear-gradient(to bottom left, rgba(130, 160, 210, 0.16) 0%, rgba(80, 110, 160, 0.07) 60%, transparent 100%)",
-            animation: "lightShaftPulse 8s ease-in-out infinite",
-          }}
-        />
+        <svg 
+          className="absolute inset-0 w-full h-full pointer-events-none z-[18] mix-blend-screen"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient id="ambientLightGrad" x1="0.88" y1="0.44" x2="0" y2="1">
+              <stop offset="0%" stopColor="#82a0d2" stopOpacity={0.16} />
+              <stop offset="60%" stopColor="#506ea0" stopOpacity={0.07} />
+              <stop offset="100%" stopColor="#000000" stopOpacity={0} />
+            </linearGradient>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="2.5" />
+            </filter>
+          </defs>
+          <polygon
+            points="0,85 88.15,12.63 88.15,75.31 0,120"
+            fill="url(#ambientLightGrad)"
+            filter="url(#softGlow)"
+            style={{
+              animation: "lightShaftPulse 8s ease-in-out infinite",
+            }}
+          />
+        </svg>
 
         {/* Volumetric lightning strike beam from window */}
-        <div 
-          className="absolute inset-0 pointer-events-none z-[19] mix-blend-screen"
+        <svg 
+          className="absolute inset-0 w-full h-full pointer-events-none z-[19] mix-blend-screen"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
           style={{
-            clipPath: "polygon(0% 85%, 88.15% 12.63%, 88.15% 75.31%, 0% 120%)",
-            background: "linear-gradient(to bottom left, rgba(200, 225, 255, 0.45) 0%, rgba(140, 180, 255, 0.18) 60%, transparent 100%)",
             opacity: "var(--lightning-intensity, 0)",
           }}
-        />
+        >
+          <defs>
+            <linearGradient id="lightningLightGrad" x1="0.88" y1="0.44" x2="0" y2="1">
+              <stop offset="0%" stopColor="#c8e1ff" stopOpacity={0.45} />
+              <stop offset="60%" stopColor="#8cb4ff" stopOpacity={0.18} />
+              <stop offset="100%" stopColor="#000000" stopOpacity={0} />
+            </linearGradient>
+          </defs>
+          <polygon
+            points="0,85 88.15,12.63 88.15,75.31 0,120"
+            fill="url(#lightningLightGrad)"
+            filter="url(#softGlow)"
+          />
+        </svg>
 
         {/* Global cabinet lightning flash overlay */}
         <div 
