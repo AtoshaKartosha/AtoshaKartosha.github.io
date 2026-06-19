@@ -41,6 +41,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
   const centerY = pos.top;
   const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
   const dimBrightness = item.id === "dossier" ? 1 : Math.max(1 - distFromLamp * 0.4, 0.78);
+  const hoverScale = item.id === "phone" ? 1.1 : 1.04;
 
   return (
     <div
@@ -49,7 +50,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         left: `${pos.left}%`,
         top: `${pos.top}%`,
         width: `${pos.width}%`,
-        transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? 1.04 : 1})`,
+        transform: `rotate(${pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0)}deg) scale(${isHovered ? hoverScale : 1})`,
         zIndex: isHovered ? 30 : item.zIndex,
       }}
     >

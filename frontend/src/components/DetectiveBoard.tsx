@@ -128,6 +128,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const dimBrightness = item.id === "dossier" ? 1 : Math.max(1 - distFromLamp * 0.4, 0.78);
 
   const rotation = pos.rotation + (isHovered ? (pos.rotation >= 0 ? 1.5 : -1.5) : 0);
+  const hoverScale = item.id === "phone" ? 1.1 : 1.04;
 
   const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
     if (isMobile) return;
@@ -182,7 +183,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         left: `${pos.left}%`,
         top: `${pos.top}%`,
         width: `${pos.width}%`,
-        transform: `rotate(${rotation}deg) scale(${isHovered ? 1.04 : 1})`,
+        transform: `rotate(${rotation}deg) scale(${isHovered ? hoverScale : 1})`,
         transformStyle: "preserve-3d",
         zIndex: isZIndexRaised ? 30 : item.zIndex,
       }}
