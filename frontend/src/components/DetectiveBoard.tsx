@@ -56,8 +56,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     } else {
       const timer = setTimeout(() => {
         setIsZIndexRaised(false);
-      }, 400);
-      return () => clearTimeout(timer);
+      }, 500);
     }
   }, [isHovered]);
 
@@ -113,7 +112,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
     const cardEl = cardRef.current;
     if (cardEl) {
-      cardEl.style.transition = "transform 0.4s ease-out";
+      cardEl.style.transition = "transform 0.5s ease-in-out";
       cardEl.style.transform = "rotateX(0deg) rotateY(0deg) translateZ(0px)";
     }
   };
@@ -121,14 +120,14 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
 
   return (
     <div
-      className="absolute group transition-all duration-300 ease-out"
+      className="absolute group transition-all duration-500 ease-in-out"
       style={{
         left: `${pos.left}%`,
         top: `${pos.top}%`,
         width: `${pos.width}%`,
         transform: `rotate(${rotation}deg) scale(${isHovered ? 1.04 : 1})`,
         transformStyle: "preserve-3d",
-        zIndex: isZIndexRaised ? (item.id === "map" ? 18 : 30) : item.zIndex,
+        zIndex: isZIndexRaised ? (item.id === "map" ? 22 : 30) : item.zIndex,
       }}
     >
       <div
