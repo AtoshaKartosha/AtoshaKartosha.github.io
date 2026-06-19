@@ -444,9 +444,9 @@ export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-
       x="15"
       y="145"
       width="150"
-      height="75"
+      height="90"
       preserveAspectRatio="xMidYMid slice"
-      style={{ filter: "saturate(0.55) contrast(1.15) brightness(0.95)" }}
+      style={{ filter: "saturate(0.65) contrast(1.1) brightness(0.98)" }}
     />
     {/* Paper aging stains */}
     <circle cx="30" cy="60" r="15" fill="#a48c68" opacity="0.15" filter="blur(4px)" />
