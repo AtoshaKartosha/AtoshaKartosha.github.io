@@ -285,7 +285,7 @@ export const DetectiveBoard: React.FC = () => {
 
   const activePopup = useBoardStore((state) => state.activePopup);
   const setActivePopup = useBoardStore((state) => state.setActivePopup);
-  const setPinPosition = useBoardStore((state) => state.setPinPosition);
+  const setPinPositions = useBoardStore((state) => state.setPinPositions);
   const panOffset = useBoardStore((state) => state.panOffset);
   const setPanOffset = useBoardStore((state) => state.setPanOffset);
   const isLoading = useBoardStore((state) => state.isLoading);
@@ -392,6 +392,7 @@ export const DetectiveBoard: React.FC = () => {
     const boardEl = boardRef.current;
     if (!boardEl) return;
     const boardRect = boardEl.getBoundingClientRect();
+    const newPositions: Record<string, { x: number; y: number }> = {};
 
     boardItems.forEach((item) => {
       const pinAnchor = boardEl.querySelector(`[data-pin-id="${item.id}"]`);
@@ -400,10 +401,12 @@ export const DetectiveBoard: React.FC = () => {
         // Divide by current zoom to get invariant logical coordinates
         const x = (pinRect.left - boardRect.left) / zoom;
         const y = (pinRect.top - boardRect.top) / zoom;
-        setPinPosition(item.id, { x, y });
+        newPositions[item.id] = { x, y };
       }
     });
-  }, [setPinPosition, zoom]);
+
+    setPinPositions(newPositions);
+  }, [setPinPositions, zoom]);
 
   // Run pin measurement on mount and resize
   useEffect(() => {

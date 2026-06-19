@@ -11,7 +11,7 @@ interface BoardState {
   panOffset: Position;
   isLoading: boolean;
   hoveredItemId: string | null;
-  setPinPosition: (id: string, pos: Position) => void;
+  setPinPositions: (positions: Record<string, Position>) => void;
   setActivePopup: (id: string | null) => void;
   setPanOffset: (pos: Position | ((prev: Position) => Position)) => void;
   setIsLoading: (loading: boolean) => void;
@@ -24,9 +24,9 @@ export const useBoardStore = create<BoardState>((set) => ({
   panOffset: { x: 0, y: 0 },
   isLoading: true,
   hoveredItemId: null,
-  setPinPosition: (id, pos) =>
+  setPinPositions: (positions) =>
     set((state) => ({
-      pinPositions: { ...state.pinPositions, [id]: pos },
+      pinPositions: { ...state.pinPositions, ...positions },
     })),
   setActivePopup: (id) => set({ activePopup: id }),
   setPanOffset: (pos) =>
