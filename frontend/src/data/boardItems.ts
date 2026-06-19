@@ -71,8 +71,8 @@ export const boardItems: BoardItem[] = [
     name: "Часы начала",
     popupId: "schedule",
     zIndex: 12,
-    desktop: { left: 63, top: 40, width: 8, rotation: -12 },
-    mobile: { left: 44, top: 12, width: 20, rotation: -12 },
+    desktop: { left: 59, top: 40, width: 8, rotation: -12 },
+    mobile: { left: 39, top: 12, width: 20, rotation: -12 },
   },
   {
     id: "evidence",
@@ -87,8 +87,8 @@ export const boardItems: BoardItem[] = [
     name: "Газетная вырезка",
     popupId: "newspaper",
     zIndex: 9,
-    desktop: { left: 69, top: 40, width: 17, rotation: -5 },
-    mobile: { left: 54, top: 42, width: 40, rotation: -5 },
+    desktop: { left: 65, top: 40, width: 17, rotation: -5 },
+    mobile: { left: 49, top: 42, width: 40, rotation: -5 },
   },
 ];
 
