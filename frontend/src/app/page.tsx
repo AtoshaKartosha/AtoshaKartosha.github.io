@@ -1,4 +1,3 @@
-"use client";
 
 import { DetectiveBoard } from "../components/DetectiveBoard";
 import { LoadingScreen } from "../components/LoadingScreen";
