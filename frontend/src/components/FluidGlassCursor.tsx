@@ -17,8 +17,10 @@ import {
 import { NoirPinboard } from "./NoirPinboard";
 import { WindowScene } from "./WindowScene";
 
-const LENS_RADIUS = 120; // Radius in pixels
-const ZOOM_FACTOR = 1.35; // Magnification factor
+const LENS_RADIUS = 105; // Radius in pixels
+const DEFAULT_ZOOM = 1.35; // Magnification factor
+const MIN_ZOOM = 1.15;
+const MAX_ZOOM = 1.7;
 
 interface ClonedBoardItemProps {
   item: BoardItem;
@@ -93,6 +95,7 @@ export const FluidGlassCursor: React.FC = () => {
   const velocity = useRef({ x: 0, y: 0 });
   const swingAngle = useRef(0);
   const swingVelocity = useRef(0);
+  const zoomRef = useRef(DEFAULT_ZOOM);
   
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
@@ -238,6 +241,30 @@ export const FluidGlassCursor: React.FC = () => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
+  useEffect(() => {
+    if (isMobile || isLoading) return;
+
+    const style = document.createElement("style");
+    style.textContent = '[data-board="true"], [data-board="true"] * { cursor: none !important; }';
+    document.head.appendChild(style);
+    return () => style.remove();
+  }, [isMobile, isLoading]);
+
+  useEffect(() => {
+    if (isMobile || isLoading) return;
+    const boardEl = document.querySelector<HTMLElement>('[data-board="true"]');
+    if (!boardEl) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const nextZoom = zoomRef.current - e.deltaY * 0.001;
+      zoomRef.current = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, nextZoom));
+    };
+
+    boardEl.addEventListener("wheel", handleWheel, { passive: false });
+    return () => boardEl.removeEventListener("wheel", handleWheel);
+  }, [isMobile, isLoading]);
+
   // Animation loop for smooth follow and precise alignment
   useEffect(() => {
     let animationFrameId: number;
@@ -305,9 +332,10 @@ export const FluidGlassCursor: React.FC = () => {
         const mouseY = clientY - boardRect.top;
 
         // Scale and shift cloned board so the point under cursor aligns perfectly with center of lens
-        const tx = LENS_RADIUS - mouseX * ZOOM_FACTOR;
-        const ty = LENS_RADIUS - mouseY * ZOOM_FACTOR;
-        clonedBoardRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${ZOOM_FACTOR})`;
+        const zoom = zoomRef.current;
+        const tx = LENS_RADIUS - mouseX * zoom;
+        const ty = LENS_RADIUS - mouseY * zoom;
+        clonedBoardRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${zoom})`;
       }
 
       animationFrameId = requestAnimationFrame(update);
@@ -575,7 +603,7 @@ export const FluidGlassCursor: React.FC = () => {
           <div
             style={{
               width: "15px",
-              height: "110px",
+              height: "96px",
               background: "linear-gradient(90deg, #2b1d12 0%, #4e3629 30%, #3a2518 70%, #1e120a 100%)",
               borderRadius: "0 0 4px 4px",
               marginLeft: "-7.5px",
@@ -594,7 +622,7 @@ export const FluidGlassCursor: React.FC = () => {
               background: "linear-gradient(90deg, #8b6d3b 0%, #c8a96e 50%, #8b6d3b 100%)",
               borderRadius: "0 0 6px 6px",
               marginLeft: "-8px",
-              marginTop: "136px",
+              marginTop: "122px",
               position: "absolute",
               top: 0,
               boxShadow: "2px 2px 4px rgba(0,0,0,0.4)",
@@ -608,9 +636,9 @@ export const FluidGlassCursor: React.FC = () => {
       <svg width="0" height="0" className="absolute">
         <defs>
           {displacementMapUrl && aberrationMapUrl && (
-            <filter id="lens-bulge" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-              <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="lensMap" x="0" y="0" width="240" height="240" />
-              <feImage href={aberrationMapUrl} xlinkHref={aberrationMapUrl} result="abMap" x="0" y="0" width="240" height="240" />
+            <filter id="lens-bulge" x="0" y="0" width={LENS_RADIUS * 2} height={LENS_RADIUS * 2} filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+              <feImage href={displacementMapUrl} xlinkHref={displacementMapUrl} result="lensMap" x="0" y="0" width={LENS_RADIUS * 2} height={LENS_RADIUS * 2} />
+              <feImage href={aberrationMapUrl} xlinkHref={aberrationMapUrl} result="abMap" x="0" y="0" width={LENS_RADIUS * 2} height={LENS_RADIUS * 2} />
               
               {/* Base lens displacement applied to all channels equally */}
               <feDisplacementMap
