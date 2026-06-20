@@ -149,3 +149,18 @@ export const getItemShadow = (id: string, isHovered: boolean): string => {
     }
   }
 };
+
+export const getPinOffset = (id: string, isMobile: boolean): { left: string; top: string } => {
+  const left = id === "phone" ? (isMobile ? "35%" : "30%") : "50%";
+  let top = "-8px";
+  if (id === "dossier") {
+    top = isMobile ? "8px" : "14px";
+  } else if (id === "phone") {
+    top = isMobile ? "10px" : "18px";
+  } else if (id === "evidence") {
+    top = isMobile ? "4px" : "8px";
+  } else if (id === "newspaper") {
+    top = isMobile ? "4px" : "8px";
+  }
+  return { left, top };
+};

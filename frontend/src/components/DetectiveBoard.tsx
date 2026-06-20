@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, BoardItem, getItemShadow } from "../data/boardItems";
+import { boardItems, BoardItem, getItemShadow, getPinOffset } from "../data/boardItems";
 import {
   CorkboardTexture,
   DossierSvg,
@@ -224,10 +224,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
               ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
               : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
           }`}
-          style={{
-            left: item.id === "phone" ? (isMobile ? "35%" : "30%") : "50%",
-            top: item.id === "dossier" ? (isMobile ? "8px" : "14px") : item.id === "phone" ? (isMobile ? "10px" : "18px") : item.id === "evidence" ? (isMobile ? "4px" : "8px") : "-8px",
-          }}
+          style={getPinOffset(item.id, isMobile)}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
           <div
