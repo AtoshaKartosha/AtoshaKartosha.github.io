@@ -420,17 +420,53 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 filter: "blur(4px)",
               }}
             />
-            {/* The text representing the wiped-away transparent glass (revealing the dark night outside) */}
-            <div 
-              className="relative text-center select-none font-mono text-[14px] font-bold leading-tight"
-              style={{
-                color: "rgba(10, 15, 30, 0.9)", // Dark night color
-                textShadow: "0 0 1px rgba(255, 255, 255, 0.4)", // Edge highlights where fog accumulates
-                letterSpacing: "1px",
-              }}
-            >
-              <div>118С</div>
-              <div className="mt-0.5 text-[13px]">16:00</div>
+            {/* The SVG paths representing the wiped-away transparent glass (revealing the dark night outside) */}
+            <div className="relative w-full h-full">
+              <svg 
+                viewBox="0 0 100 60" 
+                className="w-full h-full select-none"
+                style={{
+                  filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))",
+                }}
+              >
+                {/* Bottom highlight layer (edge of finger stroke) */}
+                <g fill="none" stroke="rgba(255, 255, 255, 0.45)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+                  {/* 118С */}
+                  <path d="M 22 15 L 26 12 L 26 28" />
+                  <path d="M 38 15 L 42 12 L 42 28" />
+                  <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
+                  <path d="M 78 14 C 70 14, 70 26, 78 26" />
+                  
+                  {/* 16:00 */}
+                  <path d="M 17 38 L 21 35 L 21 51" />
+                  <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
+                  {/* Colon */}
+                  <circle cx="48" cy="41" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
+                  <circle cx="48" cy="47" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
+                  {/* Zeros */}
+                  <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
+                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
+                </g>
+
+                {/* Top dark swipe layer (transparent window glass revealing night outside) */}
+                <g fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  {/* 118С */}
+                  <path d="M 22 15 L 26 12 L 26 28" />
+                  <path d="M 38 15 L 42 12 L 42 28" />
+                  <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
+                  <path d="M 78 14 C 70 14, 70 26, 78 26" />
+                  
+                  {/* 16:00 */}
+                  <path d="M 17 38 L 21 35 L 21 51" />
+                  <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
+                  {/* Colon */}
+                  <circle cx="48" cy="41" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
+                  <circle cx="48" cy="47" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
+                  {/* Zeros */}
+                  <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
+                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
+                </g>
+              </svg>
             </div>
           </div>
         )}
