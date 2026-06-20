@@ -402,7 +402,7 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
             aria-hidden="true"
             className="absolute z-[4]"
             style={{
-              left: "28%",
+              left: "23.5%",
               top: "37%",
               width: "44%",
               height: "18%",
@@ -433,38 +433,38 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 <g fill="none" stroke="rgba(255, 255, 255, 0.45)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
                   {/* 118С */}
                   <path d="M 22 15 L 26 12 L 26 28" />
-                  <path d="M 38 15 L 42 12 L 42 28" />
+                  <path d="M 41 12 L 41 28" />
                   <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
                   <path d="M 78 14 C 70 14, 70 26, 78 26" />
                   
                   {/* 16:00 */}
-                  <path d="M 17 38 L 21 35 L 21 51" />
+                  <path d="M 14 41 L 21 35 L 21 51 M 17 51 H 25" />
                   <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
                   {/* Colon */}
                   <circle cx="48" cy="41" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
                   <circle cx="48" cy="47" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
                   {/* Zeros */}
                   <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
-                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
+                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 C 73 34, 71 36, 73 38" />
                 </g>
 
                 {/* Top dark swipe layer (transparent window glass revealing night outside) */}
                 <g fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   {/* 118С */}
                   <path d="M 22 15 L 26 12 L 26 28" />
-                  <path d="M 38 15 L 42 12 L 42 28" />
+                  <path d="M 41 12 L 41 28" />
                   <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
                   <path d="M 78 14 C 70 14, 70 26, 78 26" />
                   
                   {/* 16:00 */}
-                  <path d="M 17 38 L 21 35 L 21 51" />
+                  <path d="M 14 41 L 21 35 L 21 51 M 17 51 H 25" />
                   <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
                   {/* Colon */}
                   <circle cx="48" cy="41" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
                   <circle cx="48" cy="47" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
                   {/* Zeros */}
                   <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
-                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
+                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 C 73 34, 71 36, 73 38" />
                 </g>
               </svg>
             </div>
@@ -517,15 +517,15 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                   <path d="M 15 38 L 15 28 L 19 34 L 23 28 L 23 38" />
                   <path d="M 32 38 L 32 31 M 28 35 C 28 31, 32 31, 32 35 C 32 39, 28 39, 28 35 Z" />
                   <path d="M 37 28 H 45 M 41 28 L 41 38" />
-                  <path d="M 52 33 C 49 33, 49 38, 52 38 C 55 38, 55 33, 52 33 Z" />
-                  <path d="M 60 28 L 60 43 M 60 29 C 65 29, 65 34, 60 34" />
+                  <path d="M 52 33 C 49 33, 49 38, 52 38 C 55 38, 55 33, 52 33 C 51 31, 49 33, 51 35" />
+                  <path d="M 60 28 L 60 43 M 60 29 C 66 29, 65 35, 60 34" />
 
                   {/* знает! */}
                   <path d="M 15 53 C 19 53, 19 58, 15 58 C 19 58, 19 64, 14 64" />
                   <path d="M 23 53 L 23 64 M 23 58 L 29 58 M 29 53 L 29 64" />
-                  <path d="M 38 64 L 38 57 M 34 61 C 34 57, 38 57, 38 61 C 38 65, 34 65, 34 61 Z" />
+                  <path d="M 38 64 L 38 57 M 34 61 C 34 57, 38 57, 38 61 C 38 65, 34 65, 34 61 Z M 38 64 C 39 64, 41 63, 42 64" />
                   <path d="M 44 61 H 50 C 50 57, 44 57, 44 61 C 44 65, 50 65, 50 62" />
-                  <path d="M 55 53 H 63 M 59 53 L 59 64" />
+                  <path d="M 55 53 H 63 M 59 53 L 59 64 C 59 66, 61 66, 62 65" />
                   <path d="M 68 52 L 68 60" />
                   <path d="M 68 64 L 68 64" />
 
@@ -547,15 +547,15 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                   <path d="M 15 38 L 15 28 L 19 34 L 23 28 L 23 38" />
                   <path d="M 32 38 L 32 31 M 28 35 C 28 31, 32 31, 32 35 C 32 39, 28 39, 28 35 Z" />
                   <path d="M 37 28 H 45 M 41 28 L 41 38" />
-                  <path d="M 52 33 C 49 33, 49 38, 52 38 C 55 38, 55 33, 52 33 Z" />
-                  <path d="M 60 28 L 60 43 M 60 29 C 65 29, 65 34, 60 34" />
+                  <path d="M 52 33 C 49 33, 49 38, 52 38 C 55 38, 55 33, 52 33 C 51 31, 49 33, 51 35" />
+                  <path d="M 60 28 L 60 43 M 60 29 C 66 29, 65 35, 60 34" />
 
                   {/* знает! */}
                   <path d="M 15 53 C 19 53, 19 58, 15 58 C 19 58, 19 64, 14 64" />
                   <path d="M 23 53 L 23 64 M 23 58 L 29 58 M 29 53 L 29 64" />
-                  <path d="M 38 64 L 38 57 M 34 61 C 34 57, 38 57, 38 61 C 38 65, 34 65, 34 61 Z" />
+                  <path d="M 38 64 L 38 57 M 34 61 C 34 57, 38 57, 38 61 C 38 65, 34 65, 34 61 Z M 38 64 C 39 64, 41 63, 42 64" />
                   <path d="M 44 61 H 50 C 50 57, 44 57, 44 61 C 44 65, 50 65, 50 62" />
-                  <path d="M 55 53 H 63 M 59 53 L 59 64" />
+                  <path d="M 55 53 H 63 M 59 53 L 59 64 C 59 66, 61 66, 62 65" />
                   <path d="M 68 52 L 68 60" />
                   <path d="M 68 64 L 68 64" />
 
