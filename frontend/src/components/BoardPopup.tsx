@@ -61,6 +61,7 @@ export const BoardPopup: React.FC = () => {
       // Animate entry: paper slaps onto desk with slight rotation
       gsap.killTweensOf(content);
       const paragraphs = content.querySelectorAll('.font-typewriter p');
+      gsap.killTweensOf(paragraphs);
       
       // Reset paragraphs inline style to make sure tween is fresh
       gsap.set(paragraphs, { opacity: 0, y: 10 });

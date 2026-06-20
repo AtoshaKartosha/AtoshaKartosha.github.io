@@ -198,7 +198,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
         onPointerMove={handlePointerMove}
-        className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e1e] focus-visible:ring-offset-2 rounded-sm block relative touch-manipulation cursor-pointer"
+        className="w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#c41e1e] rounded-sm block relative touch-manipulation cursor-pointer"
         style={{
           transformStyle: "preserve-3d",
         }}
