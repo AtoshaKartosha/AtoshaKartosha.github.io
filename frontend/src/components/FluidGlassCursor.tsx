@@ -487,7 +487,7 @@ export const FluidGlassCursor: React.FC = () => {
               <CorkboardTexture />
 
               {/* Window atmosphere scene */}
-              <WindowScene />
+              <WindowScene revealHidden={true} />
 
               {/* 2nd layer from bottom: Pinboard in noir and comic style */}
               <NoirPinboard />

@@ -34,7 +34,7 @@ interface SmokeParticle {
   windOffset: number;
 }
 
-export const WindowScene: React.FC = () => {
+export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden = false }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLElement | null>(null);
 
@@ -397,22 +397,24 @@ export const WindowScene: React.FC = () => {
         }}
       >
         {/* Condensation scribble/scratch on the window glass (Address house number + start time) */}
-        <div 
-          aria-hidden="true"
-          className="absolute text-center select-none font-mono text-[9px] font-bold leading-tight z-[4]"
-          style={{
-            left: "34%",
-            top: "43%",
-            width: "28%",
-            color: "rgba(240, 248, 255, 0.8)",
-            textShadow: "0 0 3px rgba(255, 255, 255, 0.95), 0 0 6px rgba(180, 200, 255, 0.6)",
-            transform: "rotate(-3deg)",
-            letterSpacing: "0.5px",
-          }}
-        >
-          <div>118С</div>
-          <div className="mt-0.5">16:00</div>
-        </div>
+        {revealHidden && (
+          <div 
+            aria-hidden="true"
+            className="absolute text-center select-none font-mono text-[13px] font-bold leading-tight z-[4]"
+            style={{
+              left: "30%",
+              top: "40%",
+              width: "36%",
+              color: "rgba(240, 248, 255, 0.85)",
+              textShadow: "0 0 3px rgba(255, 255, 255, 0.95), 0 0 6px rgba(180, 200, 255, 0.7)",
+              transform: "rotate(-3deg)",
+              letterSpacing: "0.5px",
+            }}
+          >
+            <div>118С</div>
+            <div className="mt-0.5">16:00</div>
+          </div>
+        )}
         {/* Faint glass sheen overlay */}
         <div 
           aria-hidden="true"
