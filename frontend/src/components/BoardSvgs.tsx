@@ -356,8 +356,8 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
     </g>
     {revealHidden && (
       <g className="uv-notes">
-        {/* Wobbly hand-drawn circle/pencil markings around key grid points (Agent area and X checkpoint) */}
-        <path d="M 55 89 C 55 82, 71 82, 71 89 C 71 96, 54 97, 55 89 C 56 84, 63 84, 69 87" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        {/* Wobbly hand-drawn circle/pencil markings around key grid points (route start, X checkpoint, and route end) */}
+        <path d="M 35 48 C 35 43, 45 43, 45 48 C 45 53, 34 54, 35 48" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
         <path d="M 35 88 C 35 83, 45 83, 45 88 C 45 93, 34 94, 35 88" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
         <path d="M 156 146 C 156 141, 164 141, 164 146 C 164 150, 155 151, 156 146 C 157 143, 161 143, 163 145" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
 
@@ -372,16 +372,17 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
         <path d="M 40 48 Q 40 100 65 125 Q 90 140 160 146" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeDasharray="3 2" filter="url(#uv-glow)" opacity="0.85" />
         <path d="M 60 122 L 65 125 L 63 130" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeLinecap="round" filter="url(#uv-glow)" />
 
-        {/* АГЕНТ: Near the building (in the park/garden area to the left, using rich purple for contrast) */}
+        {/* АГЕНТ: Near the building, placed horizontally in the clear grid cell (x:40-65, y:48-72) */}
         <g filter="url(#uv-glow)">
-          <text x="63" y="85" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">АГЕНТ</text>
-          <text x="63" y="93" fill="#6d28d9" fontFamily="monospace" fontSize="6" fontWeight="bold" textAnchor="middle">сектор Б-2</text>
+          <text x="43" y="65" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold">АГЕНТ</text>
+          <text x="43" y="73" fill="#6d28d9" fontFamily="monospace" fontSize="6" fontWeight="bold">сектор Б-2</text>
+          <path d="M 42 68 Q 52 68 60 67" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
-        {/* ИНФОРМАТОР: Inside the building (vertical track note in the train shed, using bright neon purple for contrast) */}
-        <g transform="rotate(-90, 98, 48)" filter="url(#uv-glow)">
-          <text x="98" y="48" fill="#e9d5ff" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">ИНФОРМАТОР</text>
-          <path d="M 70 52 L 126 52" fill="none" stroke="#c084fc" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+        {/* ИНФОРМАТОР: Inside the building, horizontal at the top of the terminal footprint with high-contrast white fill */}
+        <g filter="url(#uv-glow)">
+          <text x="102" y="75" fill="#ffffff" fontFamily="monospace" fontSize="7" fontWeight="bold" textAnchor="middle">ИНФОРМАТОР</text>
+          <path d="M 83 78 H 121" fill="none" stroke="#e9d5ff" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
         <g transform="rotate(5, 135, 47)" filter="url(#uv-glow)">
