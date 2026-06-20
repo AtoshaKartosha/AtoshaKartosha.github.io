@@ -420,52 +420,41 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 filter: "blur(4px)",
               }}
             />
-            {/* The SVG paths representing the wiped-away transparent glass (revealing the dark night outside) */}
-            <div className="relative w-full h-full">
-              <svg 
-                viewBox="0 0 100 60" 
-                className="w-full h-full select-none"
+            {/* The text representing the wiped-away transparent glass using Caveat font */}
+            <div 
+              className="relative w-full h-full flex flex-col items-center justify-center font-bold"
+              style={{
+                fontFamily: "var(--font-caveat)",
+                letterSpacing: "0.5px",
+              }}
+            >
+              {/* Highlight layer (wiped edge) */}
+              <div 
+                className="absolute text-center select-none text-[15px]"
                 style={{
-                  filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))",
+                  color: "rgba(255, 255, 255, 0.45)",
+                  WebkitTextStroke: "2.5px rgba(255, 255, 255, 0.45)",
                 }}
               >
-                {/* Bottom highlight layer (edge of finger stroke) */}
-                <g fill="none" stroke="rgba(255, 255, 255, 0.45)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
-                  {/* 118С */}
-                  <path d="M 22 15 L 26 12 L 26 28" />
-                  <path d="M 38 15 L 42 12 L 42 28" />
-                  <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
-                  <path d="M 78 14 C 70 14, 70 26, 78 26" />
-                  
-                  {/* 16:00 */}
-                  <path d="M 17 38 L 21 35 L 21 51" />
-                  <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
-                  {/* Colon */}
-                  <circle cx="48" cy="41" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
-                  <circle cx="48" cy="47" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
-                  {/* Zeros */}
-                  <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
-                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
-                </g>
-
-                {/* Top dark swipe layer (transparent window glass revealing night outside) */}
-                <g fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-                  {/* 118С */}
-                  <path d="M 22 15 L 26 12 L 26 28" />
-                  <path d="M 38 15 L 42 12 L 42 28" />
-                  <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
-                  <path d="M 78 14 C 70 14, 70 26, 78 26" />
-                  
-                  {/* 16:00 */}
-                  <path d="M 17 38 L 21 35 L 21 51" />
-                  <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
-                  {/* Colon */}
-                  <circle cx="48" cy="41" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
-                  <circle cx="48" cy="47" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
-                  {/* Zeros */}
-                  <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
-                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
-                </g>
+                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>118С</div>
+                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>16:00</div>
+              </div>
+              {/* Dark swipe layer */}
+              <div 
+                className="relative text-center select-none text-[15px]"
+                style={{
+                  color: "rgba(10, 15, 30, 0.95)",
+                  WebkitTextStroke: "0.5px rgba(10, 15, 30, 0.95)",
+                }}
+              >
+                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>118С</div>
+                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>16:00</div>
+              </div>
+              
+              {/* Shaky hand-drawn underline */}
+              <svg viewBox="0 0 100 20" className="absolute bottom-[2%] left-[10%] w-[80%] h-[12px] select-none" style={{ filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))" }}>
+                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2.5" strokeLinecap="round" />
+                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="1.5" strokeLinecap="round" />
               </svg>
             </div>
           </div>
