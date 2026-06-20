@@ -93,7 +93,7 @@ export const BoardPopup: React.FC = () => {
                 ease: "power1.out",
                 onComplete: () => {
                   if (textContainerRef.current) {
-                    textContainerRef.current.style.overflowY = "auto";
+                    textContainerRef.current.style.overflowY = "";
                   }
                 }
               }
@@ -196,7 +196,7 @@ export const BoardPopup: React.FC = () => {
             ref={textContainerRef}
             tabIndex={0}
             aria-label="Описание"
-            className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-hidden max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar focus:outline-none focus-visible:ring-1 focus-visible:ring-[#1c160e]/40"
+            className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-auto max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar focus:outline-none focus-visible:ring-1 focus-visible:ring-[#1c160e]/40"
           >
             {data.content.map((p, idx) => (
               <p key={idx} className="opacity-0 translate-y-2.5">

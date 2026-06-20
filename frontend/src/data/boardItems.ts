@@ -47,8 +47,8 @@ export const boardItems: BoardItem[] = [
     name: "Записка о расписании",
     popupId: "schedule",
     zIndex: 22,
-    desktop: { left: 19, top: 42, width: 13, rotation: 4 },
-    mobile: { left: 14, top: 62, width: 30, rotation: 4 },
+    desktop: { left: 19, top: 42, width: 15, rotation: 4 },
+    mobile: { left: 14, top: 62, width: 33, rotation: 4 },
   },
   {
     id: "map",
