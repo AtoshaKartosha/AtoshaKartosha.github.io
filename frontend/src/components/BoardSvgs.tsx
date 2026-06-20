@@ -449,9 +449,16 @@ export const VintageClockSvg: React.FC<{ className?: string }> = ({
   const minutes = displayTime.getMinutes();
   const hours = displayTime.getHours();
 
-  const secondsDeg = seconds * 6;
-  const minutesDeg = minutes * 6 + seconds * 0.1;
-  const hoursDeg = (hours % 12) * 30 + minutes * 0.5;
+  const [secondsDeg, setSecondsDeg] = useState(seconds * 6);
+  const [minutesDeg, setMinutesDeg] = useState(minutes * 6 + seconds * 0.1);
+  const [hoursDeg, setHoursDeg] = useState((hours % 12) * 30 + minutes * 0.5);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setSecondsDeg(prev => prev + ((seconds * 6 - prev) % 360 + 360) % 360);
+    setMinutesDeg(prev => prev + (((minutes * 6 + seconds * 0.1) - prev) % 360 + 360) % 360);
+    setHoursDeg(prev => prev + ((((hours % 12) * 30 + minutes * 0.5) - prev) % 360 + 360) % 360);
+  }, [seconds, minutes, hours]);
 
   return (
     <svg viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
