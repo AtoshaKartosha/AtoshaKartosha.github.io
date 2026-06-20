@@ -554,11 +554,11 @@ export const FluidGlassCursor: React.FC = () => {
               <div
                 className="absolute pointer-events-none z-[22] transition-all duration-300 ease-out"
                 style={{
-                  left: `${(690 / 1385.92) * 100}%`,
-                  top: `${(640 / 773.53) * 100}%`,
-                  width: `${(185 / 1385.92) * 100}%`,
-                  height: `${(105 / 773.53) * 100}%`,
-                  backgroundImage: "url(/images/board/table-phone_v2.svg)",
+                  left: `${(670 / 1385.92) * 100}%`,
+                  top: `${(620 / 773.53) * 100}%`,
+                  width: `${(225 / 1385.92) * 100}%`,
+                  height: `${(145 / 773.53) * 100}%`,
+                  backgroundImage: "url(/images/board/table-phone_v2-glow.svg?v=4)",
                   backgroundSize: "contain",
                   backgroundPosition: "center",
                   backgroundRepeat: "no-repeat",
@@ -571,10 +571,10 @@ export const FluidGlassCursor: React.FC = () => {
                 <div 
                   className="absolute select-none pointer-events-none"
                   style={{
-                    left: "60%",
-                    top: "70.3%",
-                    width: "12%",
-                    height: "21%",
+                    left: "58.2%",
+                    top: "64.7%",
+                    width: "9.9%",
+                    height: "15.2%",
                     transform: "translate(-50%, -50%)",
                     mixBlendMode: "screen",
                     opacity: 0.9,
