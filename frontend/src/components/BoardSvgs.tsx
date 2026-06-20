@@ -372,41 +372,41 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
         <path d="M 40 48 Q 40 100 65 125 Q 90 140 160 146" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeDasharray="3 2" filter="url(#uv-glow)" opacity="0.85" />
         <path d="M 60 122 L 65 125 L 63 130" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeLinecap="round" filter="url(#uv-glow)" />
 
-        {/* АГЕНТ: Near the building (in the park/garden area to the left) */}
+        {/* АГЕНТ: Near the building (in the park/garden area to the left, using rich purple for contrast) */}
         <g filter="url(#uv-glow)">
-          <text x="63" y="85" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">АГЕНТ</text>
-          <text x="63" y="93" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold" textAnchor="middle">сектор Б-2</text>
+          <text x="63" y="85" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">АГЕНТ</text>
+          <text x="63" y="93" fill="#6d28d9" fontFamily="monospace" fontSize="6" fontWeight="bold" textAnchor="middle">сектор Б-2</text>
         </g>
 
-        {/* ИНФОРМАТОР: Inside the building (vertical track note in the train shed) */}
+        {/* ИНФОРМАТОР: Inside the building (vertical track note in the train shed, using bright neon purple for contrast) */}
         <g transform="rotate(-90, 98, 48)" filter="url(#uv-glow)">
-          <text x="98" y="48" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">ИНФОРМАТОР</text>
-          <path d="M 70 52 L 126 52" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+          <text x="98" y="48" fill="#e9d5ff" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">ИНФОРМАТОР</text>
+          <path d="M 70 52 L 126 52" fill="none" stroke="#c084fc" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
         <g transform="rotate(5, 135, 47)" filter="url(#uv-glow)">
-          <text x="135" y="47" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold">сектор Г-1</text>
+          <text x="135" y="47" fill="#6d28d9" fontFamily="monospace" fontSize="6" fontWeight="bold">сектор Г-1</text>
         </g>
 
         <g transform="rotate(-3, 26, 146)" filter="url(#uv-glow)">
-          <text x="26" y="146" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">▼ 16:00 · НАЧАЛО</text>
+          <text x="26" y="146" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold">▼ 16:00 · НАЧАЛО</text>
         </g>
 
         <g transform="rotate(6, 58, 172)" filter="url(#uv-glow)">
-          <text x="58" y="172" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ОБВ.КАН. → 118С</text>
+          <text x="58" y="172" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold">ОБВ.КАН. → 118С</text>
         </g>
 
         {/* Case note placed to the right of the building, below the pin label */}
         <g transform="rotate(-2, 142, 115)" filter="url(#uv-glow)">
-          <text x="142" y="115" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ДЕЛО №1853</text>
+          <text x="142" y="115" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold">ДЕЛО №1853</text>
           <path d="M 140 119 Q 155 119 188 118" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
         {/* Cipher mark placed above the pin label */}
-        <text x="130" y="65" fill="#7c3aed" fontFamily="monospace" fontSize="10" fontWeight="bold" filter="url(#uv-glow)">※</text>
+        <text x="130" y="65" fill="#6d28d9" fontFamily="monospace" fontSize="10" fontWeight="bold" filter="url(#uv-glow)">※</text>
 
         <g transform="rotate(-90, 18, 100)" filter="url(#uv-glow)">
-          <text x="18" y="100" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold">{"// СЕКРЕТНО //"}</text>
+          <text x="18" y="100" fill="#6d28d9" fontFamily="monospace" fontSize="6" fontWeight="bold">{"// СЕКРЕТНО //"}</text>
         </g>
       </g>
     )}
