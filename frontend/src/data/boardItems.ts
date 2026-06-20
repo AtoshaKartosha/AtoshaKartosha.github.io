@@ -78,7 +78,7 @@ export const boardItems: BoardItem[] = [
     id: "evidence",
     name: "Регистрация сыщиков",
     popupId: "registration",
-    zIndex: 10,
+    zIndex: 11,
     desktop: { left: 36, top: 58, width: 10, rotation: 12 },
     mobile: { left: 64, top: 92, width: 24, rotation: 12 },
   },
