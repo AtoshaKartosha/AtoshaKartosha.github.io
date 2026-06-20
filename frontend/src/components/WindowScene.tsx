@@ -409,7 +409,7 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transform: "rotate(-3deg)",
+              transform: "rotate(-16deg)",
             }}
           >
             {/* The breath fog background */}
@@ -420,41 +420,52 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 filter: "blur(4px)",
               }}
             />
-            {/* The text representing the wiped-away transparent glass using Caveat font */}
-            <div 
-              className="relative w-full h-full flex flex-col items-center justify-center font-bold"
-              style={{
-                fontFamily: "var(--font-caveat)",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {/* Highlight layer (wiped edge) */}
-              <div 
-                className="absolute text-center select-none text-[15px]"
+            {/* The SVG paths representing the wiped-away transparent glass (revealing the dark night outside) */}
+            <div className="relative w-full h-full">
+              <svg 
+                viewBox="0 0 100 60" 
+                className="w-full h-full select-none"
                 style={{
-                  color: "rgba(255, 255, 255, 0.45)",
-                  WebkitTextStroke: "2.5px rgba(255, 255, 255, 0.45)",
+                  filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))",
                 }}
               >
-                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>118С</div>
-                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>16:00</div>
-              </div>
-              {/* Dark swipe layer */}
-              <div 
-                className="relative text-center select-none text-[15px]"
-                style={{
-                  color: "rgba(10, 15, 30, 0.95)",
-                  WebkitTextStroke: "0.5px rgba(10, 15, 30, 0.95)",
-                }}
-              >
-                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>118С</div>
-                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>16:00</div>
-              </div>
-              
-              {/* Shaky hand-drawn underline */}
-              <svg viewBox="0 0 100 20" className="absolute bottom-[2%] left-[10%] w-[80%] h-[12px] select-none" style={{ filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))" }}>
-                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="1.5" strokeLinecap="round" />
+                {/* Bottom highlight layer (edge of finger stroke) */}
+                <g fill="none" stroke="rgba(255, 255, 255, 0.45)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+                  {/* 118С */}
+                  <path d="M 22 15 L 26 12 L 26 28" />
+                  <path d="M 38 15 L 42 12 L 42 28" />
+                  <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
+                  <path d="M 78 14 C 70 14, 70 26, 78 26" />
+                  
+                  {/* 16:00 */}
+                  <path d="M 17 38 L 21 35 L 21 51" />
+                  <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
+                  {/* Colon */}
+                  <circle cx="48" cy="41" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
+                  <circle cx="48" cy="47" r="1.5" fill="rgba(255, 255, 255, 0.45)" stroke="none" />
+                  {/* Zeros */}
+                  <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
+                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
+                </g>
+
+                {/* Top dark swipe layer (transparent window glass revealing night outside) */}
+                <g fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  {/* 118С */}
+                  <path d="M 22 15 L 26 12 L 26 28" />
+                  <path d="M 38 15 L 42 12 L 42 28" />
+                  <path d="M 56 16 C 54 12, 62 12, 60 16 C 58 20, 52 20, 54 24 C 56 28, 64 28, 62 24 C 60 20, 56 20, 56 16 Z" />
+                  <path d="M 78 14 C 70 14, 70 26, 78 26" />
+                  
+                  {/* 16:00 */}
+                  <path d="M 17 38 L 21 35 L 21 51" />
+                  <path d="M 37 36 C 30 39, 30 51, 35 51 C 39 51, 39 44, 35 44 C 32 44, 32 48, 35 51" />
+                  {/* Colon */}
+                  <circle cx="48" cy="41" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
+                  <circle cx="48" cy="47" r="1.0" fill="rgba(10, 15, 30, 0.9)" stroke="none" />
+                  {/* Zeros */}
+                  <path d="M 59 36 C 55 36, 55 51, 59 51 C 63 51, 63 36, 59 36 Z" />
+                  <path d="M 75 36 C 71 36, 71 51, 75 51 C 79 51, 79 36, 75 36 Z" />
+                </g>
               </svg>
             </div>
           </div>
@@ -468,11 +479,11 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
               left: "26%",
               top: "57%",
               width: "48%",
-              height: "18%",
+              height: "22%",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transform: "rotate(2deg)",
+              transform: "rotate(-10deg)",
             }}
           >
             {/* The breath fog background */}
@@ -483,41 +494,74 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 filter: "blur(5px)",
               }}
             />
-            {/* The text representing the wiped-away transparent glass using Caveat font */}
-            <div 
-              className="relative w-full h-full flex flex-col items-center justify-center font-bold"
-              style={{
-                fontFamily: "var(--font-caveat)",
-                letterSpacing: "0.5px",
-              }}
-            >
-              {/* Highlight layer (wiped edge) */}
-              <div 
-                className="absolute text-center select-none text-[15px]"
+            {/* The SVG paths representing the wiped-away transparent glass (revealing the dark night outside) */}
+            <div className="relative w-full h-full">
+              <svg 
+                viewBox="0 0 100 80" 
+                className="w-full h-full select-none"
                 style={{
-                  color: "rgba(255, 255, 255, 0.45)",
-                  WebkitTextStroke: "2.5px rgba(255, 255, 255, 0.45)",
+                  filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))",
                 }}
               >
-                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>информатор</div>
-                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>знает!</div>
-              </div>
-              {/* Dark swipe layer */}
-              <div 
-                className="relative text-center select-none text-[15px]"
-                style={{
-                  color: "rgba(10, 15, 30, 0.95)",
-                  WebkitTextStroke: "0.5px rgba(10, 15, 30, 0.95)",
-                }}
-              >
-                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>информатор</div>
-                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>знает!</div>
-              </div>
-              
-              {/* Shaky hand-drawn underline */}
-              <svg viewBox="0 0 100 20" className="absolute bottom-[2%] left-[10%] w-[80%] h-[12px] select-none" style={{ filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))" }}>
-                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2.5" strokeLinecap="round" />
-                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="1.5" strokeLinecap="round" />
+                {/* Bottom highlight layer (edge of finger stroke) */}
+                <g fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
+                  {/* инфор- */}
+                  <path d="M 15 20 L 15 10 L 23 20 L 23 10" />
+                  <path d="M 28 10 L 28 20 M 28 15 L 34 15 M 34 10 L 34 20" />
+                  <path d="M 43 8 L 43 23 M 39 15 C 39 11, 47 11, 47 15 C 47 19, 39 19, 39 15 Z" />
+                  <path d="M 54 15 C 51 15, 51 20, 54 20 C 57 20, 57 15, 54 15 Z" />
+                  <path d="M 62 10 L 62 25 M 62 11 C 67 11, 67 16, 62 16" />
+                  <path d="M 70 15 H 76" />
+                  
+                  {/* матор */}
+                  <path d="M 15 38 L 15 28 L 19 34 L 23 28 L 23 38" />
+                  <path d="M 32 38 L 32 31 M 28 35 C 28 31, 32 31, 32 35 C 32 39, 28 39, 28 35 Z" />
+                  <path d="M 37 28 H 45 M 41 28 L 41 38" />
+                  <path d="M 52 33 C 49 33, 49 38, 52 38 C 55 38, 55 33, 52 33 Z" />
+                  <path d="M 60 28 L 60 43 M 60 29 C 65 29, 65 34, 60 34" />
+
+                  {/* знает! */}
+                  <path d="M 15 53 C 19 53, 19 58, 15 58 C 19 58, 19 64, 14 64" />
+                  <path d="M 23 53 L 23 64 M 23 58 L 29 58 M 29 53 L 29 64" />
+                  <path d="M 38 64 L 38 57 M 34 61 C 34 57, 38 57, 38 61 C 38 65, 34 65, 34 61 Z" />
+                  <path d="M 44 61 H 50 C 50 57, 44 57, 44 61 C 44 65, 50 65, 50 62" />
+                  <path d="M 55 53 H 63 M 59 53 L 59 64" />
+                  <path d="M 68 52 L 68 60" />
+                  <path d="M 68 64 L 68 64" />
+
+                  {/* Nervous Underline */}
+                  <path d="M 12 70 Q 40 68 76 71" />
+                </g>
+
+                {/* Top dark swipe layer (transparent window glass revealing night outside) */}
+                <g fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                  {/* инфор- */}
+                  <path d="M 15 20 L 15 10 L 23 20 L 23 10" />
+                  <path d="M 28 10 L 28 20 M 28 15 L 34 15 M 34 10 L 34 20" />
+                  <path d="M 43 8 L 43 23 M 39 15 C 39 11, 47 11, 47 15 C 47 19, 39 19, 39 15 Z" />
+                  <path d="M 54 15 C 51 15, 51 20, 54 20 C 57 20, 57 15, 54 15 Z" />
+                  <path d="M 62 10 L 62 25 M 62 11 C 67 11, 67 16, 62 16" />
+                  <path d="M 70 15 H 76" />
+                  
+                  {/* матор */}
+                  <path d="M 15 38 L 15 28 L 19 34 L 23 28 L 23 38" />
+                  <path d="M 32 38 L 32 31 M 28 35 C 28 31, 32 31, 32 35 C 32 39, 28 39, 28 35 Z" />
+                  <path d="M 37 28 H 45 M 41 28 L 41 38" />
+                  <path d="M 52 33 C 49 33, 49 38, 52 38 C 55 38, 55 33, 52 33 Z" />
+                  <path d="M 60 28 L 60 43 M 60 29 C 65 29, 65 34, 60 34" />
+
+                  {/* знает! */}
+                  <path d="M 15 53 C 19 53, 19 58, 15 58 C 19 58, 19 64, 14 64" />
+                  <path d="M 23 53 L 23 64 M 23 58 L 29 58 M 29 53 L 29 64" />
+                  <path d="M 38 64 L 38 57 M 34 61 C 34 57, 38 57, 38 61 C 38 65, 34 65, 34 61 Z" />
+                  <path d="M 44 61 H 50 C 50 57, 44 57, 44 61 C 44 65, 50 65, 50 62" />
+                  <path d="M 55 53 H 63 M 59 53 L 59 64" />
+                  <path d="M 68 52 L 68 60" />
+                  <path d="M 68 64 L 68 64" />
+
+                  {/* Nervous Underline */}
+                  <path d="M 12 70 Q 40 68 76 71" />
+                </g>
               </svg>
             </div>
           </div>
