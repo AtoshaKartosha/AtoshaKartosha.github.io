@@ -9,6 +9,7 @@ import { popupContentMap } from "../data/popupContent";
 export const BoardPopup: React.FC = () => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const textContainerRef = useRef<HTMLDivElement>(null);
   
   const activePopup = useBoardStore((state) => state.activePopup);
   const setActivePopup = useBoardStore((state) => state.setActivePopup);
@@ -43,6 +44,9 @@ export const BoardPopup: React.FC = () => {
     if (!dialog || !content) return;
 
     if (activePopup && data) {
+      if (textContainerRef.current) {
+        textContainerRef.current.style.overflowY = "hidden";
+      }
       // Remember last focused element to restore it on close
       lastActiveElement.current = document.activeElement as HTMLElement;
 
@@ -86,6 +90,11 @@ export const BoardPopup: React.FC = () => {
                 duration: 0.4,
                 stagger: 0.12,
                 ease: "power1.out",
+                onComplete: () => {
+                  if (textContainerRef.current) {
+                    textContainerRef.current.style.overflowY = "auto";
+                  }
+                }
               }
             );
           }
@@ -183,9 +192,10 @@ export const BoardPopup: React.FC = () => {
             </div>
           )}
           <div
+            ref={textContainerRef}
             tabIndex={0}
             aria-label="Описание"
-            className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-auto max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar focus:outline-none focus-visible:ring-1 focus-visible:ring-[#1c160e]/40"
+            className="font-typewriter text-sm space-y-4 leading-relaxed text-[#2a2217] flex-1 select-text overflow-y-hidden max-h-[28vh] sm:max-h-[35vh] md:max-h-[40vh] pr-2 red-dossier-scrollbar focus:outline-none focus-visible:ring-1 focus-visible:ring-[#1c160e]/40"
           >
             {data.content.map((p, idx) => (
               <p key={idx} className="opacity-0 translate-y-2.5">
