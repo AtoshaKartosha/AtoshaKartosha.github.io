@@ -367,49 +367,56 @@ export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> =
     {isHovered && (
       <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
         <style>{`
-          @keyframes gameParticle1 {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translate(-25px, -50px) scale(1.3); opacity: 0; }
+          @keyframes particleUpLeft {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translate(-35px, -70px) scale(1.5); opacity: 0; }
           }
-          @keyframes gameParticle2 {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.9; }
-            100% { transform: translate(30px, -40px) scale(1.2); opacity: 0; }
+          @keyframes particleUpRight {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translate(35px, -70px) scale(1.5); opacity: 0; }
           }
-          @keyframes gameParticle3 {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.8; }
-            100% { transform: translate(-15px, -60px) scale(1.4); opacity: 0; }
+          @keyframes particleUp {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translate(0, -85px) scale(1.6); opacity: 0; }
           }
-          @keyframes gameParticle4 {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.7; }
-            100% { transform: translate(20px, -45px) scale(1.1); opacity: 0; }
+          @keyframes particleLeft {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translate(-50px, -40px) scale(1.4); opacity: 0; }
           }
-          @keyframes gameParticle5 {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.95; }
-            100% { transform: translate(-20px, -35px) scale(1.3); opacity: 0; }
+          @keyframes particleRight {
+            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: translate(50px, -40px) scale(1.4); opacity: 0; }
           }
-          @keyframes gameParticle6 {
-            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.85; }
-            100% { transform: translate(25px, -55px) scale(1.2); opacity: 0; }
-          }
-          .animate-game-particle-1 { animation: gameParticle1 2.2s infinite ease-out; }
-          .animate-game-particle-2 { animation: gameParticle2 1.8s infinite ease-out 0.3s; }
-          .animate-game-particle-3 { animation: gameParticle3 2.5s infinite ease-out 0.6s; }
-          .animate-game-particle-4 { animation: gameParticle4 2.0s infinite ease-out 0.9s; }
-          .animate-game-particle-5 { animation: gameParticle5 1.7s infinite ease-out 1.2s; }
-          .animate-game-particle-6 { animation: gameParticle6 2.3s infinite ease-out 1.5s; }
+          .gp-1 { animation: particleUpLeft 2.4s infinite ease-out 0.0s; }
+          .gp-2 { animation: particleUpRight 1.8s infinite ease-out 0.2s; }
+          .gp-3 { animation: particleUp 2.2s infinite ease-out 0.4s; }
+          .gp-4 { animation: particleLeft 2.0s infinite ease-out 0.6s; }
+          .gp-5 { animation: particleRight 1.7s infinite ease-out 0.8s; }
+          .gp-6 { animation: particleUpLeft 2.1s infinite ease-out 1.0s; }
+          .gp-7 { animation: particleUpRight 2.5s infinite ease-out 1.2s; }
+          .gp-8 { animation: particleUp 1.9s infinite ease-out 1.4s; }
+          .gp-9 { animation: particleLeft 2.3s infinite ease-out 1.6s; }
+          .gp-10 { animation: particleRight 2.0s infinite ease-out 1.8s; }
+          .gp-11 { animation: particleUpLeft 1.6s infinite ease-out 2.0s; }
+          .gp-12 { animation: particleUpRight 2.2s infinite ease-out 2.2s; }
         `}</style>
-        <span className="absolute rounded-full bg-amber-400 opacity-0 blur-[1px] animate-game-particle-1" style={{ width: '6px', height: '6px', left: '20%', top: '80%' }} />
-        <span className="absolute rounded-full bg-red-400 opacity-0 blur-[1px] animate-game-particle-2" style={{ width: '4px', height: '4px', left: '70%', top: '70%' }} />
-        <span className="absolute rounded-full bg-orange-400 opacity-0 blur-[1.5px] animate-game-particle-3" style={{ width: '8px', height: '8px', left: '40%', top: '50%' }} />
-        <span className="absolute rounded-full bg-amber-300 opacity-0 blur-[1px] animate-game-particle-4" style={{ width: '5px', height: '5px', left: '10%', top: '30%' }} />
-        <span className="absolute rounded-full bg-red-300 opacity-0 blur-[1px] animate-game-particle-5" style={{ width: '6px', height: '6px', left: '85%', top: '40%' }} />
-        <span className="absolute rounded-full bg-orange-300 opacity-0 blur-[1.5px] animate-game-particle-6" style={{ width: '5px', height: '5px', left: '50%', top: '15%' }} />
+        <span className="absolute rounded-full bg-amber-400 opacity-0 blur-[1px] gp-1" style={{ width: '6px', height: '6px', left: '20%', top: '80%', boxShadow: '0 0 6px #fbbf24, 0 0 12px #d97706' }} />
+        <span className="absolute rounded-full bg-red-400 opacity-0 blur-[1px] gp-2" style={{ width: '4px', height: '4px', left: '70%', top: '70%', boxShadow: '0 0 6px #f87171, 0 0 12px #dc2626' }} />
+        <span className="absolute rounded-full bg-orange-400 opacity-0 blur-[1.5px] gp-3" style={{ width: '8px', height: '8px', left: '40%', top: '50%', boxShadow: '0 0 6px #fb923c, 0 0 12px #ea580c' }} />
+        <span className="absolute rounded-full bg-amber-300 opacity-0 blur-[1px] gp-4" style={{ width: '5px', height: '5px', left: '10%', top: '30%', boxShadow: '0 0 6px #fde047, 0 0 12px #ca8a04' }} />
+        <span className="absolute rounded-full bg-red-300 opacity-0 blur-[1px] gp-5" style={{ width: '6px', height: '6px', left: '85%', top: '40%', boxShadow: '0 0 6px #fca5a5, 0 0 12px #e11d48' }} />
+        <span className="absolute rounded-full bg-orange-300 opacity-0 blur-[1.5px] gp-6" style={{ width: '5px', height: '5px', left: '50%', top: '15%', boxShadow: '0 0 6px #ffedd5, 0 0 12px #f97316' }} />
+        <span className="absolute rounded-full bg-amber-400 opacity-0 blur-[1px] gp-7" style={{ width: '7px', height: '7px', left: '30%', top: '75%', boxShadow: '0 0 6px #fbbf24, 0 0 12px #d97706' }} />
+        <span className="absolute rounded-full bg-red-400 opacity-0 blur-[1px] gp-8" style={{ width: '5px', height: '5px', left: '60%', top: '65%', boxShadow: '0 0 6px #f87171, 0 0 12px #dc2626' }} />
+        <span className="absolute rounded-full bg-orange-400 opacity-0 blur-[1.5px] gp-9" style={{ width: '9px', height: '9px', left: '25%', top: '45%', boxShadow: '0 0 6px #fb923c, 0 0 12px #ea580c' }} />
+        <span className="absolute rounded-full bg-amber-300 opacity-0 blur-[1px] gp-10" style={{ width: '6px', height: '6px', left: '80%', top: '25%', boxShadow: '0 0 6px #fde047, 0 0 12px #ca8a04' }} />
+        <span className="absolute rounded-full bg-red-300 opacity-0 blur-[1px] gp-11" style={{ width: '5px', height: '5px', left: '15%', top: '55%', boxShadow: '0 0 6px #fca5a5, 0 0 12px #e11d48' }} />
+        <span className="absolute rounded-full bg-orange-300 opacity-0 blur-[1.5px] gp-12" style={{ width: '6px', height: '6px', left: '65%', top: '35%', boxShadow: '0 0 6px #ffedd5, 0 0 12px #f97316' }} />
       </div>
     )}
     
