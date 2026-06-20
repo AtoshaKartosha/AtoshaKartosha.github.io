@@ -372,17 +372,17 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
         <path d="M 40 48 Q 40 100 65 125 Q 90 140 160 146" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeDasharray="3 2" filter="url(#uv-glow)" opacity="0.85" />
         <path d="M 60 122 L 65 125 L 63 130" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeLinecap="round" filter="url(#uv-glow)" />
 
-        {/* АГЕНТ: Near the building, placed horizontally in the clear grid cell (x:40-65, y:48-72) */}
+        {/* АГЕНТ: Near the building, centered horizontally in the clear grid cell (x:41-64, y:48-72) */}
         <g filter="url(#uv-glow)">
-          <text x="43" y="65" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold">АГЕНТ</text>
-          <text x="43" y="73" fill="#6d28d9" fontFamily="monospace" fontSize="6" fontWeight="bold">сектор Б-2</text>
-          <path d="M 42 68 Q 52 68 60 67" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+          <text x="52.5" y="65" fill="#6d28d9" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">АГЕНТ</text>
+          <text x="52.5" y="72" fill="#6d28d9" fontFamily="monospace" fontSize="5" fontWeight="bold" textAnchor="middle">сектор Б-2</text>
+          <path d="M 44 68 H 61" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
         {/* ИНФОРМАТОР: Inside the building, horizontal at the top of the terminal footprint with high-contrast white fill */}
         <g filter="url(#uv-glow)">
           <text x="102" y="75" fill="#ffffff" fontFamily="monospace" fontSize="7" fontWeight="bold" textAnchor="middle">ИНФОРМАТОР</text>
-          <path d="M 83 78 H 121" fill="none" stroke="#e9d5ff" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+          <path d="M 85 78 H 117" fill="none" stroke="#e9d5ff" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
         <g transform="rotate(5, 135, 47)" filter="url(#uv-glow)">
