@@ -837,13 +837,9 @@ export const DetectiveBoard: React.FC = () => {
           }}
           className="absolute cursor-pointer transition-all duration-300 ease-out focus:outline-none"
           style={{
-            ...(hoveredItemId === "table-phone"
-              ? getCoverCoords(670, 620, 225, 145)
-              : getCoverCoords(690, 640, 185, 105)),
+            ...getCoverCoords(690, 640, 185, 105),
             zIndex: 22,
-            backgroundImage: hoveredItemId === "table-phone"
-              ? "url(/images/board/table-phone_v2-glow.svg?v=4)"
-              : "url(/images/board/table-phone_v2.svg)",
+            backgroundImage: "url(/images/board/table-phone_v2.svg)",
             backgroundSize: "contain",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
