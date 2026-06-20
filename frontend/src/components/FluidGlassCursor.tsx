@@ -383,6 +383,7 @@ export const FluidGlassCursor: React.FC = () => {
       case "map":
         return (
           <MapSvg
+            revealHidden={true}
             className="w-full h-full transition-all duration-300 ease-out"
           />
         );

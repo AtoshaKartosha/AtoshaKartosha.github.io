@@ -168,7 +168,10 @@ export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-f
 );
 const markerPath = "M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z";
 
-export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = ({
+  revealHidden = false,
+  className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]",
+}) => (
   <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <defs>
       <style>{`
@@ -210,6 +213,17 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
         <stop offset="80%" stopColor="#f0f0f0" />
         <stop offset="100%" stopColor="#555555" />
       </linearGradient>
+      {/* UV glow filter */}
+      <filter id="uv-glow">
+        <feGaussianBlur stdDeviation="1.5" result="blur" />
+        <feFlood floodColor="#a855f7" floodOpacity="0.7" result="color" />
+        <feComposite in="color" in2="blur" operator="in" result="glow" />
+        <feMerge>
+          <feMergeNode in="glow" />
+          <feMergeNode in="glow" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
     </defs>
     {/* Map Paper */}
     <rect width="200" height="200" rx="4" fill="#decfa8" />
@@ -341,6 +355,27 @@ export const MapSvg: React.FC<{ className?: string }> = ({ className = "w-full h
       <path d="M119 76 H186 A3 3 0 0 1 189 79 V93 A3 3 0 0 1 186 96 H118 L108 92 L116 84 V79 A3 3 0 0 1 119 76 Z" fill="#141414" stroke="#e8dcc8" strokeWidth="1" opacity="0.9" />
       <text x="152.5" y="89" fill="#e8dcc8" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
     </g>
+    {revealHidden && (
+      <g className="uv-notes">
+        {/* Dashed route line */}
+        <path d="M 40 48 Q 100 88 160 146" fill="none" stroke="rgba(160, 140, 255, 0.6)" strokeWidth="0.8" strokeDasharray="3 2" filter="url(#uv-glow)" />
+
+        {/* Small circle markers */}
+        <circle cx="40" cy="48" r="2" fill="rgba(180, 160, 255, 0.7)" filter="url(#uv-glow)" />
+        <circle cx="160" cy="146" r="2" fill="rgba(180, 160, 255, 0.7)" filter="url(#uv-glow)" />
+        <circle cx="65" cy="88" r="2" fill="rgba(180, 160, 255, 0.7)" filter="url(#uv-glow)" />
+
+        {/* Coded organizer marks & cipher/coded annotations */}
+        <text x="42" y="64" transform="rotate(-8, 42, 64)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">АГЕНТ ☆ Б-2</text>
+        <text x="140" y="40" transform="rotate(5, 140, 40)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">ИНФОРМАТОР</text>
+        <text x="155" y="50" transform="rotate(5, 155, 50)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="5" filter="url(#uv-glow)">сектор Г-1</text>
+        <text x="30" y="145" transform="rotate(-3, 30, 145)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">▼ 16:00 · НАЧАЛО</text>
+        <text x="60" y="170" transform="rotate(6, 60, 170)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">ОБВ.КАН. → 118С</text>
+        <text x="75" y="112" transform="rotate(-2, 75, 112)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">ДЕЛО №1853</text>
+        <text x="130" y="78" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="8" filter="url(#uv-glow)">※</text>
+        <text x="20" y="100" transform="rotate(-90, 20, 100)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="5" filter="url(#uv-glow)">{"// СЕКРЕТНО //"}</text>
+      </g>
+    )}
   </svg>
 );
 
