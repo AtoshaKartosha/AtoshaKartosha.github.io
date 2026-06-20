@@ -400,19 +400,38 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
         {revealHidden && (
           <div 
             aria-hidden="true"
-            className="absolute text-center select-none font-mono text-[13px] font-bold leading-tight z-[4]"
+            className="absolute z-[4]"
             style={{
-              left: "30%",
-              top: "40%",
-              width: "36%",
-              color: "rgba(240, 248, 255, 0.85)",
-              textShadow: "0 0 3px rgba(255, 255, 255, 0.95), 0 0 6px rgba(180, 200, 255, 0.7)",
+              left: "28%",
+              top: "37%",
+              width: "44%",
+              height: "18%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
               transform: "rotate(-3deg)",
-              letterSpacing: "0.5px",
             }}
           >
-            <div>118С</div>
-            <div className="mt-0.5">16:00</div>
+            {/* The breath fog background */}
+            <div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "radial-gradient(ellipse at center, rgba(240, 245, 255, 0.55) 0%, rgba(220, 230, 255, 0.25) 60%, transparent 85%)",
+                filter: "blur(4px)",
+              }}
+            />
+            {/* The text representing the wiped-away transparent glass (revealing the dark night outside) */}
+            <div 
+              className="relative text-center select-none font-mono text-[14px] font-bold leading-tight"
+              style={{
+                color: "rgba(10, 15, 30, 0.9)", // Dark night color
+                textShadow: "0 0 1px rgba(255, 255, 255, 0.4)", // Edge highlights where fog accumulates
+                letterSpacing: "1px",
+              }}
+            >
+              <div>118С</div>
+              <div className="mt-0.5 text-[13px]">16:00</div>
+            </div>
           </div>
         )}
         {/* Faint glass sheen overlay */}
