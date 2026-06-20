@@ -470,6 +470,69 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
             </div>
           </div>
         )}
+        {/* Condensation scribble/scratch (ИНФОРМАТОР ЗНАЕТ!) */}
+        {revealHidden && (
+          <div 
+            aria-hidden="true"
+            className="absolute z-[4]"
+            style={{
+              left: "26%",
+              top: "57%",
+              width: "48%",
+              height: "18%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              transform: "rotate(2deg)",
+            }}
+          >
+            {/* The breath fog background */}
+            <div 
+              className="absolute inset-0 rounded-full"
+              style={{
+                background: "radial-gradient(ellipse at center, rgba(240, 245, 255, 0.5) 0%, rgba(220, 230, 255, 0.2) 60%, transparent 85%)",
+                filter: "blur(5px)",
+              }}
+            />
+            {/* The text representing the wiped-away transparent glass using Caveat font */}
+            <div 
+              className="relative w-full h-full flex flex-col items-center justify-center font-bold"
+              style={{
+                fontFamily: "var(--font-caveat)",
+                letterSpacing: "0.5px",
+              }}
+            >
+              {/* Highlight layer (wiped edge) */}
+              <div 
+                className="absolute text-center select-none text-[15px]"
+                style={{
+                  color: "rgba(255, 255, 255, 0.45)",
+                  WebkitTextStroke: "2.5px rgba(255, 255, 255, 0.45)",
+                }}
+              >
+                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>информатор</div>
+                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>знает!</div>
+              </div>
+              {/* Dark swipe layer */}
+              <div 
+                className="relative text-center select-none text-[15px]"
+                style={{
+                  color: "rgba(10, 15, 30, 0.95)",
+                  WebkitTextStroke: "0.5px rgba(10, 15, 30, 0.95)",
+                }}
+              >
+                <div style={{ transform: "rotate(-3deg) translate(-2px, 0)" }}>информатор</div>
+                <div className="italic" style={{ transform: "rotate(2deg) translate(2px, -2px)" }}>знает!</div>
+              </div>
+              
+              {/* Shaky hand-drawn underline */}
+              <svg viewBox="0 0 100 20" className="absolute bottom-[2%] left-[10%] w-[80%] h-[12px] select-none" style={{ filter: "drop-shadow(0 0 1px rgba(255,255,255,0.4))" }}>
+                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="2.5" strokeLinecap="round" />
+                <path d="M 5 8 Q 50 4 95 8" fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="1.5" strokeLinecap="round" />
+              </svg>
+            </div>
+          </div>
+        )}
         {/* Faint glass sheen overlay */}
         <div 
           aria-hidden="true"
