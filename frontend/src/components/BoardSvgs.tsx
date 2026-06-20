@@ -215,11 +215,10 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
       </linearGradient>
       {/* UV glow filter */}
       <filter id="uv-glow">
-        <feGaussianBlur stdDeviation="1.5" result="blur" />
-        <feFlood floodColor="#a855f7" floodOpacity="0.7" result="color" />
+        <feGaussianBlur stdDeviation="0.4" result="blur" />
+        <feFlood floodColor="#a855f7" floodOpacity="0.85" result="color" />
         <feComposite in="color" in2="blur" operator="in" result="glow" />
         <feMerge>
-          <feMergeNode in="glow" />
           <feMergeNode in="glow" />
           <feMergeNode in="SourceGraphic" />
         </feMerge>
@@ -357,23 +356,56 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
     </g>
     {revealHidden && (
       <g className="uv-notes">
-        {/* Dashed route line */}
-        <path d="M 40 48 Q 100 88 160 146" fill="none" stroke="rgba(160, 140, 255, 0.6)" strokeWidth="0.8" strokeDasharray="3 2" filter="url(#uv-glow)" />
+        {/* Wobbly hand-drawn circle/pencil markings */}
+        <path d="M 36 48 C 36 43, 44 43, 44 48 C 44 52, 35 53, 36 48 C 37 45, 41 45, 43 47" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        <path d="M 61 88 C 61 83, 69 83, 69 88 C 69 92, 60 93, 61 88 C 62 85, 66 85, 68 87" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        <path d="M 156 146 C 156 141, 164 141, 164 146 C 164 150, 155 151, 156 146 C 157 143, 161 143, 163 145" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
 
-        {/* Small circle markers */}
-        <circle cx="40" cy="48" r="2" fill="rgba(180, 160, 255, 0.7)" filter="url(#uv-glow)" />
-        <circle cx="160" cy="146" r="2" fill="rgba(180, 160, 255, 0.7)" filter="url(#uv-glow)" />
-        <circle cx="65" cy="88" r="2" fill="rgba(180, 160, 255, 0.7)" filter="url(#uv-glow)" />
+        {/* Rough X mark near terminal */}
+        <path d="M 102 108 L 107 113 M 107 108 L 102 113" fill="none" stroke="#7c3aed" strokeWidth="1" strokeLinecap="round" strokeDasharray="0.5 0.3" filter="url(#uv-glow)" />
 
-        {/* Coded organizer marks & cipher/coded annotations */}
-        <text x="42" y="64" transform="rotate(-8, 42, 64)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">АГЕНТ ☆ Б-2</text>
-        <text x="140" y="40" transform="rotate(5, 140, 40)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">ИНФОРМАТОР</text>
-        <text x="155" y="50" transform="rotate(5, 155, 50)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="5" filter="url(#uv-glow)">сектор Г-1</text>
-        <text x="30" y="145" transform="rotate(-3, 30, 145)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">▼ 16:00 · НАЧАЛО</text>
-        <text x="60" y="170" transform="rotate(6, 60, 170)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">ОБВ.КАН. → 118С</text>
-        <text x="75" y="112" transform="rotate(-2, 75, 112)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="6" filter="url(#uv-glow)">ДЕЛО №1853</text>
-        <text x="130" y="78" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="8" filter="url(#uv-glow)">※</text>
-        <text x="20" y="100" transform="rotate(-90, 20, 100)" fill="rgba(200, 180, 255, 0.85)" fontFamily="monospace" fontSize="5" filter="url(#uv-glow)">{"// СЕКРЕТНО //"}</text>
+        {/* Rough curved arrow pointing to station */}
+        <path d="M 130 95 Q 120 102 110 107" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        <path d="M 110 107 L 115 104 M 110 107 L 112 112" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" filter="url(#uv-glow)" />
+
+        {/* Dashed route line and arrowhead */}
+        <path d="M 40 48 Q 100 88 160 146" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeDasharray="3 2" filter="url(#uv-glow)" opacity="0.85" />
+        <path d="M 95 86 L 100 88 L 98 93" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeLinecap="round" filter="url(#uv-glow)" />
+
+        {/* Handwritten annotations with wobbly underlines */}
+        <g transform="rotate(-8, 40, 65)" filter="url(#uv-glow)">
+          <text x="40" y="65" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">АГЕНТ ☆ Б-2</text>
+          <path d="M 38 69 Q 58 67 78 65" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+          <path d="M 40 71 Q 59 69 76 67" fill="none" stroke="#7c3aed" strokeWidth="0.5" strokeLinecap="round" strokeDasharray="0.6 0.3" opacity="0.8" />
+        </g>
+
+        <g transform="rotate(5, 135, 38)" filter="url(#uv-glow)">
+          <text x="135" y="38" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ИНФОРМАТОР</text>
+          <path d="M 133 42 Q 155 42 178 41" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+        </g>
+
+        <g transform="rotate(5, 135, 47)" filter="url(#uv-glow)">
+          <text x="135" y="47" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold">сектор Г-1</text>
+        </g>
+
+        <g transform="rotate(-3, 26, 146)" filter="url(#uv-glow)">
+          <text x="26" y="146" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">▼ 16:00 · НАЧАЛО</text>
+        </g>
+
+        <g transform="rotate(6, 58, 172)" filter="url(#uv-glow)">
+          <text x="58" y="172" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ОБВ.КАН. → 118С</text>
+        </g>
+
+        <g transform="rotate(-2, 72, 112)" filter="url(#uv-glow)">
+          <text x="72" y="112" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ДЕЛО №1853</text>
+          <path d="M 70 116 Q 90 115 118 114" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+        </g>
+
+        <text x="130" y="78" fill="#7c3aed" fontFamily="monospace" fontSize="10" fontWeight="bold" filter="url(#uv-glow)">※</text>
+
+        <g transform="rotate(-90, 18, 100)" filter="url(#uv-glow)">
+          <text x="18" y="100" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold">{"// СЕКРЕТНО //"}</text>
+        </g>
       </g>
     )}
   </svg>
