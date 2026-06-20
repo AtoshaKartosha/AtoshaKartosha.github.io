@@ -368,29 +368,29 @@ export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> =
       <div className="absolute inset-0 pointer-events-none z-20 overflow-visible">
         <style>{`
           @keyframes particleUpLeft {
-            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: translate(-35px, -70px) scale(1.5); opacity: 0; }
+            0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.85; }
+            100% { transform: translate(-30px, -65px) scale(1.4) rotate(120deg); opacity: 0; }
           }
           @keyframes particleUpRight {
-            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: translate(35px, -70px) scale(1.5); opacity: 0; }
+            0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.9; }
+            100% { transform: translate(30px, -65px) scale(1.4) rotate(-120deg); opacity: 0; }
           }
           @keyframes particleUp {
-            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: translate(0, -85px) scale(1.6); opacity: 0; }
+            0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.9; }
+            100% { transform: translate(0, -80px) scale(1.5) rotate(45deg); opacity: 0; }
           }
           @keyframes particleLeft {
-            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: translate(-50px, -40px) scale(1.4); opacity: 0; }
+            0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.8; }
+            100% { transform: translate(-45px, -35px) scale(1.3) rotate(-60deg); opacity: 0; }
           }
           @keyframes particleRight {
-            0% { transform: translate(0, 0) scale(0.4); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: translate(50px, -40px) scale(1.4); opacity: 0; }
+            0% { transform: translate(0, 0) scale(0.4) rotate(0deg); opacity: 0; }
+            15% { opacity: 0.8; }
+            100% { transform: translate(45px, -35px) scale(1.3) rotate(60deg); opacity: 0; }
           }
           .gp-1 { animation: particleUpLeft 2.4s infinite ease-out 0.0s; }
           .gp-2 { animation: particleUpRight 1.8s infinite ease-out 0.2s; }
@@ -405,20 +405,26 @@ export const GamesImage: React.FC<{ className?: string; isHovered?: boolean }> =
           .gp-11 { animation: particleUpLeft 1.6s infinite ease-out 2.0s; }
           .gp-12 { animation: particleUpRight 2.2s infinite ease-out 2.2s; }
         `}</style>
-        <span className="absolute rounded-full bg-amber-400 opacity-0 blur-[1px] gp-1" style={{ width: '6px', height: '6px', left: '20%', top: '80%', boxShadow: '0 0 6px #fbbf24, 0 0 12px #d97706' }} />
-        <span className="absolute rounded-full bg-red-400 opacity-0 blur-[1px] gp-2" style={{ width: '4px', height: '4px', left: '70%', top: '70%', boxShadow: '0 0 6px #f87171, 0 0 12px #dc2626' }} />
-        <span className="absolute rounded-full bg-orange-400 opacity-0 blur-[1.5px] gp-3" style={{ width: '8px', height: '8px', left: '40%', top: '50%', boxShadow: '0 0 6px #fb923c, 0 0 12px #ea580c' }} />
-        <span className="absolute rounded-full bg-amber-300 opacity-0 blur-[1px] gp-4" style={{ width: '5px', height: '5px', left: '10%', top: '30%', boxShadow: '0 0 6px #fde047, 0 0 12px #ca8a04' }} />
-        <span className="absolute rounded-full bg-red-300 opacity-0 blur-[1px] gp-5" style={{ width: '6px', height: '6px', left: '85%', top: '40%', boxShadow: '0 0 6px #fca5a5, 0 0 12px #e11d48' }} />
-        <span className="absolute rounded-full bg-orange-300 opacity-0 blur-[1.5px] gp-6" style={{ width: '5px', height: '5px', left: '50%', top: '15%', boxShadow: '0 0 6px #ffedd5, 0 0 12px #f97316' }} />
-        <span className="absolute rounded-full bg-amber-400 opacity-0 blur-[1px] gp-7" style={{ width: '7px', height: '7px', left: '30%', top: '75%', boxShadow: '0 0 6px #fbbf24, 0 0 12px #d97706' }} />
-        <span className="absolute rounded-full bg-red-400 opacity-0 blur-[1px] gp-8" style={{ width: '5px', height: '5px', left: '60%', top: '65%', boxShadow: '0 0 6px #f87171, 0 0 12px #dc2626' }} />
-        <span className="absolute rounded-full bg-orange-400 opacity-0 blur-[1.5px] gp-9" style={{ width: '9px', height: '9px', left: '25%', top: '45%', boxShadow: '0 0 6px #fb923c, 0 0 12px #ea580c' }} />
-        <span className="absolute rounded-full bg-amber-300 opacity-0 blur-[1px] gp-10" style={{ width: '6px', height: '6px', left: '80%', top: '25%', boxShadow: '0 0 6px #fde047, 0 0 12px #ca8a04' }} />
-        <span className="absolute rounded-full bg-red-300 opacity-0 blur-[1px] gp-11" style={{ width: '5px', height: '5px', left: '15%', top: '55%', boxShadow: '0 0 6px #fca5a5, 0 0 12px #e11d48' }} />
-        <span className="absolute rounded-full bg-orange-300 opacity-0 blur-[1.5px] gp-12" style={{ width: '6px', height: '6px', left: '65%', top: '35%', boxShadow: '0 0 6px #ffedd5, 0 0 12px #f97316' }} />
+        {/* Gold particles (warm gold lamp sparks) */}
+        <span className="absolute rounded-full bg-[#d4af37] opacity-0 blur-[1px] gp-1" style={{ width: '5px', height: '5px', left: '20%', top: '80%', boxShadow: '0 0 6px #d4af37, 0 0 12px #b8860b' }} />
+        <span className="absolute rounded-full bg-[#d4af37] opacity-0 blur-[1px] gp-4" style={{ width: '4px', height: '4px', left: '10%', top: '30%', boxShadow: '0 0 6px #d4af37, 0 0 12px #b8860b' }} />
+        <span className="absolute rounded-full bg-[#d4af37] opacity-0 blur-[1px] gp-7" style={{ width: '6px', height: '6px', left: '30%', top: '75%', boxShadow: '0 0 6px #d4af37, 0 0 12px #b8860b' }} />
+        <span className="absolute rounded-full bg-[#d4af37] opacity-0 blur-[1px] gp-10" style={{ width: '5px', height: '5px', left: '80%', top: '25%', boxShadow: '0 0 6px #d4af37, 0 0 12px #b8860b' }} />
+
+        {/* Crimson particles (mysterious blood/danger indicators) */}
+        <span className="absolute rounded-full bg-[#8b0000] opacity-0 blur-[1px] gp-2" style={{ width: '4px', height: '4px', left: '70%', top: '70%', boxShadow: '0 0 6px #8b0000, 0 0 12px #4a0000' }} />
+        <span className="absolute rounded-full bg-[#8b0000] opacity-0 blur-[1px] gp-5" style={{ width: '5px', height: '5px', left: '85%', top: '40%', boxShadow: '0 0 6px #8b0000, 0 0 12px #4a0000' }} />
+        <span className="absolute rounded-full bg-[#8b0000] opacity-0 blur-[1px] gp-8" style={{ width: '4px', height: '4px', left: '60%', top: '65%', boxShadow: '0 0 6px #8b0000, 0 0 12px #4a0000' }} />
+        <span className="absolute rounded-full bg-[#8b0000] opacity-0 blur-[1px] gp-11" style={{ width: '5px', height: '5px', left: '15%', top: '55%', boxShadow: '0 0 6px #8b0000, 0 0 12px #4a0000' }} />
+
+        {/* Ash/smoke particles (drifting dark charcoal/burnt paper specs) */}
+        <span className="absolute bg-[#4a4a4a] opacity-0 blur-[1.5px] gp-3" style={{ width: '7px', height: '7px', borderRadius: '35% 65% 70% 30% / 50% 60% 40% 50%', left: '40%', top: '50%', boxShadow: '0 0 4px #2b2b2b, 0 0 8px #121212' }} />
+        <span className="absolute bg-[#4a4a4a] opacity-0 blur-[1.5px] gp-6" style={{ width: '6px', height: '6px', borderRadius: '60% 40% 50% 50% / 40% 50% 60% 50%', left: '50%', top: '15%', boxShadow: '0 0 4px #2b2b2b, 0 0 8px #121212' }} />
+        <span className="absolute bg-[#4a4a4a] opacity-0 blur-[1.5px] gp-9" style={{ width: '8px', height: '8px', borderRadius: '45% 55% 35% 65% / 55% 45% 55% 45%', left: '25%', top: '45%', boxShadow: '0 0 4px #2b2b2b, 0 0 8px #121212' }} />
+        <span className="absolute bg-[#4a4a4a] opacity-0 blur-[1.5px] gp-12" style={{ width: '6px', height: '6px', borderRadius: '50% 50% 40% 60% / 60% 40% 60% 40%', left: '65%', top: '35%', boxShadow: '0 0 4px #2b2b2b, 0 0 8px #121212' }} />
       </div>
     )}
+
     
     {/* Картинка с играми с фильтром сепии и контраста без квадратных наложений */}
     <Image 
