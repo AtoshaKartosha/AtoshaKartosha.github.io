@@ -356,32 +356,32 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
     </g>
     {revealHidden && (
       <g className="uv-notes">
-        {/* Wobbly hand-drawn circle/pencil markings */}
-        <path d="M 36 48 C 36 43, 44 43, 44 48 C 44 52, 35 53, 36 48 C 37 45, 41 45, 43 47" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
-        <path d="M 61 88 C 61 83, 69 83, 69 88 C 69 92, 60 93, 61 88 C 62 85, 66 85, 68 87" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        {/* Wobbly hand-drawn circle/pencil markings around key grid points (Agent area and X checkpoint) */}
+        <path d="M 55 89 C 55 82, 71 82, 71 89 C 71 96, 54 97, 55 89 C 56 84, 63 84, 69 87" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        <path d="M 35 88 C 35 83, 45 83, 45 88 C 45 93, 34 94, 35 88" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
         <path d="M 156 146 C 156 141, 164 141, 164 146 C 164 150, 155 151, 156 146 C 157 143, 161 143, 163 145" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
 
-        {/* Rough X mark near terminal */}
-        <path d="M 102 108 L 107 113 M 107 108 L 102 113" fill="none" stroke="#7c3aed" strokeWidth="1" strokeLinecap="round" strokeDasharray="0.5 0.3" filter="url(#uv-glow)" />
+        {/* Rough X mark at intersection (Izmaylovsky/horizontal) representing secondary secret spot */}
+        <path d="M 37 85 L 43 91 M 43 85 L 37 91" fill="none" stroke="#7c3aed" strokeWidth="1" strokeLinecap="round" strokeDasharray="0.5 0.3" filter="url(#uv-glow)" />
 
-        {/* Rough curved arrow pointing to station */}
-        <path d="M 130 95 Q 120 102 110 107" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
-        <path d="M 110 107 L 115 104 M 110 107 L 112 112" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" filter="url(#uv-glow)" />
+        {/* Interactive handwritten arrow pointing at the pin/building from the case notes on the right */}
+        <path d="M 138 115 Q 128 114 120 113" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" strokeDasharray="0.6 0.3" filter="url(#uv-glow)" />
+        <path d="M 120 113 L 124 110 M 120 113 L 123 116" fill="none" stroke="#7c3aed" strokeWidth="0.8" strokeLinecap="round" filter="url(#uv-glow)" />
 
-        {/* Dashed route line and arrowhead */}
-        <path d="M 40 48 Q 100 88 160 146" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeDasharray="3 2" filter="url(#uv-glow)" opacity="0.85" />
-        <path d="M 95 86 L 100 88 L 98 93" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeLinecap="round" filter="url(#uv-glow)" />
+        {/* Dashed route line curving safely around the station building, avoiding pin/bubble overlap */}
+        <path d="M 40 48 Q 40 100 65 125 Q 90 140 160 146" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeDasharray="3 2" filter="url(#uv-glow)" opacity="0.85" />
+        <path d="M 60 122 L 65 125 L 63 130" fill="none" stroke="#7c3aed" strokeWidth="0.9" strokeLinecap="round" filter="url(#uv-glow)" />
 
-        {/* Handwritten annotations with wobbly underlines */}
-        <g transform="rotate(-8, 40, 65)" filter="url(#uv-glow)">
-          <text x="40" y="65" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">АГЕНТ ☆ Б-2</text>
-          <path d="M 38 69 Q 58 67 78 65" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
-          <path d="M 40 71 Q 59 69 76 67" fill="none" stroke="#7c3aed" strokeWidth="0.5" strokeLinecap="round" strokeDasharray="0.6 0.3" opacity="0.8" />
+        {/* АГЕНТ: Near the building (in the park/garden area to the left) */}
+        <g filter="url(#uv-glow)">
+          <text x="63" y="85" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">АГЕНТ</text>
+          <text x="63" y="93" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold" textAnchor="middle">сектор Б-2</text>
         </g>
 
-        <g transform="rotate(5, 135, 38)" filter="url(#uv-glow)">
-          <text x="135" y="38" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ИНФОРМАТОР</text>
-          <path d="M 133 42 Q 155 42 178 41" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+        {/* ИНФОРМАТОР: Inside the building (vertical track note in the train shed) */}
+        <g transform="rotate(-90, 98, 48)" filter="url(#uv-glow)">
+          <text x="98" y="48" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold" textAnchor="middle">ИНФОРМАТОР</text>
+          <path d="M 70 52 L 126 52" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
         <g transform="rotate(5, 135, 47)" filter="url(#uv-glow)">
@@ -396,12 +396,14 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
           <text x="58" y="172" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ОБВ.КАН. → 118С</text>
         </g>
 
-        <g transform="rotate(-2, 72, 112)" filter="url(#uv-glow)">
-          <text x="72" y="112" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ДЕЛО №1853</text>
-          <path d="M 70 116 Q 90 115 118 114" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
+        {/* Case note placed to the right of the building, below the pin label */}
+        <g transform="rotate(-2, 142, 115)" filter="url(#uv-glow)">
+          <text x="142" y="115" fill="#7c3aed" fontFamily="monospace" fontSize="8" fontWeight="bold">ДЕЛО №1853</text>
+          <path d="M 140 119 Q 155 119 188 118" fill="none" stroke="#7c3aed" strokeWidth="0.7" strokeLinecap="round" strokeDasharray="0.6 0.3" />
         </g>
 
-        <text x="130" y="78" fill="#7c3aed" fontFamily="monospace" fontSize="10" fontWeight="bold" filter="url(#uv-glow)">※</text>
+        {/* Cipher mark placed above the pin label */}
+        <text x="130" y="65" fill="#7c3aed" fontFamily="monospace" fontSize="10" fontWeight="bold" filter="url(#uv-glow)">※</text>
 
         <g transform="rotate(-90, 18, 100)" filter="url(#uv-glow)">
           <text x="18" y="100" fill="#7c3aed" fontFamily="monospace" fontSize="6" fontWeight="bold">{"// СЕКРЕТНО //"}</text>
