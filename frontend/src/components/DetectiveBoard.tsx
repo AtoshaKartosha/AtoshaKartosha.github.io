@@ -217,16 +217,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           }
         }}
       >
-        {/* Hitbox expansion to match magnifying glass scale (1.35x) and avoid premature leave */}
-        {isHovered && !isMobile && (
-          <div
-            className="absolute pointer-events-auto"
-            style={{
-              inset: "-30%",
-              zIndex: -1,
-            }}
-          />
-        )}
         {/* Red Pin Pierce-point (Stays flat on the board) */}
         <div
           className={`absolute -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
@@ -836,6 +826,15 @@ export const DetectiveBoard: React.FC = () => {
           onPointerLeave={() => setHoveredItemId(null)}
           onFocus={() => setHoveredItemId("table-phone")}
           onBlur={() => setHoveredItemId(null)}
+          onClick={() => {
+            window.open("https://t.me/detective_tabletop_bot", "_blank", "noopener,noreferrer");
+          }}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              window.open("https://t.me/detective_tabletop_bot", "_blank", "noopener,noreferrer");
+            }
+          }}
           className="absolute cursor-pointer transition-all duration-300 ease-out focus:outline-none"
           style={{
             ...getCoverCoords(690, 640, 185, 105),
@@ -849,9 +848,9 @@ export const DetectiveBoard: React.FC = () => {
               ? "drop-shadow(0 0 20px rgba(0, 191, 255, 0.9)) drop-shadow(0 10px 15px rgba(0,0,0,0.5))"
               : "drop-shadow(0 4px 6px rgba(0,0,0,0.4))",
           }}
-          tabIndex={-1}
-          aria-hidden="true"
-          aria-label="Телефон"
+          role="button"
+          tabIndex={0}
+          aria-label="Телефон для регистрации"
         />
       </div>
 

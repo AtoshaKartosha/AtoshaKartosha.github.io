@@ -328,9 +328,10 @@ export const FluidGlassCursor: React.FC = () => {
       }
 
       if (magnifierRef.current && clonedBoardRef.current && boardEl && boardRect) {
-        // Centered position of the lens on screen
-        const clientX = lerpedPos.current.x;
-        const clientY = lerpedPos.current.y;
+        // Centered position of the lens on screen matches mouse position instantly to prevent click lag
+        // ponytail: instant follow for magnifier positioning, avoids offset click lag
+        const clientX = mouseRef.current.x;
+        const clientY = mouseRef.current.y;
         
         // Calculate 3D tilt angles based on velocity
         const tiltX = Math.min(Math.max(-velocity.current.y * 0.25, -12), 12);
