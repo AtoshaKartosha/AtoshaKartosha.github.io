@@ -742,7 +742,7 @@ export const NewspaperSvg: React.FC<{ className?: string; revealHidden?: boolean
 
     {/* Illustration in paper */}
     <image
-      href="/images/board/newspaper_story.webp"
+      href={revealHidden ? "/images/board/newspaper_story_uv.webp" : "/images/board/newspaper_story.webp"}
       x="15"
       y="145"
       width="150"
