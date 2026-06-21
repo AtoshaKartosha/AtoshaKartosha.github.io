@@ -80,7 +80,7 @@ export const boardItems: BoardItem[] = [
     popupId: "registration",
     zIndex: 16,
     desktop: { left: 36, top: 58, width: 10, rotation: 12 },
-    mobile: { left: 56, top: 62, width: 15, rotation: 12 },
+    mobile: { left: 54, top: 48, width: 15, rotation: 12 },
   },
   {
     id: "newspaper",
