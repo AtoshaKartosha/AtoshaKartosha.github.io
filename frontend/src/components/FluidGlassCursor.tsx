@@ -24,6 +24,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
   item,
   hoveredItemId,
 }) => {
+  // ponytail: magnifier is disabled on mobile (returns null), so desktop layout is sufficient here
   const pos = item.desktop;
   const isHovered = hoveredItemId === item.id;
   const centerX = pos.left + pos.width / 2;
