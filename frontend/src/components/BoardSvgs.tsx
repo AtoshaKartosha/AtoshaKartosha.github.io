@@ -118,78 +118,34 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boole
       </g>
       {revealHidden && (
         <g className="uv-notes">
-          {/* Rough scratched note outline (wobbly rectangle representing a piece of paper) */}
-          <path 
-            d="M 28 105 L 82 101 L 78 155 L 24 159 Z" 
-            fill="none" 
-            stroke="#a855f7" 
-            strokeWidth="0.8" 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            filter="url(#uv-glow-dossier)" 
-            opacity="0.85" 
-          />
-          {/* Scratched tapes at the corners */}
-          {/* Top-left tape */}
-          <path 
-            d="M 22 98 L 34 110 M 24 96 L 36 108" 
-            stroke="#a855f7" 
-            strokeWidth="0.6" 
-            strokeLinecap="round" 
-            filter="url(#uv-glow-dossier)" 
-            opacity="0.75" 
-          />
-          {/* Top-right tape */}
-          <path 
-            d="M 88 95 L 76 107 M 86 93 L 74 105" 
-            stroke="#a855f7" 
-            strokeWidth="0.6" 
-            strokeLinecap="round" 
-            filter="url(#uv-glow-dossier)" 
-            opacity="0.75" 
-          />
-          {/* Bottom-left tape */}
-          <path 
-            d="M 20 165 L 30 153 M 18 163 L 28 151" 
-            stroke="#a855f7" 
-            strokeWidth="0.6" 
-            strokeLinecap="round" 
-            filter="url(#uv-glow-dossier)" 
-            opacity="0.75" 
-          />
-          {/* Bottom-right tape */}
-          <path 
-            d="M 74 150 L 84 162 M 72 148 L 82 160" 
-            stroke="#a855f7" 
-            strokeWidth="0.6" 
-            strokeLinecap="round" 
-            filter="url(#uv-glow-dossier)" 
-            opacity="0.75" 
-          />
-
-          {/* Lettering: АГЕНТ (scratched style, center-aligned horizontally inside x: 28-78) */}
-          <g filter="url(#uv-glow-dossier)" opacity="0.9">
-            {/* А */}
-            <path d="M 36 124 L 40 112 L 44 124 M 38 120 L 42 120" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-            {/* Г */}
-            <path d="M 47 124 L 47 112 L 53 112" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-            {/* Е */}
-            <path d="M 56 124 L 56 112 L 62 112 M 56 118 L 60 118 M 56 124 L 62 124" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Diagonally slanted scratched text 'НАЙДИ АГЕНТА' in the lower-right quadrant */}
+          <g transform="translate(155, 175) rotate(-14)" filter="url(#uv-glow-dossier)" opacity="0.9">
             {/* Н */}
-            <path d="M 65 124 L 65 112 M 71 124 L 71 112 M 65 118 L 71 118" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M 0 12 L 0 0 M 8 12 L 8 0 M 0 6 L 8 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* А */}
+            <path d="M 11 12 L 15 0 L 19 12 M 13 8 L 17 8" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Й */}
+            <path d="M 22 12 L 22 0 M 30 12 L 30 0 M 22 12 L 30 0 M 24 -2 Q 26 -4 28 -2" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Д */}
+            <path d="M 35 2 L 39 2 M 35 2 L 35 10 M 39 2 L 39 10 M 33 10 L 41 10 M 34 10 L 34 13 M 40 10 L 40 13" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* И */}
+            <path d="M 44 12 L 44 0 M 52 12 L 52 0 M 52 12 L 44 0" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+
+            {/* А */}
+            <path d="M 59 12 L 63 0 L 67 12 M 61 8 L 65 8" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Г */}
+            <path d="M 70 12 L 70 0 L 78 0" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Е */}
+            <path d="M 81 12 L 81 0 L 89 0 M 81 6 L 87 6 M 81 12 L 89 12" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Н */}
+            <path d="M 92 12 L 92 0 M 100 12 L 100 0 M 92 6 L 100 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
             {/* Т */}
-            <path d="M 74 112 L 82 112 M 78 112 L 78 124" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-
-            {/* Б-2 below */}
-            {/* Б */}
-            <path d="M 45 132 L 51 132 M 45 132 L 45 142 L 51 142 L 51 137 L 45 137" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-            {/* - */}
-            <path d="M 54 137 L 58 137" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-            {/* 2 */}
-            <path d="M 61 132 L 67 132 L 67 137 L 61 142 L 67 142" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
-
-            {/* Extra rough scratches across the note for realism */}
-            <path d="M 20 120 L 26 122 M 80 140 L 86 138" stroke="#a855f7" strokeWidth="0.5" opacity="0.6" />
+            <path d="M 103 0 L 111 0 M 107 0 L 107 12" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            {/* А */}
+            <path d="M 114 12 L 118 0 L 122 12 M 116 8 L 120 8" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+            
+            {/* Some chaotic scratches around the text to enhance the carved look */}
+            <path d="M -10 6 L -3 8 M 128 4 L 135 2 M 30 18 L 45 16" stroke="#a855f7" strokeWidth="0.6" opacity="0.6" />
           </g>
         </g>
       )}
