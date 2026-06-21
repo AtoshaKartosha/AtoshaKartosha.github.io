@@ -151,7 +151,10 @@ export const getItemShadow = (id: string, isHovered: boolean): string => {
 };
 
 export const getPinOffset = (id: string): { left: string; top: string } => {
-  const left = id === "phone" ? "30%" : "50%";
+  let left = id === "phone" ? "30%" : "50%";
+  if (id === "clock") {
+    left = "54%";
+  }
   let top = "-8px";
   if (id === "dossier") {
     top = "14px";
