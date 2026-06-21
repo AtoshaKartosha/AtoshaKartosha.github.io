@@ -24,7 +24,7 @@ export const boardItems: BoardItem[] = [
     popupId: "event-info",
     zIndex: 14,
     desktop: { left: 34, top: 20, width: 26, rotation: -2 },
-    mobile: { left: 58, top: 8, width: 28, rotation: -2 },
+    mobile: { left: 45, top: 8, width: 28, rotation: -2 },
   },
   {
     id: "suspect-1",
