@@ -305,6 +305,7 @@ export const FluidGlassCursor: React.FC = () => {
         boardRectRef.current = boardRect;
         clonedBoardRef.current.style.width = `${rect.width}px`;
         clonedBoardRef.current.style.height = `${rect.height}px`;
+        clonedBoardRef.current.style.setProperty("--board-width", `${rect.width}px`);
       }
 
       if (magnifierRef.current && clonedBoardRef.current && boardEl && boardRect) {

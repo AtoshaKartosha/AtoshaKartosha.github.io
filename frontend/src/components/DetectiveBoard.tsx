@@ -440,6 +440,9 @@ export const DetectiveBoard: React.FC = () => {
           transformOrigin: "center center",
           cursor: "default",
           transformStyle: "preserve-3d",
+          ...({
+            "--board-width": isMobile ? "min(100vw, calc(100dvh * 1.7913))" : "min(94vw, 1800px)",
+          } as React.CSSProperties),
         }}
       >
         {/* Repeating cork board texture in background */}

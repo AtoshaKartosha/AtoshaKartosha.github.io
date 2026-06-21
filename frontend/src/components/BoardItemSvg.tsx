@@ -73,12 +73,35 @@ export function renderItemSvg(
     case "note":
       return (
         <div
-          className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[11px] sm:text-[12px] md:text-base text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out"
+          className="w-full h-full bg-[#decfa8] font-typewriter text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out"
+          style={{
+            borderWidth: "calc(var(--board-width) * 0.0015)",
+            borderColor: "#1c160e",
+            borderStyle: "solid",
+            padding: "calc(var(--board-width) * 0.009)",
+            fontSize: "calc(var(--board-width) * 0.0083)",
+          }}
         >
-          <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[12px] sm:text-[13px] md:text-[16px]">
+          <div
+            className="font-bold text-center uppercase tracking-wider"
+            style={{
+              borderBottomWidth: "calc(var(--board-width) * 0.0008)",
+              borderBottomColor: "rgba(28, 22, 14, 0.3)",
+              borderBottomStyle: "solid",
+              paddingBottom: "calc(var(--board-width) * 0.004)",
+              marginBottom: "calc(var(--board-width) * 0.008)",
+              fontSize: "calc(var(--board-width) * 0.0095)",
+            }}
+          >
             РАСПИСАНИЕ
           </div>
-          <div className="grid grid-cols-[auto_auto_1fr] gap-x-1 sm:gap-x-1.5 gap-y-1 select-none leading-snug">
+          <div
+            className="grid grid-cols-[auto_auto_1fr] select-none leading-snug"
+            style={{
+              columnGap: "calc(var(--board-width) * 0.005)",
+              rowGap: "calc(var(--board-width) * 0.004)",
+            }}
+          >
             <div>16:00</div><div>—</div><div>Сбор гостей</div>
             <div>16:30</div><div>—</div><div>Инструктаж</div>
             <div>17:00</div><div>—</div><div>Первая сессия</div>
