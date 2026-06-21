@@ -431,22 +431,23 @@ export const DetectiveBoard: React.FC = () => {
         data-board="true"
         className={`relative ${
           isMobile
-            ? "h-auto rounded-sm"
+            ? "w-full h-full"
             : "w-[94%] h-auto max-w-[1800px] rounded-sm"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
           backgroundImage: "url(/background_detective_bg_v2.svg)",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          width: isMobile ? "min(100%, calc(100dvh * 1.7913))" : undefined,
-          aspectRatio: "1385.92 / 773.53",
+          width: isMobile ? "100%" : undefined,
+          height: isMobile ? "100%" : undefined,
+          aspectRatio: isMobile ? undefined : "1385.92 / 773.53",
           maxHeight: isMobile ? undefined : "1005px",
           transform: "translate(var(--rumble-x, 0px), var(--rumble-y, 0px))",
           transformOrigin: "center center",
           cursor: "default",
           transformStyle: "preserve-3d",
           ...({
-            "--board-width": isMobile ? "min(100vw, calc(100dvh * 1.7913))" : "min(94vw, 1800px)",
+            "--board-width": isMobile ? "100vw" : "min(94vw, 1800px)",
           } as React.CSSProperties),
         }}
       >
