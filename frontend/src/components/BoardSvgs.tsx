@@ -756,12 +756,12 @@ export const NewspaperSvg: React.FC<{ className?: string; revealHidden?: boolean
     
     {revealHidden && (
       <g className="uv-notes">
-        {/* Scratched arrow pointing to the top-left towards Suspect 2 */}
+        {/* Scratched arrow pointing straight up (slightly left) towards Suspect 2 (Informant) */}
         <g filter="url(#uv-glow-newspaper)" opacity="0.85">
           {/* Arrow shaft */}
-          <path d="M 50 100 Q 30 85 15 70" fill="none" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
-          {/* Arrow head pointing top-left */}
-          <path d="M 15 70 L 25 72 M 15 70 L 17 80" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 110 120 Q 107 70 105 30" fill="none" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
+          {/* Arrow head pointing straight up */}
+          <path d="M 105 30 L 97 38 M 105 30 L 112 38" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
         </g>
         
         {/* Scratched text ИНФОРМАТОР (using scale 0.85) */}
