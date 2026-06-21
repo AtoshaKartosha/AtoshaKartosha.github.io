@@ -680,8 +680,23 @@ export const EvidenceBagSvg: React.FC<{ className?: string }> = ({ className = "
   );
 };
 
-export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
+export const NewspaperSvg: React.FC<{ className?: string; revealHidden?: boolean }> = ({
+  className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]",
+  revealHidden = false,
+}) => (
   <svg viewBox="0 0 180 255" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+    <defs>
+      {/* UV glow filter specifically for newspaper to avoid DOM clashes */}
+      <filter id="uv-glow-newspaper">
+        <feGaussianBlur stdDeviation="0.4" result="blur" />
+        <feFlood floodColor="#a855f7" floodOpacity="0.85" result="color" />
+        <feComposite in="color" in2="blur" operator="in" result="glow" />
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
     {/* Torn Paper base */}
     <path d="M 5 10 L 175 5 L 178 245 L 160 250 L 140 243 L 120 250 L 90 240 L 60 253 L 30 245 L 5 250 Z" fill="#F1E2C6" />
     
@@ -738,6 +753,42 @@ export const NewspaperSvg: React.FC<{ className?: string }> = ({ className = "w-
     {/* Paper aging stains */}
     <circle cx="30" cy="60" r="15" fill="#a48c68" opacity="0.15" filter="blur(4px)" />
     <circle cx="150" cy="210" r="20" fill="#a48c68" opacity="0.2" filter="blur(6px)" />
+    
+    {revealHidden && (
+      <g className="uv-notes">
+        {/* Scratched arrow pointing to the top-left towards Suspect 2 */}
+        <g filter="url(#uv-glow-newspaper)" opacity="0.85">
+          {/* Arrow shaft */}
+          <path d="M 50 100 Q 30 85 15 70" fill="none" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
+          {/* Arrow head pointing top-left */}
+          <path d="M 15 70 L 25 72 M 15 70 L 17 80" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+        
+        {/* Scratched text ИНФОРМАТОР (using scale 0.85) */}
+        <g transform="translate(42, 110) rotate(-6) scale(0.85)" filter="url(#uv-glow-newspaper)" opacity="0.9">
+          {/* И */}
+          <path d="M 0 12 L 0 0 M 8 12 L 8 0 M 0 12 L 8 0" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Н */}
+          <path d="M 11 12 L 11 0 M 19 12 L 19 0 M 11 6 L 19 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Ф */}
+          <path d="M 28 12 L 28 0 M 23 6 C 23 3, 28 3, 28 6 C 28 9, 23 9, 23 6 Z M 28 6 C 28 3, 33 3, 33 6 C 33 9, 28 9, 28 6 Z" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* О */}
+          <path d="M 36 6 C 36 2, 44 2, 44 6 C 44 10, 36 10, 36 6 Z" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Р */}
+          <path d="M 47 12 L 47 0 C 52 0, 54 3, 47 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* М */}
+          <path d="M 57 12 L 57 0 L 62 8 L 67 0 L 67 12" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* А */}
+          <path d="M 70 12 L 74 0 L 78 12 M 72 8 L 76 8" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Т */}
+          <path d="M 81 0 L 89 0 M 85 0 L 85 12" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* О */}
+          <path d="M 92 6 C 92 2, 100 2, 100 6 C 100 10, 92 10, 92 6 Z" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          {/* Р */}
+          <path d="M 103 12 L 103 0 C 108 0, 110 3, 103 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+      </g>
+    )}
   </svg>
 );
 

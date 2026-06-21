@@ -411,6 +411,7 @@ export const FluidGlassCursor: React.FC = () => {
         return (
           <NewspaperSvg
             className="w-full h-full transition-all duration-300 ease-out"
+            revealHidden={true}
           />
         );
       case "note":
