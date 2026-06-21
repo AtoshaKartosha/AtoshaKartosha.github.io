@@ -96,7 +96,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const pos = (() => {
     const p = { ...item.desktop };
     if (isMobile) {
-      const scaleFactor = 1.35;
+      const scaleFactor = 1.15;
       const centerX = p.left + p.width / 2;
       p.width = p.width * scaleFactor;
       p.left = centerX - p.width / 2;
@@ -435,8 +435,8 @@ export const DetectiveBoard: React.FC = () => {
         data-board="true"
         className={`relative ${
           isMobile
-            ? "h-auto rounded-sm absolute top-1/2 left-1/2"
-            : "w-[94%] h-auto max-w-[1800px] rounded-sm absolute top-1/2 left-1/2"
+            ? "h-auto rounded-sm"
+            : "w-[94%] h-auto max-w-[1800px] rounded-sm"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
           backgroundImage: "url(/background_detective_bg_v2.svg)",
@@ -445,7 +445,7 @@ export const DetectiveBoard: React.FC = () => {
           width: isMobile ? "min(100%, calc(100dvh * 1.7913))" : undefined,
           aspectRatio: "1385.92 / 773.53",
           maxHeight: isMobile ? undefined : "1005px",
-          transform: "translate3d(-50%, -50%, 0) translate(var(--rumble-x, 0px), var(--rumble-y, 0px))",
+          transform: "translate(var(--rumble-x, 0px), var(--rumble-y, 0px))",
           transformOrigin: "center center",
           cursor: "default",
           transformStyle: "preserve-3d",
