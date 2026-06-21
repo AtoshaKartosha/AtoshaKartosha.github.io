@@ -366,6 +366,7 @@ export const FluidGlassCursor: React.FC = () => {
             forceLogo={true}
             useTelegramLogo={false}
             className="w-full h-full transition-all duration-300 ease-out"
+            revealHidden={true}
           />
         );
       case "suspect-1":

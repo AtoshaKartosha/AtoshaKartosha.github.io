@@ -14,16 +14,29 @@ export const CorkboardTexture: React.FC = () => (
 );
 
 // Dossier / Main case folder
-export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boolean; className?: string }> = ({
+export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boolean; className?: string; revealHidden?: boolean }> = ({
   forceLogo = false,
   useTelegramLogo = false,
   className = "w-full h-full drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)]",
+  revealHidden = false,
 }) => {
   const storeIsLoading = useBoardStore((state) => state.isLoading);
   const isLoading = forceLogo ? false : storeIsLoading;
   
   return (
     <svg viewBox="0 0 300 240" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <defs>
+        {/* UV glow filter specifically for dossier to avoid DOM clashes */}
+        <filter id="uv-glow-dossier">
+          <feGaussianBlur stdDeviation="0.4" result="blur" />
+          <feFlood floodColor="#a855f7" floodOpacity="0.85" result="color" />
+          <feComposite in="color" in2="blur" operator="in" result="glow" />
+          <feMerge>
+            <feMergeNode />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
+      </defs>
       {/* Сгенерированное фоновое изображение папки с легким нуар-фильтром */}
       <image 
         href="/images/board/dossier.webp" 
@@ -103,6 +116,83 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boole
           TOP SECRET
         </text>
       </g>
+      {revealHidden && (
+        <g className="uv-notes">
+          {/* Rough scratched note outline (wobbly rectangle representing a piece of paper) */}
+          <path 
+            d="M 28 105 L 82 101 L 78 155 L 24 159 Z" 
+            fill="none" 
+            stroke="#a855f7" 
+            strokeWidth="0.8" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            filter="url(#uv-glow-dossier)" 
+            opacity="0.85" 
+          />
+          {/* Scratched tapes at the corners */}
+          {/* Top-left tape */}
+          <path 
+            d="M 22 98 L 34 110 M 24 96 L 36 108" 
+            stroke="#a855f7" 
+            strokeWidth="0.6" 
+            strokeLinecap="round" 
+            filter="url(#uv-glow-dossier)" 
+            opacity="0.75" 
+          />
+          {/* Top-right tape */}
+          <path 
+            d="M 88 95 L 76 107 M 86 93 L 74 105" 
+            stroke="#a855f7" 
+            strokeWidth="0.6" 
+            strokeLinecap="round" 
+            filter="url(#uv-glow-dossier)" 
+            opacity="0.75" 
+          />
+          {/* Bottom-left tape */}
+          <path 
+            d="M 20 165 L 30 153 M 18 163 L 28 151" 
+            stroke="#a855f7" 
+            strokeWidth="0.6" 
+            strokeLinecap="round" 
+            filter="url(#uv-glow-dossier)" 
+            opacity="0.75" 
+          />
+          {/* Bottom-right tape */}
+          <path 
+            d="M 74 150 L 84 162 M 72 148 L 82 160" 
+            stroke="#a855f7" 
+            strokeWidth="0.6" 
+            strokeLinecap="round" 
+            filter="url(#uv-glow-dossier)" 
+            opacity="0.75" 
+          />
+
+          {/* Lettering: АГЕНТ (scratched style, center-aligned horizontally inside x: 28-78) */}
+          <g filter="url(#uv-glow-dossier)" opacity="0.9">
+            {/* А */}
+            <path d="M 36 124 L 40 112 L 44 124 M 38 120 L 42 120" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Г */}
+            <path d="M 47 124 L 47 112 L 53 112" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Е */}
+            <path d="M 56 124 L 56 112 L 62 112 M 56 118 L 60 118 M 56 124 L 62 124" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Н */}
+            <path d="M 65 124 L 65 112 M 71 124 L 71 112 M 65 118 L 71 118" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* Т */}
+            <path d="M 74 112 L 82 112 M 78 112 L 78 124" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+
+            {/* Б-2 below */}
+            {/* Б */}
+            <path d="M 45 132 L 51 132 M 45 132 L 45 142 L 51 142 L 51 137 L 45 137" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* - */}
+            <path d="M 54 137 L 58 137" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+            {/* 2 */}
+            <path d="M 61 132 L 67 132 L 67 137 L 61 142 L 67 142" stroke="#a855f7" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round" />
+
+            {/* Extra rough scratches across the note for realism */}
+            <path d="M 20 120 L 26 122 M 80 140 L 86 138" stroke="#a855f7" strokeWidth="0.5" opacity="0.6" />
+          </g>
+        </g>
+      )}
     </svg>
   );
 };
