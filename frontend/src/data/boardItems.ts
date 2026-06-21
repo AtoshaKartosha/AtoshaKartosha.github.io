@@ -24,7 +24,7 @@ export const boardItems: BoardItem[] = [
     popupId: "event-info",
     zIndex: 14,
     desktop: { left: 34, top: 20, width: 26, rotation: -2 },
-    mobile: { left: 28, top: 12, width: 28, rotation: -2 },
+    mobile: { left: 20, top: 22, width: 28, rotation: -2 },
   },
   {
     id: "suspect-1",
@@ -40,7 +40,7 @@ export const boardItems: BoardItem[] = [
     popupId: "suspect-2",
     zIndex: 11,
     desktop: { left: 61, top: 12, width: 14, rotation: 6 },
-    mobile: { left: 74, top: 10, width: 18, rotation: 6 },
+    mobile: { left: 76, top: 10, width: 18, rotation: 6 },
   },
   {
     id: "note",
@@ -48,7 +48,7 @@ export const boardItems: BoardItem[] = [
     popupId: "schedule",
     zIndex: 22,
     desktop: { left: 19, top: 42, width: 15, rotation: 4 },
-    mobile: { left: 10, top: 46, width: 17, rotation: 4 },
+    mobile: { left: 8, top: 42, width: 17, rotation: 4 },
   },
   {
     id: "map",
@@ -56,7 +56,7 @@ export const boardItems: BoardItem[] = [
     popupId: "location",
     zIndex: 15,
     desktop: { left: 51, top: 56, width: 13, rotation: -4 },
-    mobile: { left: 34, top: 52, width: 22, rotation: -4 },
+    mobile: { left: 48, top: 46, width: 22, rotation: -4 },
   },
   {
     id: "phone",
@@ -64,7 +64,7 @@ export const boardItems: BoardItem[] = [
     popupId: "games",
     zIndex: 21,
     desktop: { left: 8, top: 58, width: 20, rotation: 4 },
-    mobile: { left: 8, top: 76, width: 22, rotation: 4 },
+    mobile: { left: 8, top: 74, width: 22, rotation: 4 },
   },
   {
     id: "clock",
@@ -72,7 +72,7 @@ export const boardItems: BoardItem[] = [
     popupId: "schedule",
     zIndex: 12,
     desktop: { left: 59, top: 37, width: 8, rotation: -12 },
-    mobile: { left: 58, top: 8, width: 11, rotation: -12 },
+    mobile: { left: 56, top: 8, width: 11, rotation: -12 },
   },
   {
     id: "evidence",
@@ -80,7 +80,7 @@ export const boardItems: BoardItem[] = [
     popupId: "registration",
     zIndex: 11,
     desktop: { left: 36, top: 58, width: 10, rotation: 12 },
-    mobile: { left: 64, top: 72, width: 15, rotation: 12 },
+    mobile: { left: 42, top: 74, width: 15, rotation: 12 },
   },
   {
     id: "newspaper",
@@ -88,7 +88,7 @@ export const boardItems: BoardItem[] = [
     popupId: "newspaper",
     zIndex: 11,
     desktop: { left: 65, top: 40, width: 17, rotation: -5 },
-    mobile: { left: 70, top: 36, width: 22, rotation: -5 },
+    mobile: { left: 74, top: 38, width: 22, rotation: -5 },
   },
 ];
 
