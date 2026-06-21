@@ -184,9 +184,10 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       }}
     >
       <div
-        onClick={() => {
+        onClick={(e) => {
           if (isDraggingRef.current) return;
           setActivePopup(item.popupId);
+          if (e.detail > 0) e.currentTarget.blur(); // mouse only; keyboard keeps focus
         }}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
