@@ -118,8 +118,8 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boole
       </g>
       {revealHidden && (
         <g className="uv-notes">
-          {/* Diagonally slanted scratched text 'НАЙДИ АГЕНТА' in two lines in the top-left quadrant */}
-          <g transform="translate(25, 45) rotate(-10)" filter="url(#uv-glow-dossier)" opacity="0.9">
+          {/* Diagonally slanted scratched text 'НАЙДИ АГЕНТА' in two lines in the bottom-left quadrant */}
+          <g transform="translate(45, 160) rotate(-10)" filter="url(#uv-glow-dossier)" opacity="0.9">
             {/* Line 1: НАЙДИ */}
             <g transform="translate(0, 0)">
               {/* Н */}
