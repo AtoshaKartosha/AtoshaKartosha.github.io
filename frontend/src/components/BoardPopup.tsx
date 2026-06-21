@@ -3,7 +3,6 @@
 import React, { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useBoardStore } from "../stores/useBoardStore";
-import Image from "next/image";
 import { popupContentMap } from "../data/popupContent";
 
 export const BoardPopup: React.FC = () => {
@@ -189,14 +188,21 @@ export const BoardPopup: React.FC = () => {
           {/* Body content */}
           <div className={`flex flex-col ${isSuspect ? "sm:flex-row" : ""} gap-6 sm:gap-8 items-center sm:items-start`}>
             {isSuspect && (
-              <div className="w-40 sm:w-44 md:w-48 shrink-0 rotate-[-1.5deg] hover:rotate-[1deg] transition-transform duration-300">
-                <Image
-                  src={`/images/board/${activePopup}.png`}
-                  alt={data.title}
-                  width={600}
-                  height={400}
-                  className="w-full h-auto rounded-[2px] shadow-[0_6px_12px_rgba(0,0,0,0.3)] border border-[#1c160e]/10 select-none pointer-events-none"
-                />
+              <div className="w-40 sm:w-44 md:w-48 shrink-0 rotate-[-1.5deg] hover:rotate-[1deg] transition-transform duration-300 bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] flex flex-col justify-center items-center shadow-inner">
+                <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
+                  <video
+                    aria-hidden="true"
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    poster={`/images/board/${activePopup}-video-poster.jpg`}
+                    className="w-full h-full object-cover"
+                  >
+                    <source src={`/images/board/${activePopup}.webm`} type="video/webm" />
+                    <source src={`/images/board/${activePopup}.mp4`} type="video/mp4" />
+                  </video>
+                </div>
               </div>
             )}
             <div

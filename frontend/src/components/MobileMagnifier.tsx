@@ -51,17 +51,16 @@ export const MobileMagnifier: React.FC = () => {
 
   const touchStartPos = useRef({ x: 0, y: 0 });
   const touchPosRef = useRef({ x: 0, y: 0 });
-
+  const boardRectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
   const isLoading = useBoardStore((state) => state.isLoading);
   const pinPositions = useBoardStore((state) => state.pinPositions);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const setIsMagnifierActive = useBoardStore((state) => state.setIsMagnifierActive);
 
   const updatePosition = () => {
-    const boardEl = document.querySelector('[data-board="true"]') as HTMLElement | null;
-    if (!boardEl || !magnifierRef.current || !clonedBoardRef.current) return;
+    const boardRect = boardRectRef.current;
+    if (!boardRect || !magnifierRef.current || !clonedBoardRef.current) return;
 
-    const boardRect = boardEl.getBoundingClientRect();
     const touchX = touchPosRef.current.x;
     const touchY = touchPosRef.current.y;
 
@@ -74,11 +73,6 @@ export const MobileMagnifier: React.FC = () => {
     const top = clampedLensY - boardRect.top - LENS_RADIUS;
 
     magnifierRef.current.style.transform = `translate3d(${left}px, ${top}px, 0)`;
-
-    // Cloned board size matches real board size
-    clonedBoardRef.current.style.width = `${boardRect.width}px`;
-    clonedBoardRef.current.style.height = `${boardRect.height}px`;
-    clonedBoardRef.current.style.setProperty("--board-width", `${boardRect.width}px`);
 
     // Calculate touch position relative to the board
     const touchBoardX = touchX - boardRect.left;
@@ -100,6 +94,20 @@ export const MobileMagnifier: React.FC = () => {
       const touch = e.touches[0];
       touchStartPos.current = { x: touch.clientX, y: touch.clientY };
       touchPosRef.current = { x: touch.clientX, y: touch.clientY };
+
+      const rect = boardEl.getBoundingClientRect();
+      boardRectRef.current = {
+        left: rect.left,
+        top: rect.top,
+        width: rect.width,
+        height: rect.height,
+      };
+
+      if (clonedBoardRef.current) {
+        clonedBoardRef.current.style.width = `${rect.width}px`;
+        clonedBoardRef.current.style.height = `${rect.height}px`;
+        clonedBoardRef.current.style.setProperty("--board-width", `${rect.width}px`);
+      }
 
       if (longPressTimer.current !== null) {
         window.clearTimeout(longPressTimer.current);
@@ -278,7 +286,7 @@ export const MobileMagnifier: React.FC = () => {
               <CorkboardTexture />
 
               {/* Window atmosphere scene */}
-              <WindowScene revealHidden={true} />
+              <WindowScene revealHidden={true} disableAnimations={true} />
 
               {/* 2nd layer from bottom: Pinboard in noir and comic style */}
               <NoirPinboard />

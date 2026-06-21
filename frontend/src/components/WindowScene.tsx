@@ -34,11 +34,15 @@ interface SmokeParticle {
   windOffset: number;
 }
 
-export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden = false }) => {
+export const WindowScene: React.FC<{ revealHidden?: boolean; disableAnimations?: boolean }> = ({
+  revealHidden = false,
+  disableAnimations = false,
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
+    if (disableAnimations) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -361,7 +365,7 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
         containerEl.style.removeProperty("--rumble-y");
       }
     };
-  }, []);
+  }, [disableAnimations]);
   return (
     <>
       {/* SVG ClipPath — exact window glass shapes from background_detective_debug_2.svg
