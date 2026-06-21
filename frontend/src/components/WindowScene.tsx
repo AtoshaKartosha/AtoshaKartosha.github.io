@@ -506,7 +506,7 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 {/* Bottom highlight layer (edge of finger stroke) */}
                 <g fill="none" stroke="rgba(255, 255, 255, 0.4)" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round">
                   {/* инфор- */}
-                  <path d="M 15 20 L 15 10 L 23 20 L 23 10" />
+                  <path d="M 15 10 L 15 20 L 23 10 L 23 20" />
                   <path d="M 28 10 L 28 20 M 28 15 L 34 15 M 34 10 L 34 20" />
                   <path d="M 43 8 L 43 23 M 39 15 C 39 11, 47 11, 47 15 C 47 19, 39 19, 39 15 Z" />
                   <path d="M 54 15 C 50 15, 50 21, 54 21 C 58 21, 58 15, 54 15 Z" />
@@ -536,7 +536,7 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
                 {/* Top dark swipe layer (transparent window glass revealing night outside) */}
                 <g fill="none" stroke="rgba(10, 15, 30, 0.9)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   {/* инфор- */}
-                  <path d="M 15 20 L 15 10 L 23 20 L 23 10" />
+                  <path d="M 15 10 L 15 20 L 23 10 L 23 20" />
                   <path d="M 28 10 L 28 20 M 28 15 L 34 15 M 34 10 L 34 20" />
                   <path d="M 43 8 L 43 23 M 39 15 C 39 11, 47 11, 47 15 C 47 19, 39 19, 39 15 Z" />
                   <path d="M 54 15 C 50 15, 50 21, 54 21 C 58 21, 58 15, 54 15 Z" />
