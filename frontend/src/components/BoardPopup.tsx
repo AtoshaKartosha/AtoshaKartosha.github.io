@@ -189,7 +189,7 @@ export const BoardPopup: React.FC = () => {
           <div className={`flex flex-col ${isSuspect ? "sm:flex-row" : ""} gap-6 sm:gap-8 items-center sm:items-start`}>
             {isSuspect && (
               <div className="w-40 sm:w-44 md:w-48 shrink-0 rotate-[-1.5deg] hover:rotate-[1deg] transition-transform duration-300 bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] flex flex-col justify-center items-center shadow-inner">
-                <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
+                <div className="w-full h-full relative overflow-hidden bg-[#121212] rounded-[1px] flex items-center justify-center">
                   <video
                     aria-hidden="true"
                     autoPlay

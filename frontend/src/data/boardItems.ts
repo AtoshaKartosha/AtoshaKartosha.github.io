@@ -64,7 +64,7 @@ export const boardItems: BoardItem[] = [
     popupId: "games",
     zIndex: 21,
     desktop: { left: 8, top: 58, width: 20, rotation: 4 },
-    mobile: { left: 8, top: 76, width: 22, rotation: 4 },
+    mobile: { left: 8, top: 65, width: 22, rotation: 4 },
   },
   {
     id: "clock",

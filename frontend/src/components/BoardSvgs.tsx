@@ -398,7 +398,7 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string; isMo
     <rect x="80" y="65" width="44" height="56" rx="2" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
     {/* Concentric pulsating waves behind the marker tip and marker shape (scaled on mobile) */}
-    <g transform={isMobile ? "translate(104.5, 113) scale(1.4) translate(-104.5, -113)" : undefined}>
+    <g transform={isMobile ? "translate(104.5, 113) scale(1.15) translate(-104.5, -113)" : undefined}>
       <circle cx="104.5" cy="113" r="25" className="marker-wave-circle" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
       <circle cx="104.5" cy="113" r="25" className="marker-wave-circle wave-circle-2" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
 

@@ -2,6 +2,7 @@
 // ponytail: custom lightweight canvas loop, use a webgl engine if scene complexity rises
 
 import React, { useEffect, useRef } from "react";
+import { useBoardStore } from "../stores/useBoardStore";
 
 interface RainDrop {
   x: number;
@@ -40,9 +41,10 @@ export const WindowScene: React.FC<{ revealHidden?: boolean; disableAnimations?:
 }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLElement | null>(null);
+  const isMobile = useBoardStore((state) => state.isMobile);
 
   useEffect(() => {
-    if (disableAnimations) return;
+    if (isMobile || disableAnimations) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -365,7 +367,10 @@ export const WindowScene: React.FC<{ revealHidden?: boolean; disableAnimations?:
         containerEl.style.removeProperty("--rumble-y");
       }
     };
-  }, [disableAnimations]);
+  }, [disableAnimations, isMobile]);
+
+  if (isMobile) return null;
+
   return (
     <>
       {/* SVG ClipPath — exact window glass shapes from background_detective_debug_2.svg

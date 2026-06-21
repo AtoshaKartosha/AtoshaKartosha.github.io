@@ -577,12 +577,13 @@ export const DetectiveBoard: React.FC = () => {
           tabIndex={0}
           aria-label="Телефон для регистрации"
         />
-        {/* Mobile magnifying glass loupe */}
-        {isMobile && <MobileMagnifier />}
       </div>
 
       {/* 2.5 DUST PARTICLES OVERLAY */}
       <DustParticles />
+
+      {/* Mobile magnifying glass loupe */}
+      {isMobile && <MobileMagnifier />}
 
       {/* 2.7 WEBGL FLUID GLASS LENS OVERLAY */}
       <FluidGlassCursor />

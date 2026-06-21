@@ -241,7 +241,7 @@ export const MobileMagnifier: React.FC = () => {
   return (
     <div
       aria-hidden="true"
-      className="absolute inset-0 w-full h-full pointer-events-none z-35 overflow-hidden"
+      className="absolute inset-0 w-full h-full pointer-events-none z-[45] overflow-hidden"
       style={{
         opacity: isActive ? 1 : 0,
         transition: "opacity 200ms ease-out",
