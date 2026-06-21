@@ -477,7 +477,7 @@ export const DetectiveBoard: React.FC = () => {
             setHoveredItemId={setHoveredItemId}
             isLoading={isLoading}
           >
-            {renderItemSvg(item.id, { isHovered: hoveredItemId === item.id })}
+            {renderItemSvg(item.id, { isHovered: hoveredItemId === item.id, isMobile })}
           </BoardItemComponent>
         ))}
 

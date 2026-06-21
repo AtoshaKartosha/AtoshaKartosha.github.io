@@ -227,9 +227,10 @@ export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-f
 );
 const markerPath = "M 93 78 H 116 A 2 2 0 0 1 118 80 V 104 A 2 2 0 0 1 116 106 H 110 L 104.5 113 L 99 106 H 93 A 2 2 0 0 1 91 104 V 80 A 2 2 0 0 1 93 78 Z";
 
-export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = ({
+export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string; isMobile?: boolean }> = ({
   revealHidden = false,
   className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]",
+  isMobile = false,
 }) => (
   <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
     <defs>
@@ -396,23 +397,32 @@ export const MapSvg: React.FC<{ revealHidden?: boolean; className?: string }> = 
     {/* Station terminal building footprint */}
     <rect x="80" y="65" width="44" height="56" rx="2" fill="#8f7e59" stroke="#6b5b3d" strokeWidth="1.5" />
 
-    {/* Concentric pulsating waves behind the marker tip */}
-    <circle cx="104.5" cy="113" r="25" className="marker-wave-circle" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
-    <circle cx="104.5" cy="113" r="25" className="marker-wave-circle wave-circle-2" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
+    {/* Concentric pulsating waves behind the marker tip and marker shape (scaled on mobile) */}
+    <g transform={isMobile ? "translate(104.5, 113) scale(1.4) translate(-104.5, -113)" : undefined}>
+      <circle cx="104.5" cy="113" r="25" className="marker-wave-circle" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
+      <circle cx="104.5" cy="113" r="25" className="marker-wave-circle wave-circle-2" fill="none" stroke="#ff3355" strokeWidth="1.5" pointerEvents="none" />
 
-    {/* Outline/container shape around the V marker (black background, metallic 3px border, bottom triangular tail) */}
-    <path d={markerPath} fill="#141413" stroke="url(#metal-grad)" strokeWidth="3" />
+      {/* Outline/container shape around the V marker (black background, metallic 3px border, bottom triangular tail) */}
+      <path d={markerPath} fill="#141413" stroke="url(#metal-grad)" strokeWidth="3" />
 
-    {/* Unrotated V letter with a thick black outline, inline paths with brighter red colors */}
-    <g transform="translate(-35.27, 59.52) scale(0.34)" filter="url(#black-outline)">
-      <path fill="#ff3355" d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z"/>
-      <path fill="#c8102e" d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z"/>
+      {/* Unrotated V letter with a thick black outline, inline paths with brighter red colors */}
+      <g transform="translate(-35.27, 59.52) scale(0.34)" filter="url(#black-outline)">
+        <path fill="#ff3355" d="M418.94,70.28l9.51.12-21.28,51.89c-3.75.92-7.39.57-11.32.11l.27-19.96.26-32.26,9.55-.02-.33,9.54-.5,10.62.03,15.16,13.81-35.2Z"/>
+        <path fill="#c8102e" d="M411.2,95.24c1.76-.46,3.2-.44,4.97-.06l-10.33,25.36h-8.03s.47-25.39.47-25.39c1.67-.47,3.16-.44,4.96.02l-.13,17.21c0,.41-.08.7.31.77.47.09.65-.09.86-.61l6.93-17.3Z"/>
+      </g>
     </g>
-    {/* Slanted speech bubble label (placed next to the pin to avoid board lamp and tape overlays) */}
-    <g transform="rotate(-6, 152.5, 86)">
-      <path d="M119 76 H186 A3 3 0 0 1 189 79 V93 A3 3 0 0 1 186 96 H118 L108 92 L116 84 V79 A3 3 0 0 1 119 76 Z" fill="#141414" stroke="#e8dcc8" strokeWidth="1" opacity="0.9" />
-      <text x="152.5" y="89" fill="#e8dcc8" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
-    </g>
+    {/* Slanted speech bubble label (placed next to the pin to avoid board lamp and tape overlays; adjusted/scaled on mobile) */}
+    {isMobile ? (
+      <g transform="rotate(-6, 153.5, 73)">
+        <path d="M 115 62 H 192 A 3 3 0 0 1 195 65 V 81 A 3 3 0 0 1 192 84 H 114 L 100 78 L 112 72 V 65 A 3 3 0 0 1 115 62 Z" fill="#141414" stroke="#e8dcc8" strokeWidth="1.5" opacity="0.95" />
+        <text x="153.5" y="77" fill="#e8dcc8" fontSize="11" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
+      </g>
+    ) : (
+      <g transform="rotate(-6, 152.5, 86)">
+        <path d="M119 76 H186 A3 3 0 0 1 189 79 V93 A3 3 0 0 1 186 96 H118 L108 92 L116 84 V79 A3 3 0 0 1 119 76 Z" fill="#141414" stroke="#e8dcc8" strokeWidth="1" opacity="0.9" />
+        <text x="152.5" y="89" fill="#e8dcc8" fontSize="8" fontWeight="bold" fontFamily="monospace" textAnchor="middle">ВОКЗАЛЪ 1853</text>
+      </g>
+    )}
     {revealHidden && (
       <g className="uv-notes">
         {/* Wobbly hand-drawn circle/pencil markings around key grid points (route start, X checkpoint, and route end) */}

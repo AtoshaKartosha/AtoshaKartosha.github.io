@@ -13,7 +13,7 @@ import {
 
 export function renderItemSvg(
   id: string,
-  opts: { isHovered?: boolean; revealHidden?: boolean } = {}
+  opts: { isHovered?: boolean; revealHidden?: boolean; isMobile?: boolean } = {}
 ): React.ReactNode {
   switch (id) {
     case "dossier":
@@ -42,6 +42,7 @@ export function renderItemSvg(
         <MapSvg
           className="w-full h-full transition-all duration-300 ease-out"
           revealHidden={opts.revealHidden ?? false}
+          isMobile={opts.isMobile ?? false}
         />
       );
     case "phone":
