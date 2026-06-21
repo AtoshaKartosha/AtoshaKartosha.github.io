@@ -94,14 +94,10 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const cardRectRef = useRef<DOMRect | null>(null);
 
   const pos = (() => {
-    const p = { ...item.desktop };
     if (isMobile) {
-      const scaleFactor = 1.15;
-      const centerX = p.left + p.width / 2;
-      p.width = p.width * scaleFactor;
-      p.left = centerX - p.width / 2;
+      return { ...item.mobile };
     }
-    return p;
+    return { ...item.desktop };
   })();
   const isHovered = hoveredItemId === item.id;
   const [isZIndexRaised, setIsZIndexRaised] = useState(false);
