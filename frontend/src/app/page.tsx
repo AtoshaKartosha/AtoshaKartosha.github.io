@@ -1,12 +1,14 @@
 
 import { DetectiveBoard } from "../components/DetectiveBoard";
 import { LoadingScreen } from "../components/LoadingScreen";
+import { PortraitOverlay } from "../components/PortraitOverlay";
 
 export default function Home() {
   return (
     <main className="relative h-screen overflow-hidden">
       <h1 className="sr-only">Detective Table Top — Вечер настольных игр</h1>
       <LoadingScreen />
+      <PortraitOverlay />
       <DetectiveBoard />
     </main>
   );

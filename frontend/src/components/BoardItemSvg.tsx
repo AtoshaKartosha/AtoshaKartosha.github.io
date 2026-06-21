@@ -95,10 +95,9 @@ export function renderItemSvg(
 
 export const Pin: React.FC<{
   itemId: string;
-  isMobile: boolean;
   isHovered: boolean;
   showAnchor?: boolean;
-}> = ({ itemId, isMobile, isHovered, showAnchor = true }) => {
+}> = ({ itemId, isHovered, showAnchor = true }) => {
   return (
     <div
       className={`absolute -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
@@ -107,7 +106,7 @@ export const Pin: React.FC<{
           : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
       }`}
       style={{
-        ...getPinOffset(itemId, isMobile),
+        ...getPinOffset(itemId),
         transform: `translate3d(-50%, 0, ${isHovered ? "95px" : "2px"})`,
       }}
     >

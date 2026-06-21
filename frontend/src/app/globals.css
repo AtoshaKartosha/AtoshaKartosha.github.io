@@ -63,3 +63,10 @@ body {
   scrollbar-color: #c41e1e transparent;
 }
 
+
+@keyframes suggestRotate {
+  0%, 25%  { transform: rotate(0deg); }
+  40%, 70% { transform: rotate(-90deg); }
+  85%, 100% { transform: rotate(0deg); }
+}
+

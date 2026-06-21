@@ -18,15 +18,13 @@ const MAX_ZOOM = 1.7;
 interface ClonedBoardItemProps {
   item: BoardItem;
   hoveredItemId: string | null;
-  isMobile: boolean;
 }
 
 const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
   item,
   hoveredItemId,
-  isMobile,
 }) => {
-  const pos = isMobile ? item.mobile : item.desktop;
+  const pos = item.desktop;
   const isHovered = hoveredItemId === item.id;
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top;
@@ -45,7 +43,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         zIndex: isHovered ? 30 : item.zIndex,
       }}
     >
-      <Pin itemId={item.id} isMobile={isMobile} isHovered={isHovered} showAnchor={false} />
+      <Pin itemId={item.id} isHovered={isHovered} showAnchor={false} />
 
       {/* Visual SVG Content */}
       <div className="transition-transform duration-300 ease-out">
@@ -439,7 +437,6 @@ export const FluidGlassCursor: React.FC = () => {
                   key={item.id}
                   item={item}
                   hoveredItemId={hoveredItemId}
-                  isMobile={isMobile}
                 />
               ))}
 

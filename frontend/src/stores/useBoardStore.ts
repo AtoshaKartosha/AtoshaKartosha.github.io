@@ -18,6 +18,8 @@ interface BoardState {
   setIsLoading: (loading: boolean) => void;
   setHoveredItemId: (id: string | null) => void;
   setIsMobile: (v: boolean) => void;
+  isPortrait: boolean;
+  setIsPortrait: (v: boolean) => void;
 }
 
 export const useBoardStore = create<BoardState>((set) => ({
@@ -39,4 +41,6 @@ export const useBoardStore = create<BoardState>((set) => ({
   setIsLoading: (loading) => set({ isLoading: loading }),
   setHoveredItemId: (id) => set({ hoveredItemId: id }),
   setIsMobile: (v) => set({ isMobile: v }),
+  isPortrait: false,
+  setIsPortrait: (v) => set({ isPortrait: v }),
 }));

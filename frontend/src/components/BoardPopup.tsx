@@ -138,13 +138,13 @@ export const BoardPopup: React.FC = () => {
       ref={dialogRef}
       onClick={handleBackdropClick}
       aria-labelledby="dialog-title"
-      className={`bg-transparent border-0 outline-none p-4 w-full max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible m-auto ${
+      className={`bg-transparent border-0 outline-none p-2 sm:p-4 w-full max-h-[90vh] sm:max-h-[85vh] backdrop:bg-black/80 backdrop:backdrop-blur-sm overflow-visible m-auto ${
         isSuspect ? "max-w-2xl" : "max-w-lg"
       }`}
     >
       <div
         ref={contentRef}
-        className="relative bg-[#d4c9a8] text-[#1c160e] p-8 md:p-10 border-4 border-[#1c160e] shadow-[0_15px_30px_rgba(0,0,0,0.5)] rounded-sm overflow-hidden"
+        className="relative bg-[#d4c9a8] text-[#1c160e] p-5 sm:p-8 md:p-10 border-4 border-[#1c160e] shadow-[0_15px_30px_rgba(0,0,0,0.5)] rounded-sm overflow-hidden"
         style={{
           backgroundImage: `
             radial-gradient(circle at 10% 20%, rgba(139, 119, 87, 0.15) 0%, transparent 80%),

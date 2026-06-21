@@ -119,7 +119,7 @@ export const LoadingScreen: React.FC = () => {
         width={440}
         height={220}
         priority
-        className="w-[280px] h-[140px] sm:w-[360px] sm:h-[180px] md:w-[440px] md:h-[220px] object-contain mb-8 z-10 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)] opacity-0"
+        className="w-[280px] h-[140px] sm:w-[360px] sm:h-[180px] md:w-[440px] md:h-[220px] max-h-[35vh] object-contain mb-8 z-10 pointer-events-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.6)] opacity-0"
       />
 
       {/* Typewriter Text */}
