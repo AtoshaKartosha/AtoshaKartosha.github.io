@@ -756,36 +756,36 @@ export const NewspaperSvg: React.FC<{ className?: string; revealHidden?: boolean
     
     {revealHidden && (
       <g className="uv-notes">
-        {/* Scratched arrow pointing straight up (slightly left) towards Suspect 2 (Informant) */}
-        <g filter="url(#uv-glow-newspaper)" opacity="0.85">
+        {/* Scratched arrow pointing up-left towards Suspect 2 (Informant) - thickened and repositioned */}
+        <g filter="url(#uv-glow-newspaper)" opacity="0.95">
           {/* Arrow shaft */}
-          <path d="M 110 120 Q 107 70 105 30" fill="none" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
-          {/* Arrow head pointing straight up */}
-          <path d="M 105 30 L 97 38 M 105 30 L 112 38" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 140 85 Q 123 50 110 20" fill="none" stroke="#a855f7" strokeWidth="1.5" strokeLinecap="round" />
+          {/* Arrow head pointing up-left */}
+          <path d="M 110 20 L 102 28 M 110 20 L 117 28" stroke="#a855f7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </g>
         
-        {/* Scratched text ИНФОРМАТОР (using scale 0.85) */}
-        <g transform="translate(42, 110) rotate(-6) scale(0.85)" filter="url(#uv-glow-newspaper)" opacity="0.9">
+        {/* Scratched text ИНФОРМАТОР - thickened and repositioned to headline area */}
+        <g transform="translate(30, 85) rotate(-5) scale(0.95)" filter="url(#uv-glow-newspaper)" opacity="0.95">
           {/* И */}
-          <path d="M 0 12 L 0 0 M 8 12 L 8 0 M 0 12 L 8 0" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 0 12 L 0 0 M 8 12 L 8 0 M 0 12 L 8 0" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* Н */}
-          <path d="M 11 12 L 11 0 M 19 12 L 19 0 M 11 6 L 19 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 11 12 L 11 0 M 19 12 L 19 0 M 11 6 L 19 6" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* Ф */}
-          <path d="M 28 12 L 28 0 M 23 6 C 23 3, 28 3, 28 6 C 28 9, 23 9, 23 6 Z M 28 6 C 28 3, 33 3, 33 6 C 33 9, 28 9, 28 6 Z" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 28 12 L 28 0 M 23 6 C 23 3, 28 3, 28 6 C 28 9, 23 9, 23 6 Z M 28 6 C 28 3, 33 3, 33 6 C 33 9, 28 9, 28 6 Z" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* О */}
-          <path d="M 36 6 C 36 2, 44 2, 44 6 C 44 10, 36 10, 36 6 Z" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 36 6 C 36 2, 44 2, 44 6 C 44 10, 36 10, 36 6 Z" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* Р */}
-          <path d="M 47 12 L 47 0 C 52 0, 54 3, 47 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 47 12 L 47 0 C 52 0, 54 3, 47 6" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* М */}
-          <path d="M 57 12 L 57 0 L 62 8 L 67 0 L 67 12" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 57 12 L 57 0 L 62 8 L 67 0 L 67 12" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* А */}
-          <path d="M 70 12 L 74 0 L 78 12 M 72 8 L 76 8" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 70 12 L 74 0 L 78 12 M 72 8 L 76 8" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* Т */}
-          <path d="M 81 0 L 89 0 M 85 0 L 85 12" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 81 0 L 89 0 M 85 0 L 85 12" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* О */}
-          <path d="M 92 6 C 92 2, 100 2, 100 6 C 100 10, 92 10, 92 6 Z" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 92 6 C 92 2, 100 2, 100 6 C 100 10, 92 10, 92 6 Z" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
           {/* Р */}
-          <path d="M 103 12 L 103 0 C 108 0, 110 3, 103 6" stroke="#a855f7" strokeWidth="0.9" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 103 12 L 103 0 C 108 0, 110 3, 103 6" stroke="#a855f7" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
         </g>
       </g>
     )}
