@@ -70,3 +70,27 @@ body {
   85%, 100% { transform: rotate(0deg); }
 }
 
+
+@media (max-height: 500px) {
+  .compact-landscape-popup {
+    padding: 1rem !important;
+    max-height: 78vh !important;
+    font-size: 0.75rem !important;
+  }
+  .compact-landscape-header {
+    padding-bottom: 0.4rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .compact-landscape-title {
+    font-size: 1.15rem !important;
+    line-height: 1.1 !important;
+  }
+  .compact-landscape-action {
+    margin-top: 0.6rem !important;
+    padding-top: 0.4rem !important;
+  }
+  .compact-landscape-action a {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.7rem !important;
+  }
+}
