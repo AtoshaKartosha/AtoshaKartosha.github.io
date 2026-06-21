@@ -5,7 +5,7 @@ import { PortraitOverlay } from "../components/PortraitOverlay";
 
 export default function Home() {
   return (
-    <main className="relative h-screen overflow-hidden">
+    <main className="relative h-dvh overflow-hidden">
       <h1 className="sr-only">Detective Table Top — Вечер настольных игр</h1>
       <LoadingScreen />
       <PortraitOverlay />

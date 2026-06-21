@@ -93,7 +93,16 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const swayRef = useRef<HTMLDivElement>(null);
   const cardRectRef = useRef<DOMRect | null>(null);
 
-  const pos = item.desktop;
+  const pos = (() => {
+    const p = { ...item.desktop };
+    if (isMobile) {
+      const scaleFactor = 1.35;
+      const centerX = p.left + p.width / 2;
+      p.width = p.width * scaleFactor;
+      p.left = centerX - p.width / 2;
+    }
+    return p;
+  })();
   const isHovered = hoveredItemId === item.id;
   const [isZIndexRaised, setIsZIndexRaised] = useState(false);
 
@@ -386,7 +395,7 @@ export const DetectiveBoard: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen overflow-hidden select-none flex items-center justify-center bg-[#110c08]"
+      className="relative w-full h-dvh overflow-hidden select-none flex items-center justify-center bg-[#110c08]"
       style={{
         backgroundImage: `
           radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.75) 100%),
