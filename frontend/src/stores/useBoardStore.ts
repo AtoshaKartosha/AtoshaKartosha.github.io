@@ -20,6 +20,8 @@ interface BoardState {
   setIsMobile: (v: boolean) => void;
   isPortrait: boolean;
   setIsPortrait: (v: boolean) => void;
+  isMagnifierActive: boolean;
+  setIsMagnifierActive: (v: boolean) => void;
 }
 
 export const useBoardStore = create<BoardState>((set) => ({
@@ -43,4 +45,6 @@ export const useBoardStore = create<BoardState>((set) => ({
   setIsMobile: (v) => set({ isMobile: v }),
   isPortrait: false,
   setIsPortrait: (v) => set({ isPortrait: v }),
+  isMagnifierActive: false,
+  setIsMagnifierActive: (v) => set({ isMagnifierActive: v }),
 }));

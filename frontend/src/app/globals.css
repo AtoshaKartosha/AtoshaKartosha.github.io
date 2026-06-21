@@ -94,3 +94,11 @@ body {
     font-size: 0.7rem !important;
   }
 }
+
+/* Disable native touch actions, selection, and callouts on the board for magnifier */
+[data-board="true"], [data-board="true"] * {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+

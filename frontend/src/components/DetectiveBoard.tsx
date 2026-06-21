@@ -11,6 +11,7 @@ import { ThreadCanvas } from "./ThreadCanvas";
 import { BoardPopup } from "./BoardPopup";
 import { DustParticles } from "./DustParticles";
 import { FluidGlassCursor } from "./FluidGlassCursor";
+import { MobileMagnifier } from "./MobileMagnifier";
 import { NoirPinboard } from "./NoirPinboard";
 import { WindowScene } from "./WindowScene";
 
@@ -191,6 +192,8 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
       <div
         onClick={(e) => {
           if (isDraggingRef.current) return;
+          const isMagnifierActive = useBoardStore.getState().isMagnifierActive;
+          if (isMagnifierActive) return;
           setActivePopup(item.popupId);
           if (e.detail > 0) e.currentTarget.blur(); // mouse only; keyboard keeps focus
         }}
@@ -211,7 +214,10 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             if (!isDraggingRef.current) {
-              setActivePopup(item.popupId);
+              const isMagnifierActive = useBoardStore.getState().isMagnifierActive;
+              if (!isMagnifierActive) {
+                setActivePopup(item.popupId);
+              }
             }
           }
         }}
@@ -571,6 +577,8 @@ export const DetectiveBoard: React.FC = () => {
           tabIndex={0}
           aria-label="Телефон для регистрации"
         />
+        {/* Mobile magnifying glass loupe */}
+        {isMobile && <MobileMagnifier />}
       </div>
 
       {/* 2.5 DUST PARTICLES OVERLAY */}
