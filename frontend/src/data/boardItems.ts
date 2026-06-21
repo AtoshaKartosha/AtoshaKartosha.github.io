@@ -56,7 +56,7 @@ export const boardItems: BoardItem[] = [
     popupId: "location",
     zIndex: 15,
     desktop: { left: 51, top: 56, width: 13, rotation: -4 },
-    mobile: { left: 34, top: 52, width: 22, rotation: -4 },
+    mobile: { left: 24, top: 42, width: 22, rotation: -4 },
   },
   {
     id: "phone",
