@@ -271,7 +271,7 @@ export const MobileMagnifier: React.FC = () => {
           <div
             className="w-full h-full"
             style={{
-              filter: displacementMapUrl ? "url(#mobile-lens-bulge)" : "none",
+              filter: "none",
             }}
           >
             {/* Cloned Board */}

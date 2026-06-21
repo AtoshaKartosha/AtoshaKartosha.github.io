@@ -378,7 +378,7 @@ export const FluidGlassCursor: React.FC = () => {
           <div
             className="w-full h-full"
             style={{
-              filter: displacementMapUrl ? "url(#lens-bulge)" : "none",
+              filter: "none",
             }}
           >
             {/* Cloned Board */}
