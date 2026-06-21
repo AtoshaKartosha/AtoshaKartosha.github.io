@@ -118,6 +118,13 @@ export const DossierSvg: React.FC<{ forceLogo?: boolean; useTelegramLogo?: boole
       </g>
       {revealHidden && (
         <g className="uv-notes">
+          {/* Arrow pointing to the agent's photo (left and slightly up, in the top-left quadrant) */}
+          <g filter="url(#uv-glow-dossier)" opacity="0.85">
+            {/* Arrow shaft with a slight wobbly/scratched curve */}
+            <path d="M 60 55 Q 45 52 35 48" fill="none" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" />
+            {/* Arrow head pointing left-up */}
+            <path d="M 35 48 L 43 43 M 35 48 L 41 53" stroke="#a855f7" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+          </g>
           {/* Diagonally slanted scratched text 'НАЙДИ АГЕНТА' in two lines in the bottom-left quadrant */}
           <g transform="translate(45, 160) rotate(-10)" filter="url(#uv-glow-dossier)" opacity="0.9">
             {/* Line 1: НАЙДИ */}
