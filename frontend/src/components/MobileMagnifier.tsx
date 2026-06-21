@@ -82,7 +82,13 @@ export const MobileMagnifier: React.FC = () => {
     const tx = LENS_RADIUS - touchBoardX * ZOOM;
     const ty = LENS_RADIUS - touchBoardY * ZOOM;
 
-    clonedBoardRef.current.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${ZOOM})`;
+    // Clamp translation to keep cloned board boundaries within the circular lens clip (prevent clippings)
+    const minTx = LENS_RADIUS * 2 - boardRect.width * ZOOM;
+    const minTy = LENS_RADIUS * 2 - boardRect.height * ZOOM;
+    const clampedTx = Math.max(minTx, Math.min(0, tx));
+    const clampedTy = Math.max(minTy, Math.min(0, ty));
+
+    clonedBoardRef.current.style.transform = `translate3d(${clampedTx}px, ${clampedTy}px, 0) scale(${ZOOM})`;
   };
 
   useEffect(() => {
