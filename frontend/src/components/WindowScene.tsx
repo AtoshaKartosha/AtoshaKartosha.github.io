@@ -367,7 +367,7 @@ export const WindowScene: React.FC<{ revealHidden?: boolean }> = ({ revealHidden
       {/* SVG ClipPath — exact window glass shapes from background_detective_debug_2.svg
           (user-provided mask, viewBox 1386×774, converted to objectBoundingBox [0,1]
            relative to container div at SVG x=[1220,1376] y=[10,600]) */}
-      <svg aria-hidden="true" width="0" height="0" className="absolute pointer-events-none" style={{ position: 'absolute', width: 0, height: 0 }} xmlns="http://www.w3.org/2000/svg">
+      <svg aria-hidden="true" width="0" height="0" className="absolute pointer-events-none" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <clipPath id="window-panes-clip" clipPathUnits="objectBoundingBox">
             <path d="M0.288590 0.174088 L0.650769 0.114951 V0.321627 L0.288590 0.362947 Z" />

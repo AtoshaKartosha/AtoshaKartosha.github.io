@@ -21,8 +21,9 @@ export const LoadingScreen: React.FC = () => {
     const fullText = "ДЕЛО № 1853: ДЕТЕКТИВНЫЙ ВЕЧЕР...";
     
     // 1. Vintage lamp flicker turn-on animation for the logo
+    let tl: gsap.core.Timeline | undefined;
     if (logo) {
-      const tl = gsap.timeline();
+      tl = gsap.timeline();
       tl.to(logo, { opacity: 0.1, duration: 0.05 })
         .to(logo, { opacity: 0.6, duration: 0.05 })
         .to(logo, { opacity: 0.15, duration: 0.08 })
@@ -86,6 +87,7 @@ export const LoadingScreen: React.FC = () => {
       if (cursor) gsap.killTweensOf(cursor);
       if (container) gsap.killTweensOf(container);
       if (textContainer) gsap.killTweensOf(textContainer);
+      if (tl) tl.kill();
     };
   }, [setIsLoading]);
 

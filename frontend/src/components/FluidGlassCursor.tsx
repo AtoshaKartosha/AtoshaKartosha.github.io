@@ -2,18 +2,11 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, threadConnections, BoardItem, getItemShadow, getPinOffset } from "../data/boardItems";
+import { boardItems, threadConnections, BoardItem, getItemShadow } from "../data/boardItems";
 import {
   CorkboardTexture,
-  DossierSvg,
-  Suspect1Svg,
-  Suspect2Svg,
-  MapSvg,
-  GamesImage,
-  VintageClockSvg,
-  EvidenceBagSvg,
-  NewspaperSvg,
 } from "./BoardSvgs";
+import { renderItemSvg, Pin } from "./BoardItemSvg";
 import { NoirPinboard } from "./NoirPinboard";
 import { WindowScene } from "./WindowScene";
 
@@ -26,14 +19,12 @@ interface ClonedBoardItemProps {
   item: BoardItem;
   hoveredItemId: string | null;
   isMobile: boolean;
-  renderItemSvg: (id: string, isHovered?: boolean) => React.ReactNode;
 }
 
 const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
   item,
   hoveredItemId,
   isMobile,
-  renderItemSvg,
 }) => {
   const pos = isMobile ? item.mobile : item.desktop;
   const isHovered = hoveredItemId === item.id;
@@ -54,27 +45,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
         zIndex: isHovered ? 30 : item.zIndex,
       }}
     >
-      {/* Red Pin Pierce-point */}
-      <div
-        className={`absolute -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
-          isHovered
-            ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
-            : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
-        }`}
-        style={{
-          ...getPinOffset(item.id, isMobile),
-          transform: `translate3d(-50%, 0, ${isHovered ? "95px" : "2px"})`,
-        }}
-      >
-        {/* Pinhead metal shine */}
-        <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
-        
-        {/* Pin anchor node in layout for thread coordinates */}
-        <div
-          data-pin-id={item.id}
-          className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
-        />
-      </div>
+      <Pin itemId={item.id} isMobile={isMobile} isHovered={isHovered} showAnchor={false} />
 
       {/* Visual SVG Content */}
       <div className="transition-transform duration-300 ease-out">
@@ -84,7 +55,7 @@ const ClonedBoardItem: React.FC<ClonedBoardItemProps> = ({
             filter: `${getItemShadow(item.id, isHovered)} brightness(${isHovered ? 1 : dimBrightness})`,
           }}
         >
-          {renderItemSvg(item.id, isHovered)}
+          {renderItemSvg(item.id, { isHovered, revealHidden: true })}
         </div>
       </div>
     </div>
@@ -102,7 +73,7 @@ export const FluidGlassCursor: React.FC = () => {
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const pinPositions = useBoardStore((state) => state.pinPositions);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useBoardStore((state) => state.isMobile);
   const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
   const [aberrationMapUrl, setAberrationMapUrl] = useState<string | null>(null);
 
@@ -117,8 +88,8 @@ export const FluidGlassCursor: React.FC = () => {
     x: typeof window !== "undefined" ? window.innerWidth / 2 : 0,
     y: typeof window !== "undefined" ? window.innerHeight / 2 : 0,
   });
+  const prevMouseRef = useRef({ x: 0, y: 0 });
 
-  // Generate the lens displacement map once on mount
   // Generate the lens displacement map once on mount
   useEffect(() => {
     const size = LENS_RADIUS * 2;
@@ -193,15 +164,6 @@ export const FluidGlassCursor: React.FC = () => {
     });
   }, []);
 
-  // Handle mobile check and initial sizing
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 1024);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
   const boardRectRef = useRef<{ left: number; top: number; width: number; height: number } | null>(null);
 
   // Measure board rectangle once on mount, resize, or load complete to avoid layout thrashing
@@ -280,6 +242,26 @@ export const FluidGlassCursor: React.FC = () => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const update = () => {
+      if (isMobile || isLoading) return;
+
+      const cx = mouseRef.current.x;
+      const cy = mouseRef.current.y;
+      const isIdle =
+        cx === prevMouseRef.current.x &&
+        cy === prevMouseRef.current.y &&
+        velocity.current.x === 0 &&
+        velocity.current.y === 0 &&
+        Math.abs(lerpedPos.current.x - cx) <= 0.5 &&
+        Math.abs(lerpedPos.current.y - cy) <= 0.5 &&
+        Math.abs(swingAngle.current) <= 0.01 &&
+        Math.abs(swingVelocity.current) <= 0.01;
+
+      if (isIdle) {
+        animationFrameId = requestAnimationFrame(update);
+        return;
+      }
+      prevMouseRef.current = { x: cx, y: cy };
+
       const prevX = lerpedPos.current.x;
       const prevY = lerpedPos.current.y;
 
@@ -355,87 +337,8 @@ export const FluidGlassCursor: React.FC = () => {
 
     update();
     return () => cancelAnimationFrame(animationFrameId);
-  }, []);
+  }, [isMobile, isLoading]);
 
-  // Render SVG based on ID
-  const renderItemSvg = (id: string, isHovered?: boolean) => {
-    switch (id) {
-      case "dossier":
-        return (
-          <DossierSvg
-            forceLogo={true}
-            useTelegramLogo={false}
-            className="w-full h-full transition-all duration-300 ease-out"
-            revealHidden={true}
-          />
-        );
-      case "suspect-1":
-        return (
-          <Suspect1Svg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "suspect-2":
-        return (
-          <Suspect2Svg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "map":
-        return (
-          <MapSvg
-            revealHidden={true}
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "phone":
-        return (
-          <GamesImage
-            isHovered={isHovered}
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "clock":
-        return (
-          <VintageClockSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "evidence":
-        return (
-          <EvidenceBagSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "newspaper":
-        return (
-          <NewspaperSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-            revealHidden={true}
-          />
-        );
-      case "note":
-        return (
-          <div
-            className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[11px] sm:text-[12px] md:text-base text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out"
-          >
-            <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[12px] sm:text-[13px] md:text-[16px]">
-              РАСПИСАНИЕ
-            </div>
-            <div className="grid grid-cols-[auto_auto_1fr] gap-x-1 sm:gap-x-1.5 gap-y-1 select-none leading-snug">
-              <div>16:00</div><div>—</div><div>Сбор гостей</div>
-              <div>16:30</div><div>—</div><div>Инструктаж</div>
-              <div>17:00</div><div>—</div><div>Первая сессия</div>
-              <div>19:00</div><div>—</div><div>Кофе-брейк</div>
-              <div>19:30</div><div>—</div><div>Вторая сессия</div>
-              <div>21:30</div><div>—</div><div>Итоги</div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
 
   if (isMobile) return null;
   return (
@@ -495,7 +398,6 @@ export const FluidGlassCursor: React.FC = () => {
               <NoirPinboard />
 
               {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
-              {/* Red thread SVG overlay (replaces WebGL ThreadCanvas in the magnifier) */}
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
                 {threadConnections.map((conn, idx) => {
                   const p1 = pinPositions[conn.from];
@@ -538,7 +440,6 @@ export const FluidGlassCursor: React.FC = () => {
                   item={item}
                   hoveredItemId={hoveredItemId}
                   isMobile={isMobile}
-                  renderItemSvg={renderItemSvg}
                 />
               ))}
 

@@ -1,4 +1,4 @@
-export interface PopupContent {
+interface PopupContent {
   title: string;
   subtitle?: string;
   content: string[];

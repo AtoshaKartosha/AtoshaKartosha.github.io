@@ -2,18 +2,11 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useBoardStore } from "../stores/useBoardStore";
-import { boardItems, BoardItem, getItemShadow, getPinOffset } from "../data/boardItems";
+import { boardItems, BoardItem, getItemShadow } from "../data/boardItems";
 import {
   CorkboardTexture,
-  DossierSvg,
-  Suspect1Svg,
-  Suspect2Svg,
-  MapSvg,
-  GamesImage,
-  VintageClockSvg,
-  EvidenceBagSvg,
-  NewspaperSvg,
 } from "./BoardSvgs";
+import { renderItemSvg, Pin } from "./BoardItemSvg";
 import { ThreadCanvas } from "./ThreadCanvas";
 import { BoardPopup } from "./BoardPopup";
 import { DustParticles } from "./DustParticles";
@@ -217,24 +210,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
           }
         }}
       >
-        {/* Red Pin Pierce-point (Stays flat on the board) */}
-        <div
-          className={`absolute -translate-x-1/2 w-4 h-4 rounded-full border-2 border-[#1c160e] flex items-center justify-center z-40 pointer-events-none transition-all duration-300 ease-out ${
-            isHovered
-              ? "bg-[#ff2a2a] shadow-[0_0_12px_#ff2a2a,0_6px_12px_rgba(0,0,0,0.8)] scale-110"
-              : "bg-[#c41e1e] shadow-[0_4px_8px_rgba(0,0,0,0.6)]"
-          }`}
-          style={{
-            ...getPinOffset(item.id, isMobile),
-            transform: `translate3d(-50%, 0, ${isHovered ? "95px" : "2px"})`,
-          }}
-        >
-          <div className="w-1.5 h-1.5 rounded-full bg-white opacity-60" />
-          <div
-            data-pin-id={item.id}
-            className="absolute bottom-1 left-1/2 -translate-x-1/2 w-0 h-0"
-          />
-        </div>
+        <Pin itemId={item.id} isMobile={isMobile} isHovered={isHovered} />
 
 
         {/* Visual SVG Content (Tilts and lifts under the pin) */}
@@ -281,8 +257,9 @@ export const DetectiveBoard: React.FC = () => {
   const isLoading = useBoardStore((state) => state.isLoading);
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const setHoveredItemId = useBoardStore((state) => state.setHoveredItemId);
+  const isMobile = useBoardStore((state) => state.isMobile);
+  const setIsMobile = useBoardStore((state) => state.setIsMobile);
 
-  const [isMobile, setIsMobile] = useState(false);
   const [isDraggingState, setIsDraggingState] = useState(false);
   const [zoom, setZoom] = useState(1.0);
 
@@ -374,7 +351,7 @@ export const DetectiveBoard: React.FC = () => {
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [setPanOffset]);
+  }, [setPanOffset, setIsMobile]);
 
   // Helper function to measure pin positions relative to the board
   // Helper function to measure pin positions relative to the board
@@ -588,80 +565,6 @@ export const DetectiveBoard: React.FC = () => {
     animationRef.current = requestAnimationFrame(runInertia);
   };
 
-  // Helper to render proper board items SVGs
-  const renderItemSvg = (id: string, isHovered?: boolean) => {
-    switch (id) {
-      case "dossier":
-        return (
-          <DossierSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "suspect-1":
-        return (
-          <Suspect1Svg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "suspect-2":
-        return (
-          <Suspect2Svg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "map":
-        return (
-          <MapSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "phone":
-        return (
-          <GamesImage
-            isHovered={isHovered}
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "clock":
-        return (
-          <VintageClockSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "evidence":
-        return (
-          <EvidenceBagSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "newspaper":
-        return (
-          <NewspaperSvg
-            className="w-full h-full transition-all duration-300 ease-out"
-          />
-        );
-      case "note":
-        return (
-          <div
-            className="w-full h-full bg-[#decfa8] border-2 border-[#1c160e] p-3 font-typewriter text-[11px] sm:text-[12px] md:text-base text-[#1c160e] flex flex-col justify-between transition-all duration-300 ease-out"
-          >
-            <div className="font-bold border-b border-[#1c160e]/30 pb-0.5 mb-1.5 text-center uppercase tracking-wider text-[12px] sm:text-[13px] md:text-[16px]">
-              РАСПИСАНИЕ
-            </div>
-            <div className="grid grid-cols-[auto_auto_1fr] gap-x-1 sm:gap-x-1.5 gap-y-1 select-none leading-snug">
-              <div>16:00</div><div>—</div><div>Сбор гостей</div>
-              <div>16:30</div><div>—</div><div>Инструктаж</div>
-              <div>17:00</div><div>—</div><div>Первая сессия</div>
-              <div>19:00</div><div>—</div><div>Кофе-брейк</div>
-              <div>19:30</div><div>—</div><div>Вторая сессия</div>
-              <div>21:30</div><div>—</div><div>Итоги</div>
-            </div>
-          </div>
-        );
-      default:
-        return null;
-    }
-  };
 
   return (
     <div
@@ -755,7 +658,7 @@ export const DetectiveBoard: React.FC = () => {
             setHoveredItemId={setHoveredItemId}
             isLoading={isLoading}
           >
-            {renderItemSvg(item.id, hoveredItemId === item.id)}
+            {renderItemSvg(item.id, { isHovered: hoveredItemId === item.id })}
           </BoardItemComponent>
         ))}
 

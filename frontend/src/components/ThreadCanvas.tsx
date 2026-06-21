@@ -316,8 +316,6 @@ export const ThreadCanvas: React.FC = () => {
       program,
       frustumCulled: false,
     });
-    console.log("ThreadCanvas geometry built. Connections:", activeConnections.length, "Positions:", allPositions.length, "Indices:", allIndices.length);
-    console.log("Positions sample:", allPositions.slice(0, 10));
   }, [pinPositions, size]);
 
   // Animation loop

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Outfit, Special_Elite, Caveat } from "next/font/google";
+import { Playfair_Display, Outfit, Special_Elite } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 
@@ -17,10 +17,6 @@ const specialElite = Special_Elite({
 const playfairDisplay = Playfair_Display({
   subsets: ["latin", "cyrillic"],
   variable: "--font-playfair",
-});
-const caveat = Caveat({
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-caveat",
 });
 
 const hsLunaObscura = localFont({
@@ -51,9 +47,9 @@ export default function RootLayout({
   return (
     <html
       lang="ru"
-      className={`${outfit.variable} ${specialElite.variable} ${playfairDisplay.variable} ${hsLunaObscura.variable} ${caveat.variable} h-full antialiased`}
+      className={`${outfit.variable} ${specialElite.variable} ${playfairDisplay.variable} ${hsLunaObscura.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-[#0a0a0a] text-[#e8dcc8] overflow-hidden">
+      <body className="min-h-full flex flex-col overflow-hidden">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
