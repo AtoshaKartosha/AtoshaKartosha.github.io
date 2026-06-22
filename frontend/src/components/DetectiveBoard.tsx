@@ -385,6 +385,8 @@ export const DetectiveBoard: React.FC = () => {
         className={`relative ${
           isMobile
             ? "w-full h-full"
+            : isTablet
+            ? "w-[98%] h-auto max-w-[1800px] rounded-sm"
             : "w-[94%] h-auto max-w-[1800px] rounded-sm"
         } touch-none shadow-[0_30px_60px_rgba(0,0,0,0.9),_inset_0_0_80px_rgba(0,0,0,0.8)]`}
         style={{
@@ -395,12 +397,12 @@ export const DetectiveBoard: React.FC = () => {
           height: isMobile ? "100%" : undefined,
           aspectRatio: isMobile ? undefined : "1385.92 / 773.53",
           maxHeight: isMobile ? undefined : "1005px",
-          transform: "translate(var(--rumble-x, 0px), var(--rumble-y, 0px))",
+          transform: `translate(var(--rumble-x, 0px), var(--rumble-y, 0px))${isTablet ? " scale(1.12)" : ""}`,
           transformOrigin: "center center",
           cursor: "default",
           transformStyle: "preserve-3d",
           ...({
-            "--board-width": isMobile ? "100vw" : "min(94vw, 1800px)",
+            "--board-width": isMobile ? "100vw" : isTablet ? "min(98vw, 1800px)" : "min(94vw, 1800px)",
           } as React.CSSProperties),
         }}
       >
