@@ -14,6 +14,7 @@ import { FluidGlassCursor } from "./FluidGlassCursor";
 import { MobileMagnifier } from "./MobileMagnifier";
 import { NoirPinboard } from "./NoirPinboard";
 import { WindowScene } from "./WindowScene";
+import { calculateCoverCoords } from "../utils/coords";
 
 // ponytail: inline hook for wind sway animation, avoids introducing external animation library
 function useWindSway(
@@ -290,52 +291,6 @@ export const DetectiveBoard: React.FC = () => {
     };
   }, [isLoading]);
 
-  // Helper to calculate pixel coordinates on backgroundSize: cover
-  const getCoverCoords = (x: number, y: number, w: number, h: number) => {
-    if (boardSize.width === 0 || boardSize.height === 0) {
-      return {
-        left: `${(x / 1385.92) * 100}%`,
-        top: `${(y / 773.53) * 100}%`,
-        width: `${(w / 1385.92) * 100}%`,
-        height: `${(h / 773.53) * 100}%`,
-      };
-    }
-    const W_i = 1385.92;
-    const H_i = 773.53;
-    const R_i = W_i / H_i;
-    const R_c = boardSize.width / boardSize.height;
-
-    let W_scaled = 0;
-    let H_scaled = 0;
-    let offset_x = 0;
-    let offset_y = 0;
-
-    if (R_c > R_i) {
-      W_scaled = boardSize.width;
-      H_scaled = boardSize.width / R_i;
-      offset_x = 0;
-      offset_y = (boardSize.height - H_scaled) / 2;
-    } else {
-      H_scaled = boardSize.height;
-      W_scaled = boardSize.height * R_i;
-      offset_x = (boardSize.width - W_scaled) / 2;
-      offset_y = 0;
-    }
-
-    const left = offset_x + (x / W_i) * W_scaled;
-    const top = offset_y + (y / H_i) * H_scaled;
-    const width = (w / W_i) * W_scaled;
-    const height = (h / H_i) * H_scaled;
-
-    return {
-      left: `${left}px`,
-      top: `${top}px`,
-      width: `${width}px`,
-      height: `${height}px`,
-    };
-  };
-
-
   // Drag interaction state
   const isDragging = useRef(false);
 
@@ -562,7 +517,7 @@ export const DetectiveBoard: React.FC = () => {
           }}
           className="absolute cursor-pointer transition-all duration-300 ease-out focus:outline-none"
           style={{
-            ...getCoverCoords(690, 640, 185, 105),
+            ...calculateCoverCoords(690, 640, 185, 105, boardSize.width, boardSize.height),
             zIndex: 22,
             backgroundImage: "url(/images/board/table-phone_v2.svg)",
             backgroundSize: "contain",
