@@ -31,7 +31,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 14,
     desktop: { left: 34, top: 20, width: 26, rotation: -2 },
     mobile: { left: 45, top: 8, width: 28, rotation: -2 },
-    tablet: { left: 36, top: 18, width: 24, rotation: -2 },
+    tablet: { left: 40, top: 18, width: 24, rotation: -2 },
   },
   {
     id: "suspect-1",
@@ -40,7 +40,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 11,
     desktop: { left: 20, top: 14, width: 14, rotation: -8 },
     mobile: { left: 8, top: 10, width: 18, rotation: -8 },
-    tablet: { left: 18, top: 12, width: 15, rotation: -8 },
+    tablet: { left: 24, top: 12, width: 15, rotation: -8 },
   },
   {
     id: "suspect-2",
@@ -58,7 +58,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 22,
     desktop: { left: 19, top: 42, width: 15, rotation: 4 },
     mobile: { left: 10, top: 46, width: 17, rotation: 4 },
-    tablet: { left: 17, top: 44, width: 16, rotation: 4 },
+    tablet: { left: 22, top: 44, width: 16, rotation: 4 },
   },
   {
     id: "map",
@@ -67,7 +67,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 15,
     desktop: { left: 51, top: 56, width: 13, rotation: -4 },
     mobile: { left: 28, top: 42, width: 22, rotation: -4 },
-    tablet: { left: 50, top: 54, width: 15, rotation: -4 },
+    tablet: { left: 52, top: 54, width: 15, rotation: -4 },
   },
   {
     id: "phone",
@@ -76,7 +76,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 21,
     desktop: { left: 8, top: 58, width: 20, rotation: 4 },
     mobile: { left: 8, top: 65, width: 22, rotation: 4 },
-    tablet: { left: 7, top: 58, width: 21, rotation: 4 },
+    tablet: { left: 15, top: 58, width: 21, rotation: 4 },
   },
   {
     id: "clock",
@@ -94,7 +94,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 16,
     desktop: { left: 36, top: 58, width: 10, rotation: 12 },
     mobile: { left: 54, top: 48, width: 15, rotation: 12 },
-    tablet: { left: 35, top: 57, width: 12, rotation: 12 },
+    tablet: { left: 38, top: 57, width: 12, rotation: 12 },
   },
   {
     id: "newspaper",

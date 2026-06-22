@@ -397,8 +397,8 @@ export const DetectiveBoard: React.FC = () => {
           height: isMobile ? "100%" : undefined,
           aspectRatio: isMobile ? undefined : "1385.92 / 773.53",
           maxHeight: isMobile ? undefined : "1005px",
-          transform: `translate(var(--rumble-x, 0px), var(--rumble-y, 0px))${isTablet ? " scale(1.12)" : ""}`,
-          transformOrigin: "center center",
+          transform: `translate(var(--rumble-x, 0px), var(--rumble-y, 0px))${isTablet ? " scale(1.22)" : ""}`,
+          transformOrigin: isTablet ? "94% 50%" : "center center",
           cursor: "default",
           transformStyle: "preserve-3d",
           ...({

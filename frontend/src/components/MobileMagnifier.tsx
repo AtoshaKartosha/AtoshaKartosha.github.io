@@ -70,8 +70,8 @@ export const MobileMagnifier: React.FC = () => {
     const clampedLensY = Math.max(LENS_RADIUS, Math.min(window.innerHeight - LENS_RADIUS, touchY - 120));
 
     // Position magnifier relative to the board
-    const left = clampedLensX - boardRect.left - LENS_RADIUS;
-    const top = clampedLensY - boardRect.top - LENS_RADIUS;
+    const left = clampedLensX - LENS_RADIUS;
+    const top = clampedLensY - LENS_RADIUS;
 
     magnifierRef.current.style.transform = `translate3d(${left}px, ${top}px, 0)`;
 

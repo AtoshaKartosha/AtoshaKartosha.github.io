@@ -194,8 +194,9 @@ const fluidGlassCursorContent = fs.readFileSync(path.join(__dirname, "src/compon
 assert.ok(fluidGlassCursorContent.includes("isMobile || isTablet"), "FluidGlassCursor.tsx should disable itself on tablet");
 
 assert.ok(detectiveBoardContent.includes("(isMobile || isTablet) && <MobileMagnifier"), "DetectiveBoard.tsx should render MobileMagnifier on tablet");
-assert.ok(detectiveBoardContent.includes("scale(1.12)"), "DetectiveBoard.tsx should scale the board by 1.12 on tablet");
+assert.ok(detectiveBoardContent.includes("scale(1.22)"), "DetectiveBoard.tsx should scale the board by 1.22 on tablet");
 assert.ok(detectiveBoardContent.includes("w-[98%] h-auto max-w-[1800px] rounded-sm"), "DetectiveBoard.tsx should use w-[98%] for the class name on tablet");
 assert.ok(detectiveBoardContent.includes("min(98vw, 1800px)"), "DetectiveBoard.tsx should use min(98vw, 1800px) on tablet");
+assert.ok(mobileMagnifierContent.includes("const left = clampedLensX - LENS_RADIUS;"), "MobileMagnifier.tsx should position lens relative to screen, not board");
 
 console.log("Codebase structural tests passed!");
