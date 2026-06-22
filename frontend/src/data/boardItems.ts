@@ -15,6 +15,12 @@ export interface BoardItem {
     width: number; // %
     rotation: number; // deg
   };
+  tablet: {
+    left: number; // %
+    top: number;  // %
+    width: number; // %
+    rotation: number; // deg
+  };
 }
 
 export const boardItems: BoardItem[] = [
@@ -25,6 +31,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 14,
     desktop: { left: 34, top: 20, width: 26, rotation: -2 },
     mobile: { left: 45, top: 8, width: 28, rotation: -2 },
+    tablet: { left: 36, top: 18, width: 24, rotation: -2 },
   },
   {
     id: "suspect-1",
@@ -33,6 +40,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 11,
     desktop: { left: 20, top: 14, width: 14, rotation: -8 },
     mobile: { left: 8, top: 10, width: 18, rotation: -8 },
+    tablet: { left: 18, top: 12, width: 15, rotation: -8 },
   },
   {
     id: "suspect-2",
@@ -41,6 +49,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 11,
     desktop: { left: 61, top: 12, width: 14, rotation: 6 },
     mobile: { left: 74, top: 10, width: 18, rotation: 6 },
+    tablet: { left: 63, top: 11, width: 15, rotation: 6 },
   },
   {
     id: "note",
@@ -49,6 +58,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 22,
     desktop: { left: 19, top: 42, width: 15, rotation: 4 },
     mobile: { left: 10, top: 46, width: 17, rotation: 4 },
+    tablet: { left: 17, top: 44, width: 16, rotation: 4 },
   },
   {
     id: "map",
@@ -57,6 +67,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 15,
     desktop: { left: 51, top: 56, width: 13, rotation: -4 },
     mobile: { left: 28, top: 42, width: 22, rotation: -4 },
+    tablet: { left: 50, top: 54, width: 15, rotation: -4 },
   },
   {
     id: "phone",
@@ -65,6 +76,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 21,
     desktop: { left: 8, top: 58, width: 20, rotation: 4 },
     mobile: { left: 8, top: 65, width: 22, rotation: 4 },
+    tablet: { left: 7, top: 58, width: 21, rotation: 4 },
   },
   {
     id: "clock",
@@ -73,6 +85,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 12,
     desktop: { left: 59, top: 37, width: 8, rotation: -12 },
     mobile: { left: 28, top: 12, width: 11, rotation: -12 },
+    tablet: { left: 60, top: 36, width: 9, rotation: -12 },
   },
   {
     id: "evidence",
@@ -81,6 +94,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 16,
     desktop: { left: 36, top: 58, width: 10, rotation: 12 },
     mobile: { left: 54, top: 48, width: 15, rotation: 12 },
+    tablet: { left: 35, top: 57, width: 12, rotation: 12 },
   },
   {
     id: "newspaper",
@@ -89,6 +103,7 @@ export const boardItems: BoardItem[] = [
     zIndex: 11,
     desktop: { left: 65, top: 40, width: 17, rotation: -5 },
     mobile: { left: 70, top: 36, width: 22, rotation: -5 },
+    tablet: { left: 66, top: 38, width: 18, rotation: -5 },
   },
 ];
 

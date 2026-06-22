@@ -94,11 +94,11 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
   const cardRef = useRef<HTMLDivElement>(null);
   const swayRef = useRef<HTMLDivElement>(null);
   const cardRectRef = useRef<DOMRect | null>(null);
+  const isTablet = useBoardStore((state) => state.isTablet);
 
   const pos = (() => {
-    if (isMobile) {
-      return { ...item.mobile };
-    }
+    if (isMobile) return { ...item.mobile };
+    if (isTablet) return { ...item.tablet };
     return { ...item.desktop };
   })();
   const isHovered = hoveredItemId === item.id;
@@ -255,6 +255,7 @@ export const DetectiveBoard: React.FC = () => {
   const isMobile = useBoardStore((state) => state.isMobile);
   const setIsMobile = useBoardStore((state) => state.setIsMobile);
   const setIsPortrait = useBoardStore((state) => state.setIsPortrait);
+  const setIsTablet = useBoardStore((state) => state.setIsTablet);
 
 
   const [boardSize, setBoardSize] = useState({ width: 0, height: 0 });
@@ -284,14 +285,17 @@ export const DetectiveBoard: React.FC = () => {
   // Determine if viewport is mobile/tablet (< 1024px)
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth < 1024;
+      const width = window.innerWidth;
+      const mobile = width < 768;
+      const tablet = width >= 768 && width < 1024;
       setIsMobile(mobile);
-      setIsPortrait(mobile && window.innerHeight > window.innerWidth);
+      setIsTablet(tablet);
+      setIsPortrait((mobile || tablet) && window.innerHeight > window.innerWidth);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [setIsMobile, setIsPortrait]);
+  }, [setIsMobile, setIsTablet, setIsPortrait]);
 
   // Helper function to measure pin positions relative to the board
   // Helper function to measure pin positions relative to the board

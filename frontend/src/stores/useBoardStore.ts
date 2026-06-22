@@ -12,6 +12,8 @@ interface BoardState {
   isLoading: boolean;
   hoveredItemId: string | null;
   isMobile: boolean;
+  isTablet: boolean;
+  setIsTablet: (v: boolean) => void;
   setPinPositions: (positions: Record<string, Position>) => void;
   setActivePopup: (id: string | null) => void;
   setPanOffset: (pos: Position | ((prev: Position) => Position)) => void;
@@ -43,6 +45,8 @@ export const useBoardStore = create<BoardState>((set) => ({
   setIsLoading: (loading) => set({ isLoading: loading }),
   setHoveredItemId: (id) => set({ hoveredItemId: id }),
   setIsMobile: (v) => set({ isMobile: v }),
+  isTablet: false,
+  setIsTablet: (v) => set({ isTablet: v }),
   isPortrait: false,
   setIsPortrait: (v) => set({ isPortrait: v }),
   isMagnifierActive: false,

@@ -4,15 +4,19 @@ const assert = require("assert");
 // Pure functions matching the logic implemented in the React application
 
 function getIsMobile(innerWidth) {
-  return innerWidth < 1024;
+  return innerWidth < 768;
 }
 
-function getIsPortrait(isMobile, innerWidth, innerHeight) {
-  return isMobile && innerHeight > innerWidth;
+function getIsTablet(innerWidth) {
+  return innerWidth >= 768 && innerWidth < 1024;
 }
 
-function shouldShowOverlay(isMobile, isPortrait) {
-  return isMobile && isPortrait;
+function getIsPortrait(isMobile, isTablet, innerWidth, innerHeight) {
+  return (isMobile || isTablet) && innerHeight > innerWidth;
+}
+
+function shouldShowOverlay(isMobile, isTablet, isPortrait) {
+  return (isMobile || isTablet) && isPortrait;
 }
 
 function calculateCoverCoords(x, y, w, h, boardWidth, boardHeight) {
@@ -59,37 +63,57 @@ function calculateCoverCoords(x, y, w, h, boardWidth, boardHeight) {
   };
 }
 
-console.log("Running mobile detection tests...");
+console.log("Running mobile/tablet detection tests...");
 // Desktop widths
 assert.strictEqual(getIsMobile(1920), false);
 assert.strictEqual(getIsMobile(1024), false);
+assert.strictEqual(getIsTablet(1920), false);
+assert.strictEqual(getIsTablet(1024), false);
+
+// Tablet widths
+assert.strictEqual(getIsMobile(900), false);
+assert.strictEqual(getIsTablet(900), true);
+assert.strictEqual(getIsTablet(768), true);
+
 // Mobile widths
-assert.strictEqual(getIsMobile(1023), true);
+assert.strictEqual(getIsMobile(767), true);
 assert.strictEqual(getIsMobile(375), true);
-console.log("Mobile detection tests passed!");
+assert.strictEqual(getIsTablet(375), false);
+console.log("Mobile/tablet detection tests passed!");
 
 console.log("Running portrait detection tests...");
-// Desktop sizes (even if height > width, isMobile should be false, so isPortrait should be false)
-assert.strictEqual(getIsPortrait(getIsMobile(1200), 1200, 1600), false);
+// Desktop sizes (even if height > width, should be false)
+assert.strictEqual(getIsPortrait(getIsMobile(1200), getIsTablet(1200), 1200, 1600), false);
+
+// Tablet landscape (width > height)
+assert.strictEqual(getIsPortrait(getIsMobile(900), getIsTablet(900), 900, 700), false);
+
+// Tablet portrait (width < height)
+assert.strictEqual(getIsPortrait(getIsMobile(768), getIsTablet(768), 768, 1024), true);
 
 // Mobile landscape (width > height)
-assert.strictEqual(getIsPortrait(getIsMobile(900), 900, 450), false);
+assert.strictEqual(getIsPortrait(getIsMobile(600), getIsTablet(600), 600, 400), false);
 
 // Mobile portrait (width < height)
-assert.strictEqual(getIsPortrait(getIsMobile(375), 375, 812), true);
-assert.strictEqual(getIsPortrait(getIsMobile(768), 768, 1024), true);
+assert.strictEqual(getIsPortrait(getIsMobile(375), getIsTablet(375), 375, 812), true);
 console.log("Portrait detection tests passed!");
 
 console.log("Running overlay display condition tests...");
 // Desktop should never show overlay
-assert.strictEqual(shouldShowOverlay(false, false), false);
-assert.strictEqual(shouldShowOverlay(false, true), false);
+assert.strictEqual(shouldShowOverlay(false, false, false), false);
+assert.strictEqual(shouldShowOverlay(false, false, true), false);
+
+// Tablet landscape should not show overlay
+assert.strictEqual(shouldShowOverlay(false, true, false), false);
+
+// Tablet portrait MUST show overlay
+assert.strictEqual(shouldShowOverlay(false, true, true), true);
 
 // Mobile landscape should not show overlay
-assert.strictEqual(shouldShowOverlay(true, false), false);
+assert.strictEqual(shouldShowOverlay(true, false, false), false);
 
 // Mobile portrait MUST show overlay
-assert.strictEqual(shouldShowOverlay(true, true), true);
+assert.strictEqual(shouldShowOverlay(true, false, true), true);
 console.log("Overlay display condition tests passed!");
 
 console.log("Running cover coordinates tests...");
@@ -154,3 +178,12 @@ const detectiveBoardContent = fs.readFileSync(path.join(__dirname, "src/componen
 assert.ok(!detectiveBoardContent.includes("isZIndexRaised"), "DetectiveBoard.tsx should not contain isZIndexRaised state/effect anymore");
 console.log("zIndex synchronization verification tests passed!");
 console.log("All orientation and mobile detection tests passed successfully!");
+
+// Test presence of isTablet in useBoardStore.ts and tablet coordinates in boardItems.ts
+console.log("Running codebase structural tests for tablet mode...");
+const useBoardStoreContent = fs.readFileSync(path.join(__dirname, "src/stores/useBoardStore.ts"), "utf8");
+assert.ok(useBoardStoreContent.includes("isTablet"), "useBoardStore.ts should contain isTablet state/setters");
+
+const boardItemsContent = fs.readFileSync(path.join(__dirname, "src/data/boardItems.ts"), "utf8");
+assert.ok(boardItemsContent.includes("tablet: {"), "boardItems.ts should define tablet coordinates");
+console.log("Codebase structural tests passed!");
