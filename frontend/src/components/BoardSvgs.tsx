@@ -185,7 +185,7 @@ export const Suspect1Svg: React.FC<{ className?: string }> = ({ className = "w-f
   };
 
   return (
-    <div className={`${className} bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
+    <div className={`${className} bg-[#f5f4ef] p-[3%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
       <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
         <video
           ref={videoRef}
@@ -208,7 +208,7 @@ export const Suspect1Svg: React.FC<{ className?: string }> = ({ className = "w-f
 
 // Polaroid Suspect 2 (The Mobster / Informant)
 export const Suspect2Svg: React.FC<{ className?: string }> = ({ className = "w-full h-full drop-shadow-[0_8px_16px_rgba(0,0,0,0.5)]" }) => (
-  <div className={`${className} bg-[#f5f4ef] p-[5%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
+  <div className={`${className} bg-[#f5f4ef] p-[3%] aspect-square rounded-[2px] border border-[#dfded7] select-none flex flex-col justify-center items-center shadow-inner`}>
     <div className="w-full h-full relative overflow-hidden bg-[#121212] border border-black/15 rounded-[1px] flex items-center justify-center">
       <video
         aria-hidden="true"
