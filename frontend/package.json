@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test": "node test-sway.js"
+    "test": "node test-sway.js && node test-orientation.js"
   },
   "dependencies": {
     "gsap": "^3.15.0",
