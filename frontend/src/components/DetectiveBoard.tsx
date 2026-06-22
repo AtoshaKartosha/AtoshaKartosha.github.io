@@ -102,19 +102,6 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
     return { ...item.desktop };
   })();
   const isHovered = hoveredItemId === item.id;
-  const [isZIndexRaised, setIsZIndexRaised] = useState(false);
-
-  useEffect(() => {
-    if (isHovered) {
-      const timer = setTimeout(() => {
-        setIsZIndexRaised(true);
-      }, 0);
-      return () => clearTimeout(timer);
-    } else {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setIsZIndexRaised(false);
-    }
-  }, [isHovered]);
 
   const swayEnabled = item.id !== "phone" && item.id !== "clock" && !isHovered;
   const swaySeed = item.id.charCodeAt(0) + item.id.charCodeAt(item.id.length - 1);
@@ -187,7 +174,7 @@ const BoardItemComponent: React.FC<BoardItemProps> = ({
         width: `${pos.width}%`,
         transform: `rotate(${rotation}deg) scale(${isHovered ? hoverScale : 1})`,
         transformStyle: "preserve-3d",
-        zIndex: isZIndexRaised ? 30 : item.zIndex,
+        zIndex: isHovered ? 30 : item.zIndex,
       }}
     >
       <div

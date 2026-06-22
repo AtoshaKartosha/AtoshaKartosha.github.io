@@ -148,4 +148,9 @@ assert.ok(boardPopupContent.includes("p-[2%]"), "BoardPopup.tsx should contain r
 assert.ok(!boardPopupContent.includes("bg-[#f5f4ef] p-[5%] aspect-square"), "BoardPopup.tsx should not contain the old p-[5%] padding for suspect photo");
 console.log("Suspect photo padding verification tests passed!");
 
+// Test isZIndexRaised removal to ensure synchronous zIndex on hover
+console.log("Running zIndex synchronization verification tests...");
+const detectiveBoardContent = fs.readFileSync(path.join(__dirname, "src/components/DetectiveBoard.tsx"), "utf8");
+assert.ok(!detectiveBoardContent.includes("isZIndexRaised"), "DetectiveBoard.tsx should not contain isZIndexRaised state/effect anymore");
+console.log("zIndex synchronization verification tests passed!");
 console.log("All orientation and mobile detection tests passed successfully!");
