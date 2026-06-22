@@ -143,8 +143,8 @@ const path = require("path");
 const boardSvgsContent = fs.readFileSync(path.join(__dirname, "src/components/BoardSvgs.tsx"), "utf8");
 const boardPopupContent = fs.readFileSync(path.join(__dirname, "src/components/BoardPopup.tsx"), "utf8");
 
-assert.ok(boardSvgsContent.includes("p-[3%]"), "BoardSvgs.tsx should contain reduced photo padding (p-[3%])");
-assert.ok(boardPopupContent.includes("p-[3%]"), "BoardPopup.tsx should contain reduced photo padding (p-[3%])");
+assert.ok(boardSvgsContent.includes("p-[2%]"), "BoardSvgs.tsx should contain reduced photo padding (p-[2%])");
+assert.ok(boardPopupContent.includes("p-[2%]"), "BoardPopup.tsx should contain reduced photo padding (p-[2%])");
 assert.ok(!boardPopupContent.includes("bg-[#f5f4ef] p-[5%] aspect-square"), "BoardPopup.tsx should not contain the old p-[5%] padding for suspect photo");
 console.log("Suspect photo padding verification tests passed!");
 
