@@ -186,4 +186,13 @@ assert.ok(useBoardStoreContent.includes("isTablet"), "useBoardStore.ts should co
 
 const boardItemsContent = fs.readFileSync(path.join(__dirname, "src/data/boardItems.ts"), "utf8");
 assert.ok(boardItemsContent.includes("tablet: {"), "boardItems.ts should define tablet coordinates");
+
+const mobileMagnifierContent = fs.readFileSync(path.join(__dirname, "src/components/MobileMagnifier.tsx"), "utf8");
+assert.ok(mobileMagnifierContent.includes("isTablet"), "MobileMagnifier.tsx should contain isTablet checks for positions");
+
+const fluidGlassCursorContent = fs.readFileSync(path.join(__dirname, "src/components/FluidGlassCursor.tsx"), "utf8");
+assert.ok(fluidGlassCursorContent.includes("isMobile || isTablet"), "FluidGlassCursor.tsx should disable itself on tablet");
+
+assert.ok(detectiveBoardContent.includes("(isMobile || isTablet) && <MobileMagnifier"), "DetectiveBoard.tsx should render MobileMagnifier on tablet");
+
 console.log("Codebase structural tests passed!");

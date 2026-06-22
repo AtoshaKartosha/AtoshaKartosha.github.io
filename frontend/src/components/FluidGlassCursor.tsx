@@ -73,6 +73,7 @@ export const FluidGlassCursor: React.FC = () => {
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const pinPositions = useBoardStore((state) => state.pinPositions);
   const isMobile = useBoardStore((state) => state.isMobile);
+  const isTablet = useBoardStore((state) => state.isTablet);
   const [displacementMapUrl, setDisplacementMapUrl] = useState<string | null>(null);
   const [aberrationMapUrl, setAberrationMapUrl] = useState<string | null>(null);
 
@@ -167,7 +168,7 @@ export const FluidGlassCursor: React.FC = () => {
 
   // Measure board rectangle once on mount, resize, or load complete to avoid layout thrashing
   useEffect(() => {
-    if (isMobile) return;
+    if (isMobile || isTablet) return;
 
     const updateBoardRect = () => {
       if (!boardElRef.current) {
@@ -195,7 +196,7 @@ export const FluidGlassCursor: React.FC = () => {
       clearTimeout(timer);
       window.removeEventListener("resize", updateBoardRect);
     };
-  }, [isMobile, isLoading]);
+  }, [isMobile, isTablet, isLoading]);
 
   // Track mouse coordinates globally
   useEffect(() => {
@@ -208,16 +209,16 @@ export const FluidGlassCursor: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (isMobile || isLoading) return;
+    if (isMobile || isTablet || isLoading) return;
 
     const style = document.createElement("style");
     style.textContent = '[data-board="true"], [data-board="true"] * { cursor: none !important; }';
     document.head.appendChild(style);
     return () => style.remove();
-  }, [isMobile, isLoading]);
+  }, [isMobile, isTablet, isLoading]);
 
   useEffect(() => {
-    if (isMobile || isLoading) return;
+    if (isMobile || isTablet || isLoading) return;
     if (!boardElRef.current) {
       boardElRef.current = document.querySelector<HTMLElement>('[data-board="true"]');
     }
@@ -232,7 +233,7 @@ export const FluidGlassCursor: React.FC = () => {
 
     boardEl.addEventListener("wheel", handleWheel, { passive: false });
     return () => boardEl.removeEventListener("wheel", handleWheel);
-  }, [isMobile, isLoading]);
+  }, [isMobile, isTablet, isLoading]);
 
   // Animation loop for smooth follow and precise alignment
   useEffect(() => {
@@ -241,7 +242,7 @@ export const FluidGlassCursor: React.FC = () => {
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
     const update = () => {
-      if (isMobile || isLoading) return;
+      if (isMobile || isTablet || isLoading) return;
 
       const cx = mouseRef.current.x;
       const cy = mouseRef.current.y;
@@ -344,10 +345,10 @@ export const FluidGlassCursor: React.FC = () => {
 
     update();
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isMobile, isLoading]);
+  }, [isMobile, isTablet, isLoading]);
 
 
-  if (isMobile) return null;
+  if (isMobile || isTablet) return null;
   return (
     <div 
       aria-hidden="true"

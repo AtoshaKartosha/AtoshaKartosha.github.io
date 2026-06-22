@@ -12,7 +12,8 @@ const LENS_RADIUS = 75; // Mobile lens radius
 const ZOOM = 1.5;
 
 const ClonedMobileBoardItem: React.FC<{ item: BoardItem }> = ({ item }) => {
-  const pos = item.mobile;
+  const isTablet = useBoardStore((state) => state.isTablet);
+  const pos = isTablet ? item.tablet : item.mobile;
   const centerX = pos.left + pos.width / 2;
   const centerY = pos.top;
   const distFromLamp = Math.hypot((centerX - 85) / 100, (centerY - 15) / 100);
@@ -35,7 +36,7 @@ const ClonedMobileBoardItem: React.FC<{ item: BoardItem }> = ({ item }) => {
           filter: `${getItemShadow(item.id, false)} brightness(${dimBrightness})`,
         }}
       >
-        {renderItemSvg(item.id, { isHovered: false, revealHidden: true, isMobile: true })}
+        {renderItemSvg(item.id, { isHovered: false, revealHidden: true, isMobile: !isTablet })}
       </div>
     </div>
   );

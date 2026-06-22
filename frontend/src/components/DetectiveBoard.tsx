@@ -253,6 +253,7 @@ export const DetectiveBoard: React.FC = () => {
   const hoveredItemId = useBoardStore((state) => state.hoveredItemId);
   const setHoveredItemId = useBoardStore((state) => state.setHoveredItemId);
   const isMobile = useBoardStore((state) => state.isMobile);
+  const isTablet = useBoardStore((state) => state.isTablet);
   const setIsMobile = useBoardStore((state) => state.setIsMobile);
   const setIsPortrait = useBoardStore((state) => state.setIsPortrait);
   const setIsTablet = useBoardStore((state) => state.setIsTablet);
@@ -529,7 +530,7 @@ export const DetectiveBoard: React.FC = () => {
       <DustParticles />
 
       {/* Mobile magnifying glass loupe */}
-      {isMobile && <MobileMagnifier />}
+      {(isMobile || isTablet) && <MobileMagnifier />}
 
       {/* 2.7 WEBGL FLUID GLASS LENS OVERLAY */}
       <FluidGlassCursor />
